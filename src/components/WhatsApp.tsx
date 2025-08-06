@@ -11,7 +11,7 @@ interface WhatsAppButtonProps {
 
 export function WhatsAppButton({ 
   phone = '+59899252808', 
-  message = 'Hola! Me interesa conocer más sobre los servicios de TechFix Uruguay.',
+  message = '¡Hola TechFix Uruguay! 👋\n\nMe interesa conocer más sobre sus servicios de soporte técnico.\n\n¿Podrían ayudarme con una consulta?',
   className = '',
   children 
 }: WhatsAppButtonProps) {
@@ -40,13 +40,13 @@ export function WhatsAppFloatingButton() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <WhatsAppButton
-        message="¡Hola! Necesito ayuda con soporte técnico."
-        className="bg-green-500 text-white hover:bg-green-600 shadow-lg rounded-full p-4"
+        message="🆘 ¡Hola TechFix Uruguay!\n\nTengo un problema técnico y necesito ayuda urgente.\n\n¿Pueden asistirme por favor?"
+        className="bg-green-500 text-white hover:bg-green-600 shadow-lg rounded-full p-4 pulse-animation"
       >
         <MessageCircle className="h-6 w-6" />
       </WhatsAppButton>
-      <div className="absolute -top-2 -left-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center animate-pulse">
-        !
+      <div className="absolute -top-2 -left-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center animate-bounce">
+        SOS
       </div>
     </div>
   )

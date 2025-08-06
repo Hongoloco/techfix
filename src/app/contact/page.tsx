@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Ticket, ArrowLeft, Phone, Mail, MapPin, Clock } from 'lucide-react'
+import { Ticket, ArrowLeft, Phone, Mail, MapPin, Clock, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react'
 import { WhatsAppButton, ContactInfo, WhatsAppFloatingButton } from '@/components/WhatsApp'
 import { BusinessHours, AfterHoursModal, useBusinessHours } from '@/components/BusinessHours'
 
@@ -55,25 +55,49 @@ export default function ContactPage() {
   if (submitted) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8 text-center">
-          <div className="mb-6">
-            <Ticket className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">¡Ticket Creado!</h2>
-            <p className="text-gray-600">
-              Hemos recibido tu solicitud de soporte. Te contactaremos dentro de nuestro horario de atención.
-            </p>
+        <div className="max-w-2xl w-full bg-white rounded-lg shadow-lg p-8 text-center">
+          <div className="mb-8">
+            <CheckCircle className="h-20 w-20 text-green-500 mx-auto mb-6" />
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">¡Ticket Creado Exitosamente! ✅</h2>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+              <p className="text-green-800 font-semibold mb-2">
+                Tu solicitud ha sido enviada a: <strong>techfixuruguay@gmail.com</strong>
+              </p>
+              <p className="text-green-700 text-sm">
+                Título: "{formData.title}"
+              </p>
+            </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <h3 className="font-semibold text-blue-900 mb-2">⏰ ¿Qué sigue ahora?</h3>
+              <ul className="text-left text-blue-800 text-sm space-y-2">
+                <li>• Recibirás una confirmación por email</li>
+                <li>• Te contactaremos en horario de atención (10:00 - 20:00)</li>
+                <li>• Para urgencias, contáctanos por WhatsApp</li>
+              </ul>
+            </div>
           </div>
           <div className="space-y-4">
-            <Link
-              href="/"
-              className="block w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
-            >
-              Volver al Inicio
-            </Link>
             <WhatsAppButton
-              message={`¡Hola TechFix Uruguay! Acabo de crear un ticket: "${formData.title}". ¿Podrían confirmar que lo recibieron?`}
-              className="w-full bg-green-500 text-white hover:bg-green-600"
-            />
+              message={`🆘 ¡Hola TechFix Uruguay!\n\nAcabo de crear un ticket: "${formData.title}"\n\n¿Es posible una consulta rápida por WhatsApp?`}
+              className="w-full bg-green-500 text-white hover:bg-green-600 py-3 mb-4"
+            >
+              <MessageCircle className="w-5 h-5 mr-2" />
+              Contactar por WhatsApp - URGENTE
+            </WhatsAppButton>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Link
+                href="/"
+                className="block w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+              >
+                Volver al Inicio
+              </Link>
+              <button
+                onClick={() => setSubmitted(false)}
+                className="w-full bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600"
+              >
+                Crear Otro Ticket
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -124,6 +148,36 @@ export default function ContactPage() {
           <p className="text-lg text-gray-600">
             ¿Necesitas ayuda? Estamos aquí para resolver tus problemas técnicos
           </p>
+        </div>
+
+        {/* Información de contacto destacada */}
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg shadow-lg p-6 mb-8 text-white">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div className="flex flex-col items-center">
+              <MessageCircle className="h-8 w-8 mb-2 text-green-300" />
+              <h3 className="font-semibold mb-1">WhatsApp</h3>
+              <p className="text-blue-100">+598 99 252 808</p>
+              <WhatsAppButton 
+                className="mt-2 bg-green-500 hover:bg-green-600 text-white text-sm px-4 py-2"
+                message="🛠️ Hola TechFix Uruguay!\n\nNecesito ayuda con un problema técnico.\n\n¿Pueden asistirme?"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Contactar ahora
+              </WhatsAppButton>
+            </div>
+            <div className="flex flex-col items-center">
+              <Mail className="h-8 w-8 mb-2 text-blue-200" />
+              <h3 className="font-semibold mb-1">Email</h3>
+              <p className="text-blue-100">techfixuruguay@gmail.com</p>
+              <p className="text-xs text-blue-200 mt-1">Respuesta en 24-48hs</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <Clock className="h-8 w-8 mb-2 text-yellow-300" />
+              <h3 className="font-semibold mb-1">Horarios</h3>
+              <p className="text-blue-100">Lun - Vie: 10:00 - 20:00</p>
+              <p className="text-xs text-blue-200 mt-1">Las Piedras, Uruguay</p>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
