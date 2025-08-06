@@ -1,4 +1,4 @@
-import { Ticket, MessageCircle, Clock, CheckCircle, Zap, Shield, Users, Cpu, Smartphone, Wifi } from 'lucide-react'
+import { Ticket, MessageCircle, Clock, CheckCircle, Zap, Shield, Users, Cpu, Smartphone, Wifi, Instagram, Facebook } from 'lucide-react'
 import Link from 'next/link'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
 
@@ -58,13 +58,66 @@ export default function Home() {
             </p>
 
             {/* Botones de acción principales */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
               <Link href="/contact" className="btn-modern btn-success text-lg sm:text-xl px-6 sm:px-8 py-3 sm:py-4 card-hover">
                 🎫 Crear Ticket de Soporte
               </Link>
               <Link href="/quote" className="btn-modern btn-tech text-lg sm:text-xl px-6 sm:px-8 py-3 sm:py-4 card-hover">
                 💰 Solicitar Cotización
               </Link>
+            </div>
+
+            {/* Redes Sociales */}
+            <div className="mb-16">
+              <h3 className="text-2xl font-bold text-white mb-6">
+                📱 ¡Síguenos en nuestras redes sociales!
+              </h3>
+              <div className="flex flex-wrap justify-center gap-4">
+                <a
+                  href="https://www.instagram.com/techfix_soporte_tecnico/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-card-readable p-4 flex items-center space-x-3 card-hover group"
+                >
+                  <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-3 group-hover:scale-110 transition-transform">
+                    <Instagram className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-white font-medium">Instagram</p>
+                    <p className="text-white/70 text-sm">@techfix_soporte_tecnico</p>
+                  </div>
+                </a>
+
+                <a
+                  href="https://www.facebook.com/profile.php?id=61579259244594"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-card-readable p-4 flex items-center space-x-3 card-hover group"
+                >
+                  <div className="bg-blue-600 rounded-full p-3 group-hover:scale-110 transition-transform">
+                    <Facebook className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-white font-medium">Facebook</p>
+                    <p className="text-white/70 text-sm">TechFix Uruguay</p>
+                  </div>
+                </a>
+
+                <a
+                  href="https://www.tiktok.com/@techfix_soporte_tecnico"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-card-readable p-4 flex items-center space-x-3 card-hover group"
+                >
+                  <div className="bg-black rounded-full p-3 group-hover:scale-110 transition-transform">
+                    <div className="h-6 w-6 text-white font-bold text-center leading-6">🎵</div>
+                  </div>
+                  <div className="text-left">
+                    <p className="text-white font-medium">TikTok</p>
+                    <p className="text-white/70 text-sm">@techfix_soporte_tecnico</p>
+                  </div>
+                </a>
+              </div>
             </div>
 
             {/* Stats impresionantes */}
