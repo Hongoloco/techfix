@@ -72,12 +72,12 @@ function StatCard({ icon: Icon, label, value, color, loading }: {
 }) {
   if (loading) {
     return (
-      <div className="bg-gray-50 p-6 rounded-lg shadow animate-pulse border border-gray-200">
+      <div className="glass-card-readable p-6">
         <div className="flex items-center">
-          <div className={`h-8 w-8 bg-gray-300 rounded`}></div>
+          <div className={`h-8 w-8 bg-white/20 rounded animate-pulse`}></div>
           <div className="ml-4 space-y-2">
-            <div className="h-4 bg-gray-300 rounded w-24"></div>
-            <div className="h-6 bg-gray-300 rounded w-16"></div>
+            <div className="h-4 bg-white/20 rounded w-24 animate-pulse"></div>
+            <div className="h-6 bg-white/20 rounded w-16 animate-pulse"></div>
           </div>
         </div>
       </div>
@@ -85,12 +85,12 @@ function StatCard({ icon: Icon, label, value, color, loading }: {
   }
 
   return (
-    <div className="bg-gray-50 p-6 rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200">
+    <div className="glass-card-readable p-6 card-hover">
       <div className="flex items-center">
         <Icon className={`h-8 w-8 ${color}`} />
         <div className="ml-4">
-          <p className="text-sm font-medium text-gray-700">{label}</p>
-          <p className="text-2xl font-semibold text-gray-800">
+          <p className="text-sm font-medium text-white/90">{label}</p>
+          <p className="text-2xl font-semibold text-white">
             {typeof value === 'number' ? value.toLocaleString() : value}
           </p>
         </div>
@@ -250,18 +250,18 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen gradient-animated">
       {/* Header */}
-      <header className="bg-gray-50 shadow-sm border-b border-gray-300">
+      <header className="glass-effect sticky top-0 z-50 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-gray-800">
+              <h1 className="text-2xl font-bold text-white">
                 Panel de Administración TechFix
               </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-700">
+              <span className="text-sm text-white/90">
                 Bienvenido, {user.name}
               </span>
               <button
@@ -270,7 +270,7 @@ export default function AdminDashboard() {
                   localStorage.removeItem('user')
                   router.push('/')
                 }}
-                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+                className="btn-modern bg-red-600 hover:bg-red-700 px-4 py-2 text-sm"
               >
                 Cerrar Sesión
               </button>
@@ -283,7 +283,7 @@ export default function AdminDashboard() {
         <div className="flex space-x-8">
           {/* Sidebar */}
           <div className="w-64 flex-shrink-0">
-            <nav className="bg-gray-50 rounded-lg shadow p-4 border border-gray-200">
+            <nav className="glass-card-readable p-4">
               <ul className="space-y-2">
                 {tabs.map((tab) => {
                   const Icon = tab.icon
@@ -293,8 +293,8 @@ export default function AdminDashboard() {
                         onClick={() => setActiveTab(tab.id)}
                         className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                           activeTab === tab.id
-                            ? 'bg-blue-100 text-blue-700'
-                            : 'text-gray-700 hover:bg-gray-100 hover:text-gray-800'
+                            ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30'
+                            : 'text-white/80 hover:bg-white/10 hover:text-white'
                         }`}
                       >
                         <Icon className="mr-3 h-5 w-5" />
@@ -312,8 +312,8 @@ export default function AdminDashboard() {
             {activeTab === 'dashboard' && (
               <div>
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
-                  <div className="text-sm text-gray-600">
+                  <h2 className="text-xl font-semibold text-white">Dashboard</h2>
+                  <div className="text-sm text-white/70">
                     Última actualización: {new Date().toLocaleDateString('es-UY')}
                   </div>
                 </div>
@@ -324,28 +324,28 @@ export default function AdminDashboard() {
                     icon={Users} 
                     label="Total Usuarios" 
                     value={stats?.totalUsers || 0}
-                    color="text-blue-600"
+                    color="text-blue-300"
                     loading={statsLoading}
                   />
                   <StatCard 
                     icon={Ticket} 
                     label="Total Tickets" 
                     value={stats?.totalTickets || 0}
-                    color="text-green-600"
+                    color="text-green-300"
                     loading={statsLoading}
                   />
                   <StatCard 
                     icon={MessageSquare} 
                     label="Tickets Abiertos" 
                     value={stats?.openTickets || 0}
-                    color="text-yellow-600"
+                    color="text-yellow-300"
                     loading={statsLoading}
                   />
                   <StatCard 
                     icon={DollarSign} 
                     label="Ingresos" 
                     value={stats?.revenue || 0}
-                    color="text-purple-600"
+                    color="text-purple-300"
                     loading={statsLoading}
                   />
                 </div>

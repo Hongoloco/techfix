@@ -150,7 +150,7 @@ export default function ContactPage() {
                     required
                     value={formData.phone}
                     onChange={handleChange}
-                    className="modern-input"
+                    className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                     placeholder="099 123 456"
                   />
                 </div>
@@ -167,7 +167,7 @@ export default function ContactPage() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="modern-input"
+                  className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                   placeholder="tu@email.com"
                 />
               </div>
@@ -184,7 +184,7 @@ export default function ContactPage() {
                     required
                     value={formData.subject}
                     onChange={handleChange}
-                    className="modern-input"
+                    className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                     placeholder="Problema con mi computadora"
                   />
                 </div>
@@ -198,7 +198,7 @@ export default function ContactPage() {
                     name="priority"
                     value={formData.priority}
                     onChange={handleChange}
-                    className="modern-input"
+                    className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                   >
                     <option value="low">🟢 Baja - No es urgente</option>
                     <option value="normal">🟡 Normal - En los próximos días</option>
@@ -219,7 +219,7 @@ export default function ContactPage() {
                   value={formData.message}
                   onChange={handleChange}
                   rows={5}
-                  className="modern-input resize-none"
+                  className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"
                   placeholder="Describe con detalle el problema que estás experimentando. Incluye cualquier mensaje de error que hayas visto..."
                 />
               </div>
