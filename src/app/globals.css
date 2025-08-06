@@ -1,26 +1,63 @@
-@import "tailwindcss";
+/* Importar Tailwind CSS - Las siguientes líneas son necesarias para el framework */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff !important;
+  color: #000000 !important;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Asegurar que todo se vea claro */
+* {
+  color: inherit;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Reset específico para evitar modo oscuro */
+html, body, #__next, main, div, section, article {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Animaciones personalizadas */
+@keyframes pulse-animation {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.pulse-animation {
+  animation: pulse-animation 2s infinite;
+}
+
+/* Fondos para secciones específicas */
+.bg-gray-50 {
+  background-color: #f9fafb !important;
+}
+
+.bg-white {
+  background-color: #ffffff !important;
+}
+
+/* Texto oscuro por defecto */
+.text-gray-900 {
+  color: #111827 !important;
+}
+
+.text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.text-gray-700 {
+  color: #374151 !important;
+}
+
+.text-white {
+  color: #ffffff !important;
 }
