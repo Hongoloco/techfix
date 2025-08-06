@@ -19,7 +19,10 @@ import {
   Trash2,
   Instagram,
   Share2,
-  ExternalLink
+  ExternalLink,
+  Check,
+  X,
+  AlertCircle
 } from 'lucide-react'
 
 // Carga dinámica de componentes pesados (comentado hasta instalar react-chartjs-2)
@@ -184,6 +187,35 @@ export default function AdminDashboard() {
   const router = useRouter()
   const { user, loading: authLoading, isAdmin } = useAuth()
   const [activeTab, setActiveTab] = useState('dashboard')
+  
+  // Estados para gestión de usuarios
+  const [showCreateUserModal, setShowCreateUserModal] = useState(false)
+  const [showEditUserModal, setShowEditUserModal] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [createUserForm, setCreateUserForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'USER'
+  })
+  const [editUserForm, setEditUserForm] = useState({
+    name: '',
+    email: '',
+    role: 'USER'
+  })
+  
+  // Estados para notificaciones
+  const [notification, setNotification] = useState<{
+    show: boolean
+    type: 'success' | 'error' | 'info'
+    title: string
+    message: string
+  }>({
+    show: false,
+    type: 'info',
+    title: '',
+    message: ''
+  })
 
   // APIs optimizadas con hooks personalizados
   const { data: stats, loading: statsLoading } = useApi<Stats>('/api/admin/stats', {
@@ -191,7 +223,7 @@ export default function AdminDashboard() {
     initialData: { totalUsers: 0, totalTickets: 0, openTickets: 0, revenue: 0 }
   })
 
-  const { data: users, loading: usersLoading } = useApi<User[]>('/api/admin/users', {
+  const { data: users, loading: usersLoading, refetch: refetchUsers } = useApi<User[]>('/api/admin/users', {
     autoFetch: activeTab === 'users',
     initialData: []
   })
@@ -207,6 +239,9 @@ export default function AdminDashboard() {
   })
 
   const { mutate: toggleService } = useMutation()
+  const { mutate: createUserMutation } = useMutation()
+  const { mutate: updateUserMutation } = useMutation()
+  const { mutate: deleteUserMutation } = useMutation()
 
   // Redirect si no es admin
   useEffect(() => {
@@ -227,6 +262,73 @@ export default function AdminDashboard() {
       console.error('Error updating service:', error)
     }
   }, [toggleService, refetchServices])
+
+  // Función para mostrar notificaciones
+  const showNotification = useCallback((type: 'success' | 'error' | 'info', title: string, message: string) => {
+    setNotification({ show: true, type, title, message })
+    setTimeout(() => {
+      setNotification(prev => ({ ...prev, show: false }))
+    }, 5000)
+  }, [])
+
+  // Funciones para gestión de usuarios
+  const handleCreateUser = useCallback(async () => {
+    try {
+      await createUserMutation('/api/admin/users', {
+        method: 'POST',
+        body: createUserForm
+      })
+      setShowCreateUserModal(false)
+      setCreateUserForm({ name: '', email: '', password: '', role: 'USER' })
+      refetchUsers()
+      showNotification('success', '¡Usuario creado!', `El usuario ${createUserForm.name} ha sido creado exitosamente.`)
+    } catch (error) {
+      console.error('Error creating user:', error)
+      showNotification('error', 'Error al crear usuario', 'No se pudo crear el usuario. Intenta de nuevo.')
+    }
+  }, [createUserMutation, createUserForm, refetchUsers, showNotification])
+
+  const handleEditUser = useCallback(async () => {
+    if (!selectedUser) return
+    try {
+      await updateUserMutation(`/api/admin/users/${selectedUser.id}`, {
+        method: 'PUT',
+        body: editUserForm
+      })
+      setShowEditUserModal(false)
+      setSelectedUser(null)
+      setEditUserForm({ name: '', email: '', role: 'USER' })
+      refetchUsers()
+      showNotification('success', '¡Usuario actualizado!', `Los datos de ${editUserForm.name} han sido actualizados correctamente.`)
+    } catch (error) {
+      console.error('Error updating user:', error)
+      showNotification('error', 'Error al actualizar', 'No se pudo actualizar el usuario. Intenta de nuevo.')
+    }
+  }, [updateUserMutation, selectedUser, editUserForm, refetchUsers, showNotification])
+
+  const handleDeleteUser = useCallback(async (userId: string, userName: string) => {
+    if (!confirm(`¿Estás seguro de que quieres eliminar a ${userName}?`)) return
+    try {
+      await deleteUserMutation(`/api/admin/users/${userId}`, {
+        method: 'DELETE'
+      })
+      refetchUsers()
+      showNotification('success', '¡Usuario eliminado!', `${userName} ha sido eliminado del sistema.`)
+    } catch (error) {
+      console.error('Error deleting user:', error)
+      showNotification('error', 'Error al eliminar', 'No se pudo eliminar el usuario. Intenta de nuevo.')
+    }
+  }, [deleteUserMutation, refetchUsers, showNotification])
+
+  const openEditModal = useCallback((userToEdit: User) => {
+    setSelectedUser(userToEdit)
+    setEditUserForm({
+      name: userToEdit.name,
+      email: userToEdit.email,
+      role: userToEdit.role
+    })
+    setShowEditUserModal(true)
+  }, [])
 
   // Navegación de tabs optimizada
   const tabs = useMemo(() => [
@@ -433,10 +535,10 @@ export default function AdminDashboard() {
                   <h2 className="text-xl font-semibold text-gray-800">Gestión de Usuarios</h2>
                   <button
                     className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center transition-colors"
-                    onClick={() => {/* Aquí podrías agregar funcionalidad para invitar usuarios */}}
+                    onClick={() => setShowCreateUserModal(true)}
                   >
                     <PlusCircle className="h-4 w-4 mr-2" />
-                    Invitar Usuario
+                    Crear Usuario
                   </button>
                 </div>
                 
@@ -474,28 +576,51 @@ export default function AdminDashboard() {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                               Fecha de Registro
                             </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                              Acciones
+                            </th>
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-300">
-                          {users?.map((user) => (
-                            <tr key={user.id} className="hover:bg-gray-50">
+                          {users?.map((userItem) => (
+                            <tr key={userItem.id} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm font-medium text-gray-800">{user.name}</div>
+                                <div className="text-sm font-medium text-gray-800">{userItem.name}</div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-600">{user.email}</div>
+                                <div className="text-sm text-gray-600">{userItem.email}</div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                  user.role === 'ADMIN' ? 'bg-purple-100 text-purple-800' :
-                                  user.role === 'AGENT' ? 'bg-blue-100 text-blue-800' :
+                                  userItem.role === 'ADMIN' ? 'bg-purple-100 text-purple-800' :
+                                  userItem.role === 'AGENT' ? 'bg-blue-100 text-blue-800' :
                                   'bg-gray-100 text-gray-800'
                                 }`}>
-                                  {user.role}
+                                  {userItem.role}
                                 </span>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                {new Date(user.createdAt).toLocaleDateString('es-UY')}
+                                {new Date(userItem.createdAt).toLocaleDateString('es-UY')}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div className="flex space-x-2">
+                                  <button
+                                    onClick={() => openEditModal(userItem)}
+                                    className="text-blue-600 hover:text-blue-900 flex items-center"
+                                  >
+                                    <Edit className="h-4 w-4 mr-1" />
+                                    Editar
+                                  </button>
+                                  {userItem.id !== user?.id && (
+                                    <button
+                                      onClick={() => handleDeleteUser(userItem.id, userItem.name)}
+                                      className="text-red-600 hover:text-red-900 flex items-center"
+                                    >
+                                      <Trash2 className="h-4 w-4 mr-1" />
+                                      Eliminar
+                                    </button>
+                                  )}
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -705,6 +830,180 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Modal para crear usuario */}
+      {showCreateUserModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="glass-card-readable max-w-md w-full mx-4 p-6">
+            <div className="flex items-center mb-6">
+              <div className="bg-blue-500/20 p-3 rounded-full mr-4">
+                <Users className="h-6 w-6 text-blue-300" />
+              </div>
+              <h2 className="text-2xl font-bold text-white">✨ Crear Nuevo Usuario</h2>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">👤 Nombre completo</label>
+                <input
+                  type="text"
+                  value={createUserForm.name}
+                  onChange={(e) => setCreateUserForm({...createUserForm, name: e.target.value})}
+                  className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  placeholder="Juan Pérez"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">📧 Email</label>
+                <input
+                  type="email"
+                  value={createUserForm.email}
+                  onChange={(e) => setCreateUserForm({...createUserForm, email: e.target.value})}
+                  className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  placeholder="juan@email.com"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">🔑 Contraseña</label>
+                <input
+                  type="password"
+                  value={createUserForm.password}
+                  onChange={(e) => setCreateUserForm({...createUserForm, password: e.target.value})}
+                  className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  placeholder="••••••••"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">👑 Rol</label>
+                <select
+                  value={createUserForm.role}
+                  onChange={(e) => setCreateUserForm({...createUserForm, role: e.target.value})}
+                  className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                >
+                  <option value="USER" className="bg-gray-800">👤 Usuario</option>
+                  <option value="AGENT" className="bg-gray-800">🎧 Agente</option>
+                  <option value="ADMIN" className="bg-gray-800">👑 Administrador</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => setShowCreateUserModal(false)}
+                className="flex-1 px-4 py-3 bg-gray-500/20 backdrop-blur-lg border border-gray-500/30 text-white rounded-lg hover:bg-gray-500/30 transition-all"
+              >
+                ❌ Cancelar
+              </button>
+              <button
+                onClick={handleCreateUser}
+                className="flex-1 px-4 py-3 bg-blue-600/80 backdrop-blur-lg border border-blue-500/30 text-white rounded-lg hover:bg-blue-600 transition-all pulse-modern"
+              >
+                ✨ Crear Usuario
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para editar usuario */}
+      {showEditUserModal && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="glass-card-readable max-w-md w-full mx-4 p-6">
+            <div className="flex items-center mb-6">
+              <div className="bg-orange-500/20 p-3 rounded-full mr-4">
+                <Edit className="h-6 w-6 text-orange-300" />
+              </div>
+              <h2 className="text-2xl font-bold text-white">🔧 Editar Usuario</h2>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">👤 Nombre completo</label>
+                <input
+                  type="text"
+                  value={editUserForm.name}
+                  onChange={(e) => setEditUserForm({...editUserForm, name: e.target.value})}
+                  className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">📧 Email</label>
+                <input
+                  type="email"
+                  value={editUserForm.email}
+                  onChange={(e) => setEditUserForm({...editUserForm, email: e.target.value})}
+                  className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">👑 Rol</label>
+                <select
+                  value={editUserForm.role}
+                  onChange={(e) => setEditUserForm({...editUserForm, role: e.target.value})}
+                  className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                >
+                  <option value="USER" className="bg-gray-800">👤 Usuario</option>
+                  <option value="AGENT" className="bg-gray-800">🎧 Agente</option>
+                  <option value="ADMIN" className="bg-gray-800">👑 Administrador</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => setShowEditUserModal(false)}
+                className="flex-1 px-4 py-3 bg-gray-500/20 backdrop-blur-lg border border-gray-500/30 text-white rounded-lg hover:bg-gray-500/30 transition-all"
+              >
+                ❌ Cancelar
+              </button>
+              <button
+                onClick={handleEditUser}
+                className="flex-1 px-4 py-3 bg-orange-600/80 backdrop-blur-lg border border-orange-500/30 text-white rounded-lg hover:bg-orange-600 transition-all pulse-modern"
+              >
+                💾 Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Notificación bonita */}
+      {notification.show && (
+        <div className="fixed top-4 right-4 z-50 animate-slide-in-right">
+          <div className={`glass-card-readable p-4 max-w-sm shadow-2xl border-l-4 ${
+            notification.type === 'success' ? 'border-green-500' :
+            notification.type === 'error' ? 'border-red-500' :
+            'border-blue-500'
+          }`}>
+            <div className="flex items-start">
+              <div className={`flex-shrink-0 mr-3 ${
+                notification.type === 'success' ? 'text-green-400' :
+                notification.type === 'error' ? 'text-red-400' :
+                'text-blue-400'
+              }`}>
+                {notification.type === 'success' && <Check className="h-6 w-6" />}
+                {notification.type === 'error' && <X className="h-6 w-6" />}
+                {notification.type === 'info' && <AlertCircle className="h-6 w-6" />}
+              </div>
+              <div>
+                <h4 className="text-white font-semibold">{notification.title}</h4>
+                <p className="text-white/80 text-sm mt-1">{notification.message}</p>
+              </div>
+              <button
+                onClick={() => setNotification(prev => ({ ...prev, show: false }))}
+                className="ml-3 text-white/60 hover:text-white transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
