@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
   
   // Configuración experimental
   experimental: {
-    optimizeCss: true,
+    // optimizeCss: true, // Deshabilitado por problemas de build en Vercel
     optimizePackageImports: ['lucide-react'],
   },
   
