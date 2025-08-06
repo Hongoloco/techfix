@@ -16,9 +16,6 @@ export default function Home() {
               <h1 className="text-2xl font-bold gradient-text">TechFix Uruguay</h1>
             </div>
             <nav className="hidden md:flex space-x-6">
-              <Link href="/services" className="text-white hover:text-yellow-300 transition-colors font-medium">
-                🔧 Servicios
-              </Link>
               <Link href="/contact" className="text-white hover:text-yellow-300 transition-colors font-medium">
                 📞 Contacto
               </Link>

@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { ArrowLeft, Send } from 'lucide-react'
+import { Send } from 'lucide-react'
 
 function QuoteForm() {
   const [formData, setFormData] = useState({
@@ -77,12 +77,6 @@ function QuoteForm() {
           </div>
           <div className="space-y-4">
             <Link
-              href="/services"
-              className="block w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Ver Otros Servicios
-            </Link>
-            <Link
               href="/"
               className="block w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors"
             >
@@ -101,17 +95,11 @@ function QuoteForm() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
-              <Link href="/" className="text-white hover:text-yellow-300 transition-colors mr-4">
-                <ArrowLeft className="h-6 w-6" />
-              </Link>
               <h1 className="text-2xl font-bold text-white">Solicitar Cotización</h1>
             </div>
             <nav className="hidden md:flex space-x-6">
               <Link href="/" className="text-white hover:text-yellow-300 transition-colors font-medium">
                 🏠 Inicio
-              </Link>
-              <Link href="/services" className="text-white hover:text-yellow-300 transition-colors font-medium">
-                🔧 Servicios
               </Link>
               <Link href="/contact" className="text-white hover:text-yellow-300 transition-colors font-medium">
                 📞 Contacto
@@ -123,13 +111,6 @@ function QuoteForm() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <Link
-            href="/services"
-            className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Volver a Servicios
-          </Link>
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Solicitar Cotización
           </h1>

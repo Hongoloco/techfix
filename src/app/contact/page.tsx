@@ -74,9 +74,6 @@ export default function ContactPage() {
               <Link href="/" className="text-white hover:text-yellow-300 transition-colors font-medium">
                 🏠 Inicio
               </Link>
-              <Link href="/services" className="text-white hover:text-yellow-300 transition-colors font-medium">
-                🔧 Servicios
-              </Link>
               <Link href="/quote" className="text-white hover:text-yellow-300 transition-colors font-medium">
                 💰 Cotización
               </Link>
