@@ -394,8 +394,8 @@ export default function AdminDashboard() {
                         </div>
                         <p className="text-gray-700 mb-4 line-clamp-3">{service.description}</p>
                         <div className="flex justify-between items-center">
-                          <span className="text-2xl font-bold text-blue-600">
-                            ${service.price.toLocaleString()}
+                          <span className="text-lg font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                            Consultar precio
                           </span>
                           <span className="text-sm text-gray-600">
                             {service.duration}

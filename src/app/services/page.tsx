@@ -160,10 +160,10 @@ Me interesa conocer sus servicios de soporte técnico.
                       {service.description}
                     </p>
                     <div className="flex items-baseline">
-                      <span className="text-4xl font-bold text-blue-600">
-                        ${service.price}
+                      <span className="text-2xl font-bold text-blue-600 bg-blue-50 px-4 py-2 rounded-full">
+                        Consultar precio
                       </span>
-                      <span className="text-gray-500 ml-2">
+                      <span className="text-gray-500 ml-3">
                         / {service.duration}
                       </span>
                     </div>
