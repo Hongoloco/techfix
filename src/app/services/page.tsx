@@ -104,7 +104,11 @@ export default function ServicesPage() {
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <WhatsAppButton
-              message="¡Hola TechFix Uruguay! Me interesa conocer sus servicios de soporte técnico."
+              message="¡Hola TechFix Uruguay! 
+
+Me interesa conocer sus servicios de soporte técnico.
+
+¿Podrían brindarme más información?"
               className="border-2 border-white text-white hover:bg-white hover:text-blue-600 flex items-center justify-center"
             >
               <MessageSquare className="mr-2 h-5 w-5" />

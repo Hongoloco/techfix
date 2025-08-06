@@ -242,7 +242,7 @@ export default function ContactPage() {
               </p>
               <a
                 href="https://wa.me/59899252808?text=🛠️%20Hola%20TechFix%20Uruguay!%0A%0ANecesito%20ayuda%20técnica.%20¿Pueden%20asistirme?"
-                className="btn-modern btn-tech text-xl px-8 py-4 card-hover"
+                className="btn-modern bg-green-600 hover:bg-green-700 text-xl px-8 py-4 card-hover"
                 target="_blank"
                 rel="noopener noreferrer"
               >
