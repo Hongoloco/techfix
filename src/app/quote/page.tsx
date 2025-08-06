@@ -95,32 +95,30 @@ function QuoteForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen gradient-animated">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
+      <header className="glass-effect sticky top-0 z-50 border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
-              <Link href="/" className="text-xl font-bold text-blue-600">
-                TechFix
+              <Link href="/" className="text-white hover:text-yellow-300 transition-colors mr-4">
+                <ArrowLeft className="h-6 w-6" />
               </Link>
+              <h1 className="text-2xl font-bold text-white">Solicitar Cotización</h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/services"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Servicios
+            <nav className="hidden md:flex space-x-6">
+              <Link href="/" className="text-white hover:text-yellow-300 transition-colors font-medium">
+                🏠 Inicio
               </Link>
-              <Link
-                href="/contact"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Contacto
+              <Link href="/services" className="text-white hover:text-yellow-300 transition-colors font-medium">
+                🔧 Servicios
               </Link>
-            </div>
+              <Link href="/contact" className="text-white hover:text-yellow-300 transition-colors font-medium">
+                📞 Contacto
+              </Link>
+            </nav>
           </div>
-        </nav>
+        </div>
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

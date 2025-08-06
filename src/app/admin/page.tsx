@@ -311,7 +311,12 @@ export default function AdminDashboard() {
           <div className="flex-1">
             {activeTab === 'dashboard' && (
               <div>
-                <h2 className="text-xl font-semibold mb-6">Dashboard</h2>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
+                  <div className="text-sm text-gray-600">
+                    Última actualización: {new Date().toLocaleDateString('es-UY')}
+                  </div>
+                </div>
                 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -349,15 +354,27 @@ export default function AdminDashboard() {
 
             {activeTab === 'tickets' && (
               <div>
-                <h2 className="text-xl font-semibold mb-6">Gestión de Tickets</h2>
-                <TicketsTable tickets={tickets || []} loading={ticketsLoading} />
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-semibold text-gray-800">Gestión de Tickets</h2>
+                  <button
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center transition-colors"
+                    onClick={() => {/* Aquí podrías agregar funcionalidad para crear nuevo ticket */}}
+                  >
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    Nuevo Ticket
+                  </button>
+                </div>
+                
+                <div className="bg-white rounded-lg shadow border border-gray-200">
+                  <TicketsTable tickets={tickets || []} loading={ticketsLoading} />
+                </div>
               </div>
             )}
 
             {activeTab === 'services' && (
               <div>
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-semibold">Gestión de Servicios</h2>
+                  <h2 className="text-xl font-semibold text-gray-800">Gestión de Servicios</h2>
                   <button
                     onClick={() => router.push('/admin/services/new')}
                     className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center transition-colors"
@@ -367,118 +384,144 @@ export default function AdminDashboard() {
                   </button>
                 </div>
                 
-                {servicesLoading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[...Array(6)].map((_, i) => (
-                      <ServiceSkeleton key={i} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {services?.map((service) => (
-                      <div key={service.id} className="bg-gray-50 rounded-lg shadow p-6 hover:shadow-md transition-shadow border border-gray-200">
-                        <div className="flex justify-between items-start mb-4">
-                          <h3 className="text-lg font-semibold text-gray-800">{service.name}</h3>
-                          <div className="flex space-x-2">
-                            <button
-                              onClick={() => handleToggleService(service.id, service.active)}
-                              className={`px-2 py-1 text-xs rounded-full transition-colors ${
-                                service.active 
-                                  ? 'bg-green-100 text-green-800 hover:bg-green-200' 
-                                  : 'bg-red-100 text-red-800 hover:bg-red-200'
-                              }`}
-                            >
-                              {service.active ? 'Activo' : 'Inactivo'}
-                            </button>
+                <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+                  {servicesLoading ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {[...Array(6)].map((_, i) => (
+                        <ServiceSkeleton key={i} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {services?.map((service) => (
+                        <div key={service.id} className="bg-gray-50 rounded-lg shadow p-6 hover:shadow-md transition-shadow border border-gray-200">
+                          <div className="flex justify-between items-start mb-4">
+                            <h3 className="text-lg font-semibold text-gray-800">{service.name}</h3>
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => handleToggleService(service.id, service.active)}
+                                className={`px-2 py-1 text-xs rounded-full transition-colors ${
+                                  service.active 
+                                    ? 'bg-green-100 text-green-800 hover:bg-green-200' 
+                                    : 'bg-red-100 text-red-800 hover:bg-red-200'
+                                }`}
+                              >
+                                {service.active ? 'Activo' : 'Inactivo'}
+                              </button>
+                            </div>
+                          </div>
+                          <p className="text-gray-700 mb-4 line-clamp-3">{service.description}</p>
+                          <div className="flex justify-between items-center">
+                            <span className="text-lg font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                              Consultar precio
+                            </span>
+                            <span className="text-sm text-gray-600">
+                              {service.duration}
+                            </span>
                           </div>
                         </div>
-                        <p className="text-gray-700 mb-4 line-clamp-3">{service.description}</p>
-                        <div className="flex justify-between items-center">
-                          <span className="text-lg font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-                            Consultar precio
-                          </span>
-                          <span className="text-sm text-gray-600">
-                            {service.duration}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
             {activeTab === 'users' && (
               <div>
-                <h2 className="text-xl font-semibold mb-6">Gestión de Usuarios</h2>
-                {usersLoading ? (
-                  <div className="space-y-4">
-                    {[...Array(5)].map((_, i) => (
-                      <div key={i} className="bg-gray-50 p-4 rounded-lg shadow animate-pulse border border-gray-200">
-                        <div className="flex items-center space-x-4">
-                          <div className="h-10 w-10 bg-gray-300 rounded-full"></div>
-                          <div className="space-y-2 flex-1">
-                            <div className="h-4 bg-gray-300 rounded w-1/3"></div>
-                            <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-semibold text-gray-800">Gestión de Usuarios</h2>
+                  <button
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center transition-colors"
+                    onClick={() => {/* Aquí podrías agregar funcionalidad para invitar usuarios */}}
+                  >
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    Invitar Usuario
+                  </button>
+                </div>
+                
+                <div className="bg-white rounded-lg shadow border border-gray-200">
+                  {usersLoading ? (
+                    <div className="p-6">
+                      <div className="space-y-4">
+                        {[...Array(5)].map((_, i) => (
+                          <div key={i} className="bg-gray-50 p-4 rounded-lg shadow animate-pulse border border-gray-200">
+                            <div className="flex items-center space-x-4">
+                              <div className="h-10 w-10 bg-gray-300 rounded-full"></div>
+                              <div className="space-y-2 flex-1">
+                                <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+                                <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="bg-gray-50 rounded-lg shadow overflow-hidden border border-gray-200">
-                    <table className="min-w-full divide-y divide-gray-300">
-                      <thead className="bg-gray-100">
-                        <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                            Usuario
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                            Email
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                            Rol
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                            Fecha de Registro
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-gray-50 divide-y divide-gray-300">
-                        {users?.map((user) => (
-                          <tr key={user.id} className="hover:bg-gray-100">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm font-medium text-gray-800">{user.name}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-600">{user.email}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                                user.role === 'ADMIN' ? 'bg-purple-100 text-purple-800' :
-                                user.role === 'AGENT' ? 'bg-blue-100 text-blue-800' :
-                                'bg-gray-100 text-gray-800'
-                              }`}>
-                                {user.role}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                              {new Date(user.createdAt).toLocaleDateString('es-UY')}
-                            </td>
-                          </tr>
                         ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="overflow-hidden">
+                      <table className="min-w-full divide-y divide-gray-300">
+                        <thead className="bg-gray-100">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                              Usuario
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                              Email
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                              Rol
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+                              Fecha de Registro
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-300">
+                          {users?.map((user) => (
+                            <tr key={user.id} className="hover:bg-gray-50">
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm font-medium text-gray-800">{user.name}</div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-600">{user.email}</div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                                  user.role === 'ADMIN' ? 'bg-purple-100 text-purple-800' :
+                                  user.role === 'AGENT' ? 'bg-blue-100 text-blue-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {user.role}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                {new Date(user.createdAt).toLocaleDateString('es-UY')}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
             {activeTab === 'social' && (
               <div>
-                <h2 className="text-xl font-semibold mb-6">Gestión de Redes Sociales</h2>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-semibold text-gray-800">Gestión de Redes Sociales</h2>
+                  <button
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center transition-colors"
+                    onClick={() => {/* Aquí podrías agregar funcionalidad para conectar nueva red social */}}
+                  >
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    Conectar Red Social
+                  </button>
+                </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-white rounded-lg shadow border border-gray-200 p-6 mb-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {/* Instagram Card */}
                   <div className="bg-gray-50 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border border-gray-200">
                     <div className="flex items-center justify-between mb-4">
@@ -633,9 +676,10 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                 </div>
+                </div>
 
                 {/* Acciones Rápidas */}
-                <div className="mt-8">
+                <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
                   <h3 className="text-lg font-semibold mb-4">Acciones Rápidas</h3>
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <button className="bg-gradient-to-r from-purple-600 to-pink-500 text-white p-4 rounded-lg hover:from-purple-700 hover:to-pink-600 transition-all duration-200 flex items-center justify-center">

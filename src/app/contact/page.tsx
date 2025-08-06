@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Send, MapPin, Clock, Mail, Phone, Zap } from 'lucide-react'
 import { BusinessHours } from '@/components/BusinessHours'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
@@ -60,15 +61,26 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen gradient-animated">
       {/* Header */}
-      <header className="glass-effect sticky top-0 z-50">
+      <header className="glass-effect sticky top-0 z-50 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
-              <div className="bg-white rounded-full p-2 mr-3 float-animation">
-                <Phone className="h-8 w-8 text-green-600" />
+              <div className="bg-white/20 backdrop-blur-lg rounded-full p-3 mr-3 float-animation shadow-lg border border-white/30">
+                <Phone className="h-8 w-8 text-white" />
               </div>
-              <h1 className="text-2xl font-bold gradient-text">Contacto - TechFix Uruguay</h1>
+              <h1 className="text-2xl font-bold text-white">Contacto - TechFix Uruguay</h1>
             </div>
+            <nav className="hidden md:flex space-x-6">
+              <Link href="/" className="text-white hover:text-yellow-300 transition-colors font-medium">
+                🏠 Inicio
+              </Link>
+              <Link href="/services" className="text-white hover:text-yellow-300 transition-colors font-medium">
+                🔧 Servicios
+              </Link>
+              <Link href="/quote" className="text-white hover:text-yellow-300 transition-colors font-medium">
+                💰 Cotización
+              </Link>
+            </nav>
           </div>
         </div>
       </header>
@@ -88,22 +100,22 @@ export default function ContactPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Formulario de contacto */}
-          <div className="glass-effect modern-card">
+          <div className="glass-card-readable p-8">
             <h2 className="text-3xl font-bold text-white mb-8 text-center">
               🎫 Crear Ticket de Soporte
             </h2>
             
             {submitStatus === 'success' && (
-              <div className="mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
-                <p className="text-green-100 font-medium">
+              <div className="mb-6 p-4 bg-green-500/20 backdrop-blur-lg border border-green-500/30 rounded-lg">
+                <p className="text-green-300 font-medium">
                   ✅ ¡Ticket creado exitosamente! Te contactaremos pronto.
                 </p>
               </div>
             )}
             
             {submitStatus === 'error' && (
-              <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
-                <p className="text-red-100 font-medium">
+              <div className="mb-6 p-4 bg-red-500/20 backdrop-blur-lg border border-red-500/30 rounded-lg">
+                <p className="text-red-300 font-medium">
                   ❌ Error al enviar el ticket. Intenta de nuevo o contáctanos por WhatsApp.
                 </p>
               </div>
@@ -122,7 +134,7 @@ export default function ContactPage() {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="modern-input"
+                    className="w-full px-4 py-3 bg-white/10 backdrop-blur-lg border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                     placeholder="Tu nombre y apellido"
                   />
                 </div>
