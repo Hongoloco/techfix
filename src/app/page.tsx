@@ -6,11 +6,11 @@ export default function Home() {
   return (
     <div className="min-h-screen gradient-animated">
       {/* Header moderno */}
-      <header className="glass-effect sticky top-0 z-50">
+      <header className="glass-effect sticky top-0 z-50 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
-              <div className="bg-white rounded-full p-2 mr-3 float-animation">
+              <div className="bg-white rounded-full p-2 mr-3 float-animation shadow-lg">
                 <Cpu className="h-8 w-8 text-purple-600" />
               </div>
               <h1 className="text-2xl font-bold gradient-text">TechFix Uruguay</h1>
@@ -29,6 +29,12 @@ export default function Home() {
                 Iniciar Sesión
               </Link>
             </nav>
+            {/* Menú móvil */}
+            <div className="md:hidden">
+              <Link href="/contact" className="btn-modern text-sm px-4 py-2">
+                Contacto
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -38,14 +44,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center relative z-10">
             <div className="float-animation">
-              <h1 className="text-6xl md:text-8xl font-extrabold text-white mb-6 leading-tight">
-                🛠️ <span className="gradient-text bg-white">TechFix</span>
+              <h1 className="text-4xl sm:text-6xl md:text-8xl font-extrabold text-white mb-6 leading-tight">
+                🛠️ <span className="gradient-text bg-gradient-to-r from-white to-yellow-200 bg-clip-text">TechFix</span>
                 <br />
-                <span className="text-yellow-300">Uruguay</span>
+                <span className="text-yellow-300 drop-shadow-lg">Uruguay</span>
               </h1>
             </div>
             
-            <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 max-w-4xl mx-auto leading-relaxed">
               🚀 <strong>Soporte técnico profesional</strong> en Las Piedras y alrededores
               <br />
               💻 Resolvemos todos tus problemas tecnológicos con <strong>rapidez y eficiencia</strong>
@@ -53,10 +59,10 @@ export default function Home() {
 
             {/* Botones de acción principales */}
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-              <Link href="/contact" className="btn-modern btn-success text-xl px-8 py-4 card-hover">
+              <Link href="/contact" className="btn-modern btn-success text-lg sm:text-xl px-6 sm:px-8 py-3 sm:py-4 card-hover">
                 🎫 Crear Ticket de Soporte
               </Link>
-              <Link href="/quote" className="btn-modern btn-tech text-xl px-8 py-4 card-hover">
+              <Link href="/quote" className="btn-modern btn-tech text-lg sm:text-xl px-6 sm:px-8 py-3 sm:py-4 card-hover">
                 💰 Solicitar Cotización
               </Link>
             </div>
