@@ -285,6 +285,7 @@ export default function ContactPage() {
                     <p className="text-white font-medium">Área de Servicio</p>
                     <p className="text-white/80">Las Piedras y alrededores</p>
                     <p className="text-sm text-white/60">🚗 Visitas gratuitas en la zona</p>
+                    <p className="text-xs text-white/50 italic">Otras zonas: consultá costos</p>
                   </div>
                 </div>
               </div>

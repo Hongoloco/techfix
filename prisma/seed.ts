@@ -7,16 +7,20 @@ async function main() {
   console.log('Poblando la base de datos con datos iniciales...')
 
   // Crear usuarios de prueba
-  const adminPassword = await bcrypt.hash('admin123', 12)
+  const adminPassword = await bcrypt.hash('Agustin2025', 12)
   const agentPassword = await bcrypt.hash('agent123', 12)
   const userPassword = await bcrypt.hash('user123', 12)
 
   // Admin
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@techfix.com' },
-    update: {},
+    where: { email: 'techfix@gmail.com' },
+    update: {
+      name: 'Administrador TechFix',
+      password: adminPassword,
+      role: 'ADMIN'
+    },
     create: {
-      email: 'admin@techfix.com',
+      email: 'techfix@gmail.com',
       name: 'Administrador TechFix',
       password: adminPassword,
       role: 'ADMIN'
@@ -159,7 +163,7 @@ async function main() {
 
   console.log('✅ Base de datos poblada exitosamente!')
   console.log('\n👤 Usuarios creados:')
-  console.log('📧 Admin: admin@techfix.com / admin123')
+  console.log('📧 Admin: techfix@gmail.com / Agustin2025')
   console.log('📧 Agent: agent@techfix.com / agent123')
   console.log('📧 User: user@techfix.com / user123')
   console.log('\n📋 Tickets y FAQs creados exitosamente!')

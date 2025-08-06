@@ -69,20 +69,21 @@ export default function Home() {
 
             {/* Stats impresionantes */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-              <div className="glass-effect modern-card card-hover text-center">
-                <div className="text-4xl mb-4">⚡</div>
-                <h3 className="text-2xl font-bold text-white mb-2">Respuesta Rápida</h3>
-                <p className="text-white/80">WhatsApp inmediato en horario de atención</p>
+              <div className="glass-card-readable modern-card text-center p-8">
+                <div className="text-5xl mb-6">⚡</div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">Respuesta Rápida</h3>
+                <p className="text-gray-700 font-medium">WhatsApp inmediato en horario de atención</p>
               </div>
-              <div className="glass-effect modern-card card-hover text-center">
-                <div className="text-4xl mb-4">🇺🇾</div>
-                <h3 className="text-2xl font-bold text-white mb-2">Empresa Local</h3>
-                <p className="text-white/80">Soporte en español, entendemos tu negocio</p>
+              <div className="glass-card-readable modern-card text-center p-8">
+                <div className="text-5xl mb-6">🇺🇾</div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">Empresa Local</h3>
+                <p className="text-gray-700 font-medium">Soporte en español, entendemos tu negocio</p>
               </div>
-              <div className="glass-effect modern-card card-hover text-center">
-                <div className="text-4xl mb-4">🆓</div>
-                <h3 className="text-2xl font-bold text-white mb-2">Visitas Gratuitas</h3>
-                <p className="text-white/80">Sin costo en Las Piedras y alrededores</p>
+              <div className="glass-card-readable modern-card text-center p-8">
+                <div className="text-5xl mb-6">🆓</div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">Visitas Gratuitas</h3>
+                <p className="text-gray-700 font-medium">Sin costo en Las Piedras y alrededores</p>
+                <p className="text-gray-600 text-sm mt-2 italic">Si sos de otra zona, consultá costos</p>
               </div>
             </div>
           </div>

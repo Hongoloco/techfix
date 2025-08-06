@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyTokenFromRequest } from '@/lib/auth'
+import { getTokenFromRequest, verifyToken } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
-    const tokenData = verifyTokenFromRequest(request)
-    if (!tokenData) {
+    const token = getTokenFromRequest(request)
+    if (!token) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    }
+
+    const tokenData = verifyToken(token)
+    if (!tokenData) {
+      return NextResponse.json({ error: 'Token inválido' }, { status: 401 })
     }
 
     // Verificar que el usuario sea admin

@@ -54,11 +54,11 @@ export function WhatsAppFloatingButton() {
 Tengo un problema técnico y necesito ayuda urgente.
 
 ¿Pueden asistirme por favor?"
-        className="bg-green-500 text-white hover:bg-green-600 shadow-xl rounded-full p-4 pulse-animation hover:shadow-2xl transition-all duration-300"
+        className="whatsapp-round whatsapp-float"
       >
-        <WhatsAppIcon className="h-7 w-7" />
+        <WhatsAppIcon className="h-8 w-8 text-white" />
       </WhatsAppButton>
-      <div className="absolute -top-2 -left-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center animate-bounce font-bold">
+      <div className="whatsapp-badge absolute -top-1 -right-1 text-white text-xs h-6 w-6 flex items-center justify-center font-bold border-2 border-white">
         SOS
       </div>
     </div>
