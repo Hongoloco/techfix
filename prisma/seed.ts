@@ -47,40 +47,6 @@ async function main() {
     }
   })
 
-  // Crear FAQs de ejemplo
-  const faqs = [
-    {
-      question: '¿Cómo puedo restablecer mi contraseña?',
-      answer: 'Para restablecer tu contraseña, ve a la página de inicio de sesión y haz clic en "¿Olvidaste tu contraseña?". Recibirás un enlace por correo electrónico para crear una nueva contraseña.',
-      category: 'Cuenta',
-      order: 1
-    },
-    {
-      question: '¿Cuál es el horario de soporte técnico?',
-      answer: 'Nuestro equipo de soporte técnico está disponible de lunes a viernes de 9:00 AM a 6:00 PM. Para emergencias fuera de horario, puedes crear un ticket con prioridad urgente.',
-      category: 'General',
-      order: 2
-    },
-    {
-      question: '¿Cómo puedo actualizar mi perfil?',
-      answer: 'Puedes actualizar tu perfil accediendo al panel de usuario después de iniciar sesión. Allí podrás cambiar tu nombre, correo electrónico y otra información personal.',
-      category: 'Cuenta',
-      order: 3
-    },
-    {
-      question: '¿Qué información debo incluir al reportar un problema?',
-      answer: 'Al reportar un problema, incluye: descripción detallada del problema, pasos para reproducirlo, capturas de pantalla si es posible, y información sobre tu sistema operativo y navegador.',
-      category: 'Tickets',
-      order: 4
-    }
-  ]
-
-  for (const faqData of faqs) {
-    await prisma.fAQ.create({
-      data: faqData
-    })
-  }
-
   // Crear servicios de ejemplo
   const services = [
     {

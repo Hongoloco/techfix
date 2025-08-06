@@ -14,7 +14,6 @@ export default function Home() {
             </div>
             <nav className="flex space-x-8">
               <Link href="/services" className="text-gray-600 hover:text-gray-900">Servicios</Link>
-              <Link href="/faq" className="text-gray-600 hover:text-gray-900">FAQ</Link>
               <Link href="/contact" className="text-gray-600 hover:text-gray-900">Contacto</Link>
               <Link href="/quote" className="text-blue-600 hover:text-blue-700 font-medium">Cotización</Link>
               <Link href="/login" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
@@ -42,14 +41,6 @@ export default function Home() {
                 className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
               >
                 Crear Ticket
-              </Link>
-            </div>
-            <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-              <Link
-                href="/faq"
-                className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10"
-              >
-                Ver FAQ
               </Link>
             </div>
           </div>

@@ -298,7 +298,6 @@ export default function ServicesPage() {
             <div>
               <h4 className="text-lg font-semibold mb-4">Empresa</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="/faq" className="hover:text-white">FAQ</Link></li>
                 <li><Link href="/contact" className="hover:text-white">Contacto</Link></li>
               </ul>
             </div>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Ticket, ArrowLeft, MapPin } from 'lucide-react'
+import { Ticket, ArrowLeft, Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { WhatsAppButton, ContactInfo, WhatsAppFloatingButton } from '@/components/WhatsApp'
 import { BusinessHours, AfterHoursModal, useBusinessHours } from '@/components/BusinessHours'
 
@@ -97,12 +97,6 @@ export default function ContactPage() {
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Servicios
-              </Link>
-              <Link
-                href="/faq"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                FAQ
               </Link>
               <Link
                 href="/quote"

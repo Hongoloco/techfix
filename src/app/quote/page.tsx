@@ -113,12 +113,6 @@ function QuoteForm() {
                 Servicios
               </Link>
               <Link
-                href="/faq"
-                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                FAQ
-              </Link>
-              <Link
                 href="/contact"
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
               >
