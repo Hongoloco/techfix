@@ -5,9 +5,10 @@ import { getTokenFromRequest, verifyToken } from '@/lib/auth'
 // GET - Obtener un cliente específico
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const token = getTokenFromRequest(request)
     
     if (!token) {
@@ -30,7 +31,7 @@ export async function GET(
     }
 
     const client = await prisma.client.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         tickets: {
           orderBy: { createdAt: 'desc' }
@@ -58,9 +59,10 @@ export async function GET(
 // PUT - Actualizar cliente
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const token = getTokenFromRequest(request)
     
     if (!token) {
@@ -93,7 +95,7 @@ export async function PUT(
 
     // Verificar que el cliente existe
     const existingClient = await prisma.client.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!existingClient) {
@@ -104,7 +106,7 @@ export async function PUT(
     const emailInUse = await prisma.client.findFirst({
       where: {
         email,
-        NOT: { id: params.id }
+        NOT: { id }
       }
     })
 
@@ -116,7 +118,7 @@ export async function PUT(
     }
 
     const client = await prisma.client.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         name,
         email,
@@ -140,9 +142,10 @@ export async function PUT(
 // DELETE - Eliminar cliente
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const token = getTokenFromRequest(request)
     
     if (!token) {
@@ -166,7 +169,7 @@ export async function DELETE(
 
     // Verificar que el cliente existe
     const existingClient = await prisma.client.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!existingClient) {
@@ -175,7 +178,7 @@ export async function DELETE(
 
     // Eliminar cliente (esto también eliminará tickets y quotes relacionados por cascada)
     await prisma.client.delete({
-      where: { id: params.id }
+      where: { id }
     })
 
     return NextResponse.json({ message: 'Cliente eliminado exitosamente' })
