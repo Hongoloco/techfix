@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,72 +8,60 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(cuid())
-  name     String
-  email    String @unique
-  password String
-  role     Role   @default(USER)
-  
-  tickets       Ticket[] @relation("UserTickets")
-  assignedTickets Ticket[] @relation("AssignedTickets")
-  comments      TicketComment[]
-  blogPosts     BlogPost[]
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String          @id @default(cuid())
+  name            String
+  email           String          @unique
+  password        String
+  role            Role            @default(USER)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  blogPosts       BlogPost[]
+  assignedTickets Ticket[]        @relation("AssignedTickets")
+  tickets         Ticket[]        @relation("UserTickets")
+  comments        TicketComment[]
 }
 
 model Client {
-  id          String @id @default(cuid())
-  name        String
-  email       String @unique
-  phone       String?
-  company     String?
-  address     String?
-  notes       String?
-  
-  tickets     Ticket[] @relation("ClientTickets")
-  quotes      Quote[] @relation("ClientQuotes")
-  
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  company   String?
+  address   String?
+  notes     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  quotes    Quote[]  @relation("ClientQuotes")
+  tickets   Ticket[] @relation("ClientTickets")
 }
 
 model Ticket {
-  id          String       @id @default(cuid())
-  title       String
-  description String
-  priority    Priority     @default(MEDIUM)
-  status      TicketStatus @default(OPEN)
-  category    String?
-  
-  userId   String
-  user     User   @relation("UserTickets", fields: [userId], references: [id], onDelete: Cascade)
-  
-  clientId String?
-  client   Client? @relation("ClientTickets", fields: [clientId], references: [id], onDelete: SetNull)
-  
+  id           String          @id @default(cuid())
+  title        String
+  description  String
+  priority     Priority        @default(MEDIUM)
+  status       TicketStatus    @default(OPEN)
+  category     String?
+  userId       String
+  clientId     String?
   assignedToId String?
-  assignedTo   User?   @relation("AssignedTickets", fields: [assignedToId], references: [id], onDelete: SetNull)
-  
-  comments TicketComment[]
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  assignedTo   User?           @relation("AssignedTickets", fields: [assignedToId], references: [id])
+  client       Client?         @relation("ClientTickets", fields: [clientId], references: [id])
+  user         User            @relation("UserTickets", fields: [userId], references: [id], onDelete: Cascade)
+  comments     TicketComment[]
 }
 
 model TicketComment {
-  id      String @id @default(cuid())
-  content String
-  
-  ticketId String
-  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id        String   @id @default(cuid())
+  content   String
+  ticketId  String
+  userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Service {
@@ -85,16 +70,15 @@ model Service {
   description String
   price       Float
   duration    String
-  features    String   // JSON string con las características del servicio
+  features    String
   active      Boolean  @default(true)
   category    String?
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Quote {
-  id          String @id @default(cuid())
+  id          String      @id @default(cuid())
   name        String
   email       String
   company     String?
@@ -103,28 +87,25 @@ model Quote {
   description String
   budget      String?
   status      QuoteStatus @default(PENDING)
-  
-  clientId String?
-  client   Client? @relation("ClientQuotes", fields: [clientId], references: [id], onDelete: SetNull)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  clientId    String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  client      Client?     @relation("ClientQuotes", fields: [clientId], references: [id])
 }
 
 model BlogPost {
-  id          String @id @default(cuid())
-  title       String
-  content     String
-  excerpt     String?
-  slug        String @unique
-  published   Boolean @default(false)
-  authorId    String
-  author      User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  category    String?
-  tags        String?  // JSON string con los tags
-  
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  excerpt   String?
+  slug      String   @unique
+  published Boolean  @default(false)
+  authorId  String
+  category  String?
+  tags      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 enum Role {
