@@ -5,11 +5,28 @@ import { sendEmail, newTicketEmailTemplate } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, title, description, priority, category } = await request.json()
+    const body = await request.json()
+    console.log('Received ticket data:', body)
+    
+    // Soportar tanto el formato nuevo como el antiguo
+    const { 
+      name, 
+      email, 
+      phone,
+      title, 
+      subject,
+      description, 
+      message,
+      priority, 
+      category 
+    } = body
 
-    if (!name || !email || !title || !description) {
+    const ticketTitle = title || subject
+    const ticketDescription = description || message
+
+    if (!name || !email || !ticketTitle || !ticketDescription) {
       return NextResponse.json(
-        { error: 'Nombre, email, título y descripción son requeridos' },
+        { error: 'Nombre, email, asunto y mensaje son requeridos' },
         { status: 400 }
       )
     }
@@ -46,12 +63,29 @@ export async function POST(request: NextRequest) {
       userId = user.id
     }
 
+    // Convertir prioridad del formulario al formato de la DB
+    let dbPriority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT' = 'MEDIUM'
+    switch (priority) {
+      case 'low':
+        dbPriority = 'LOW'
+        break
+      case 'normal':
+        dbPriority = 'MEDIUM'
+        break
+      case 'high':
+        dbPriority = 'HIGH'
+        break
+      case 'urgent':
+        dbPriority = 'URGENT'
+        break
+    }
+
     // Crear el ticket
     const ticket = await prisma.ticket.create({
       data: {
-        title,
-        description,
-        priority: priority || 'MEDIUM',
+        title: ticketTitle,
+        description: ticketDescription,
+        priority: dbPriority,
         category: category || null,
         userId,
         status: 'OPEN'

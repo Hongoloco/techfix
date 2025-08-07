@@ -274,6 +274,7 @@ export default function AdminDashboard() {
   // Funciones para gestión de usuarios
   const handleCreateUser = useCallback(async () => {
     try {
+      console.log('Creating user with data:', createUserForm)
       await createUserMutation('/api/admin/users', {
         method: 'POST',
         body: createUserForm
@@ -284,13 +285,15 @@ export default function AdminDashboard() {
       showNotification('success', '¡Usuario creado!', `El usuario ${createUserForm.name} ha sido creado exitosamente.`)
     } catch (error) {
       console.error('Error creating user:', error)
-      showNotification('error', 'Error al crear usuario', 'No se pudo crear el usuario. Intenta de nuevo.')
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido'
+      showNotification('error', 'Error al crear usuario', `No se pudo crear el usuario: ${errorMessage}`)
     }
   }, [createUserMutation, createUserForm, refetchUsers, showNotification])
 
   const handleEditUser = useCallback(async () => {
     if (!selectedUser) return
     try {
+      console.log('Updating user:', selectedUser.id, 'with data:', editUserForm)
       await updateUserMutation(`/api/admin/users/${selectedUser.id}`, {
         method: 'PUT',
         body: editUserForm
@@ -302,21 +305,25 @@ export default function AdminDashboard() {
       showNotification('success', '¡Usuario actualizado!', `Los datos de ${editUserForm.name} han sido actualizados correctamente.`)
     } catch (error) {
       console.error('Error updating user:', error)
-      showNotification('error', 'Error al actualizar', 'No se pudo actualizar el usuario. Intenta de nuevo.')
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido'
+      showNotification('error', 'Error al actualizar', `No se pudo actualizar el usuario: ${errorMessage}`)
     }
   }, [updateUserMutation, selectedUser, editUserForm, refetchUsers, showNotification])
 
   const handleDeleteUser = useCallback(async (userId: string, userName: string) => {
     if (!confirm(`¿Estás seguro de que quieres eliminar a ${userName}?`)) return
     try {
+      console.log('Attempting to delete user:', userId, userName)
       await deleteUserMutation(`/api/admin/users/${userId}`, {
         method: 'DELETE'
       })
+      console.log('User deleted successfully')
       refetchUsers()
       showNotification('success', '¡Usuario eliminado!', `${userName} ha sido eliminado del sistema.`)
     } catch (error) {
       console.error('Error deleting user:', error)
-      showNotification('error', 'Error al eliminar', 'No se pudo eliminar el usuario. Intenta de nuevo.')
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido'
+      showNotification('error', 'Error al eliminar', `No se pudo eliminar el usuario: ${errorMessage}`)
     }
   }, [deleteUserMutation, refetchUsers, showNotification])
 
@@ -611,15 +618,13 @@ export default function AdminDashboard() {
                                     <Edit className="h-4 w-4 mr-1" />
                                     Editar
                                   </button>
-                                  {userItem.id !== user?.id && (
-                                    <button
-                                      onClick={() => handleDeleteUser(userItem.id, userItem.name)}
-                                      className="text-red-600 hover:text-red-900 flex items-center"
-                                    >
-                                      <Trash2 className="h-4 w-4 mr-1" />
-                                      Eliminar
-                                    </button>
-                                  )}
+                                  <button
+                                    onClick={() => handleDeleteUser(userItem.id, userItem.name)}
+                                    className="text-red-600 hover:text-red-900 flex items-center"
+                                  >
+                                    <Trash2 className="h-4 w-4 mr-1" />
+                                    Eliminar
+                                  </button>
                                 </div>
                               </td>
                             </tr>

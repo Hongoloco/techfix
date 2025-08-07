@@ -107,22 +107,41 @@ export async function DELETE(
     }
 
     // Verificar que el usuario sea admin
-    const user = await prisma.user.findUnique({
+    const adminUser = await prisma.user.findUnique({
       where: { id: tokenData.userId }
     })
 
-    if (!user || user.role !== 'ADMIN') {
+    if (!adminUser || adminUser.role !== 'ADMIN') {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
 
-    // No permitir que el admin se elimine a sí mismo
-    if (params.id === tokenData.userId) {
-      return NextResponse.json({ error: 'No puedes eliminarte a ti mismo' }, { status: 400 })
+    const userId = params.id
+
+    // Verificar que el usuario a eliminar existe
+    const userToDelete = await prisma.user.findUnique({
+      where: { id: userId }
+    })
+
+    if (!userToDelete) {
+      return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 })
+    }
+
+    // Si se está intentando eliminar un admin, verificar que no sea el último
+    if (userToDelete.role === 'ADMIN') {
+      const adminCount = await prisma.user.count({
+        where: { role: 'ADMIN' }
+      })
+      
+      if (adminCount <= 1) {
+        return NextResponse.json({ 
+          error: 'No se puede eliminar el último administrador del sistema' 
+        }, { status: 400 })
+      }
     }
 
     // Eliminar el usuario
     await prisma.user.delete({
-      where: { id: params.id }
+      where: { id: userId }
     })
 
     return NextResponse.json({ message: 'Usuario eliminado exitosamente' })
