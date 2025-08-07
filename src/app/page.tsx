@@ -1,5 +1,6 @@
 import { Ticket, MessageCircle, Clock, CheckCircle, Zap, Shield, Users, Cpu, Smartphone, Wifi, Instagram, Facebook } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
 
 export default function Home() {
@@ -10,10 +11,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
-              <div className="bg-white rounded-full p-2 mr-3 float-animation shadow-lg">
+                            <div className="relative">
                 <Cpu className="h-8 w-8 text-purple-600" />
+                <span className="absolute -top-1 -right-1 flag-wave text-lg">🇺🇾</span>
               </div>
-              <h1 className="text-2xl font-bold gradient-text">TechFix Uruguay</h1>
+              <h1 className="text-2xl font-bold gradient-text">TechFix Uruguay <span className="flag-pulse-patriotic text-xl">🇺🇾</span></h1>
             </div>
             <nav className="hidden md:flex space-x-6">
               <Link href="/contact" className="text-white hover:text-yellow-300 transition-colors font-medium">
@@ -44,7 +46,7 @@ export default function Home() {
               <h1 className="text-4xl sm:text-6xl md:text-8xl font-extrabold text-white mb-6 leading-tight">
                 🛠️ <span className="gradient-text bg-gradient-to-r from-white to-yellow-200 bg-clip-text">TechFix</span>
                 <br />
-                <span className="text-yellow-300 drop-shadow-lg">Uruguay</span>
+                <span className="text-yellow-300 drop-shadow-lg">Uruguay</span> <span className="flag-bounce-uruguay text-6xl sm:text-7xl md:text-9xl">🇺🇾</span>
               </h1>
             </div>
             
@@ -76,8 +78,14 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="glass-card-readable p-4 flex items-center space-x-3 card-hover group"
                 >
-                  <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-3 group-hover:scale-110 transition-transform">
-                    <Instagram className="h-6 w-6 text-white" />
+                  <div className="bg-white rounded-full p-3 group-hover:scale-110 transition-transform">
+                    <Image 
+                      src="/instagram-icon.svg" 
+                      alt="Instagram" 
+                      width={24} 
+                      height={24}
+                      className="w-6 h-6"
+                    />
                   </div>
                   <div className="text-left">
                     <p className="text-white font-medium">Instagram</p>
@@ -91,8 +99,14 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="glass-card-readable p-4 flex items-center space-x-3 card-hover group"
                 >
-                  <div className="bg-blue-600 rounded-full p-3 group-hover:scale-110 transition-transform">
-                    <Facebook className="h-6 w-6 text-white" />
+                  <div className="bg-white rounded-full p-3 group-hover:scale-110 transition-transform">
+                    <Image 
+                      src="/facebook-icon.svg" 
+                      alt="Facebook" 
+                      width={24} 
+                      height={24}
+                      className="w-6 h-6"
+                    />
                   </div>
                   <div className="text-left">
                     <p className="text-white font-medium">Facebook</p>
@@ -106,8 +120,14 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="glass-card-readable p-4 flex items-center space-x-3 card-hover group"
                 >
-                  <div className="bg-black rounded-full p-3 group-hover:scale-110 transition-transform">
-                    <div className="h-6 w-6 text-white font-bold text-center leading-6">🎵</div>
+                  <div className="bg-white rounded-full p-3 group-hover:scale-110 transition-transform">
+                    <Image 
+                      src="/tiktok-icon.svg" 
+                      alt="TikTok" 
+                      width={24} 
+                      height={24}
+                      className="w-6 h-6"
+                    />
                   </div>
                   <div className="text-left">
                     <p className="text-white font-medium">TikTok</p>

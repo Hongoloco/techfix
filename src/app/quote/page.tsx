@@ -110,17 +110,17 @@ function QuoteForm() {
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Solicitar Cotización
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-white mb-4 drop-shadow-lg">
+            💰 Solicitar Cotización
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-white/90 drop-shadow">
             Completa el formulario y nuestro equipo te contactará con una propuesta personalizada
           </p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-white rounded-xl shadow-2xl p-8 border border-gray-100">
+          <form onSubmit={handleSubmit} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -133,7 +133,7 @@ function QuoteForm() {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white shadow-sm"
                 />
               </div>
 
@@ -148,7 +148,7 @@ function QuoteForm() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white shadow-sm"
                 />
               </div>
 
@@ -162,7 +162,7 @@ function QuoteForm() {
                   name="company"
                   value={formData.company}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white shadow-sm"
                 />
               </div>
 
@@ -176,7 +176,7 @@ function QuoteForm() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white shadow-sm"
                 />
               </div>
             </div>
@@ -191,7 +191,7 @@ function QuoteForm() {
                 required
                 value={formData.serviceType}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white shadow-sm"
               >
                 <option value="">Selecciona un servicio</option>
                 <option value="Soporte Técnico General">Soporte Técnico General</option>
@@ -217,7 +217,7 @@ function QuoteForm() {
                 value={formData.description}
                 onChange={handleChange}
                 placeholder="Describe detalladamente qué necesitas, el alcance del proyecto, requisitos específicos, etc."
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500 bg-white shadow-sm resize-vertical min-h-[120px]"
               />
             </div>
 
@@ -230,7 +230,7 @@ function QuoteForm() {
                 name="budget"
                 value={formData.budget}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white shadow-sm"
               >
                 <option value="">Selecciona un rango</option>
                 <option value="Menos de $1,000">Menos de $1,000</option>

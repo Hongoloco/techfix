@@ -81,7 +81,7 @@ export function newTicketEmailTemplate(ticketData: any) {
         </div>
         
         <div style="text-align: center; margin: 30px 0;">
-          <a href="http://localhost:3000/admin" 
+          <a href="${process.env.SITE_URL || 'https://techfix-pi.vercel.app'}/admin" 
              style="background-color: #2563eb; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold;">
             🔧 VER EN PANEL DE ADMINISTRACIÓN
           </a>
@@ -118,7 +118,7 @@ export function newTicketEmailTemplate(ticketData: any) {
     Descripción:
     ${ticketData.description}
     
-    Ver en panel: http://localhost:3000/admin
+    Ver en panel: ${process.env.SITE_URL || 'https://techfix-pi.vercel.app'}/admin
     WhatsApp al cliente: https://wa.me/59899252808
   `
   

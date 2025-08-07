@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "public": true,
   "framework": "nextjs",
   "functions": {
     "app/api/**/*.ts": {
