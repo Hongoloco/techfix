@@ -26,6 +26,22 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model Client {
+  id          String @id @default(cuid())
+  name        String
+  email       String @unique
+  phone       String?
+  company     String?
+  address     String?
+  notes       String?
+  
+  tickets     Ticket[] @relation("ClientTickets")
+  quotes      Quote[] @relation("ClientQuotes")
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Ticket {
   id          String       @id @default(cuid())
   title       String
@@ -35,10 +51,13 @@ model Ticket {
   category    String?
   
   userId   String
-  user     User   @relation("UserTickets", fields: [userId], references: [id])
+  user     User   @relation("UserTickets", fields: [userId], references: [id], onDelete: Cascade)
+  
+  clientId String?
+  client   Client? @relation("ClientTickets", fields: [clientId], references: [id], onDelete: SetNull)
   
   assignedToId String?
-  assignedTo   User?   @relation("AssignedTickets", fields: [assignedToId], references: [id])
+  assignedTo   User?   @relation("AssignedTickets", fields: [assignedToId], references: [id], onDelete: SetNull)
   
   comments TicketComment[]
   
@@ -54,7 +73,7 @@ model TicketComment {
   ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -85,6 +104,9 @@ model Quote {
   budget      String?
   status      QuoteStatus @default(PENDING)
   
+  clientId String?
+  client   Client? @relation("ClientQuotes", fields: [clientId], references: [id], onDelete: SetNull)
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -97,7 +119,7 @@ model BlogPost {
   slug        String @unique
   published   Boolean @default(false)
   authorId    String
-  author      User    @relation(fields: [authorId], references: [id])
+  author      User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
   category    String?
   tags        String?  // JSON string con los tags
   

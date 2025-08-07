@@ -39,6 +39,21 @@ interface User {
   createdAt: string
 }
 
+interface Client {
+  id: string
+  name: string
+  email: string
+  phone?: string
+  company?: string
+  address?: string
+  notes?: string
+  createdAt: string
+  _count?: {
+    tickets: number
+    quotes: number
+  }
+}
+
 interface TicketData {
   id: string
   title: string
@@ -203,6 +218,27 @@ export default function AdminDashboard() {
     email: '',
     role: 'USER'
   })
+
+  // Estados para gestión de clientes
+  const [showCreateClientModal, setShowCreateClientModal] = useState(false)
+  const [showEditClientModal, setShowEditClientModal] = useState(false)
+  const [editingClient, setEditingClient] = useState<Client | null>(null)
+  const [createClientForm, setCreateClientForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    address: '',
+    notes: ''
+  })
+  const [editClientForm, setEditClientForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    address: '',
+    notes: ''
+  })
   
   // Estados para notificaciones
   const [notification, setNotification] = useState<{
@@ -238,10 +274,18 @@ export default function AdminDashboard() {
     initialData: []
   })
 
+  const { data: clients, loading: clientsLoading, refetch: refetchClients } = useApi<Client[]>('/api/admin/clients', {
+    autoFetch: activeTab === 'clients',
+    initialData: []
+  })
+
   const { mutate: toggleService } = useMutation()
   const { mutate: createUserMutation } = useMutation()
   const { mutate: updateUserMutation } = useMutation()
   const { mutate: deleteUserMutation } = useMutation()
+  const { mutate: createClientMutation } = useMutation()
+  const { mutate: updateClientMutation } = useMutation()
+  const { mutate: deleteClientMutation } = useMutation()
 
   // Redirect si no es admin
   useEffect(() => {
@@ -337,11 +381,82 @@ export default function AdminDashboard() {
     setShowEditUserModal(true)
   }, [])
 
+  // Funciones para gestión de clientes
+  const handleCreateClient = useCallback(async () => {
+    try {
+      console.log('Creating client with data:', createClientForm)
+      await createClientMutation('/api/admin/clients', {
+        method: 'POST',
+        body: createClientForm
+      })
+      setShowCreateClientModal(false)
+      setCreateClientForm({ name: '', email: '', phone: '', company: '', address: '', notes: '' })
+      refetchClients()
+      showNotification('success', '¡Cliente creado!', `El cliente ${createClientForm.name} ha sido creado exitosamente.`)
+    } catch (error) {
+      console.error('Error creating client:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido'
+      showNotification('error', 'Error al crear cliente', `No se pudo crear el cliente: ${errorMessage}`)
+    }
+  }, [createClientMutation, createClientForm, refetchClients, showNotification])
+
+  const handleEditClient = useCallback(async () => {
+    if (!editingClient) return
+    try {
+      console.log('Updating client:', editingClient.id, 'with data:', editClientForm)
+      await updateClientMutation(`/api/admin/clients/${editingClient.id}`, {
+        method: 'PUT',
+        body: editClientForm
+      })
+      setShowEditClientModal(false)
+      setEditingClient(null)
+      setEditClientForm({ name: '', email: '', phone: '', company: '', address: '', notes: '' })
+      refetchClients()
+      showNotification('success', '¡Cliente actualizado!', `Los datos de ${editClientForm.name} han sido actualizados correctamente.`)
+    } catch (error) {
+      console.error('Error updating client:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido'
+      showNotification('error', 'Error al actualizar', `No se pudo actualizar el cliente: ${errorMessage}`)
+    }
+  }, [updateClientMutation, editingClient, editClientForm, refetchClients, showNotification])
+
+  const handleDeleteClient = useCallback(async (clientId: string) => {
+    const client = clients?.find(c => c.id === clientId)
+    if (!client || !confirm(`¿Estás seguro de que quieres eliminar a ${client.name}?`)) return
+    try {
+      console.log('Attempting to delete client:', clientId, client.name)
+      await deleteClientMutation(`/api/admin/clients/${clientId}`, {
+        method: 'DELETE'
+      })
+      console.log('Client deleted successfully')
+      refetchClients()
+      showNotification('success', '¡Cliente eliminado!', `${client.name} ha sido eliminado del sistema.`)
+    } catch (error) {
+      console.error('Error deleting client:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido'
+      showNotification('error', 'Error al eliminar', `No se pudo eliminar el cliente: ${errorMessage}`)
+    }
+  }, [deleteClientMutation, clients, refetchClients, showNotification])
+
+  const openEditClientModal = useCallback((clientToEdit: Client) => {
+    setEditingClient(clientToEdit)
+    setEditClientForm({
+      name: clientToEdit.name,
+      email: clientToEdit.email,
+      phone: clientToEdit.phone || '',
+      company: clientToEdit.company || '',
+      address: clientToEdit.address || '',
+      notes: clientToEdit.notes || ''
+    })
+    setShowEditClientModal(true)
+  }, [])
+
   // Navegación de tabs optimizada
   const tabs = useMemo(() => [
     { id: 'dashboard', name: 'Dashboard', icon: TrendingUp },
     { id: 'users', name: 'Usuarios', icon: Users },
     { id: 'tickets', name: 'Tickets', icon: Ticket },
+    { id: 'clients', name: 'Clientes', icon: Users },
     { id: 'services', name: 'Servicios', icon: Package },
     { id: 'social', name: 'Redes Sociales', icon: Share2 },
   ], [])
@@ -533,6 +648,75 @@ export default function AdminDashboard() {
                     </div>
                   )}
                 </div>
+              </div>
+            )}
+
+            {activeTab === 'clients' && (
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-semibold text-gray-800">Gestión de Clientes</h2>
+                  <button
+                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center transition-colors"
+                    onClick={() => setShowCreateClientModal(true)}
+                  >
+                    <PlusCircle className="w-5 h-5 mr-2" />
+                    Nuevo Cliente
+                  </button>
+                </div>
+
+                {clientsLoading ? (
+                  <div className="space-y-4">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i} className="glass-card-readable p-4">
+                        <div className="animate-pulse flex space-x-4">
+                          <div className="rounded-full bg-gray-300 h-10 w-10"></div>
+                          <div className="flex-1 space-y-2">
+                            <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                            <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid gap-4">
+                    {clients?.map((client) => (
+                      <div key={client.id} className="glass-card-readable p-4 card-hover">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-800">{client.name}</h3>
+                            <p className="text-gray-600 text-sm">{client.email}</p>
+                            {client.phone && (
+                              <p className="text-gray-600 text-sm">📞 {client.phone}</p>
+                            )}
+                            {client.company && (
+                              <p className="text-gray-600 text-sm">🏢 {client.company}</p>
+                            )}
+                            <div className="flex gap-4 mt-2 text-sm text-gray-500">
+                              <span>🎫 {client._count?.tickets || 0} tickets</span>
+                              <span>💰 {client._count?.quotes || 0} cotizaciones</span>
+                              <span>📅 {new Date(client.createdAt).toLocaleDateString()}</span>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => openEditClientModal(client)}
+                              className="text-blue-600 hover:text-blue-800 p-1"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClient(client.id)}
+                              className="text-red-600 hover:text-red-800 p-1"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
@@ -835,6 +1019,202 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Modal para crear cliente */}
+      {showCreateClientModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="glass-card-readable max-w-md w-full mx-4 p-6">
+            <div className="flex items-center mb-6">
+              <div className="bg-green-500/20 p-3 rounded-full mr-4">
+                <Users className="h-6 w-6 text-green-300" />
+              </div>
+              <h2 className="text-2xl font-bold text-white">✨ Crear Nuevo Cliente</h2>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">👤 Nombre completo</label>
+                <input
+                  type="text"
+                  value={createClientForm.name}
+                  onChange={(e) => setCreateClientForm({...createClientForm, name: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Nombre del cliente"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">📧 Email</label>
+                <input
+                  type="email"
+                  value={createClientForm.email}
+                  onChange={(e) => setCreateClientForm({...createClientForm, email: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="email@ejemplo.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">📞 Teléfono</label>
+                <input
+                  type="tel"
+                  value={createClientForm.phone}
+                  onChange={(e) => setCreateClientForm({...createClientForm, phone: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Número de teléfono"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">🏢 Empresa</label>
+                <input
+                  type="text"
+                  value={createClientForm.company}
+                  onChange={(e) => setCreateClientForm({...createClientForm, company: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Nombre de la empresa (opcional)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">📍 Dirección</label>
+                <input
+                  type="text"
+                  value={createClientForm.address}
+                  onChange={(e) => setCreateClientForm({...createClientForm, address: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Dirección (opcional)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">📝 Notas</label>
+                <textarea
+                  value={createClientForm.notes}
+                  onChange={(e) => setCreateClientForm({...createClientForm, notes: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder="Notas adicionales (opcional)"
+                  rows={3}
+                />
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setShowCreateClientModal(false)}
+                className="flex-1 bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors font-medium"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleCreateClient}
+                disabled={!createClientForm.name || !createClientForm.email}
+                className="flex-1 bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+              >
+                ✨ Crear Cliente
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para editar cliente */}
+      {showEditClientModal && editingClient && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="glass-card-readable max-w-md w-full mx-4 p-6">
+            <div className="flex items-center mb-6">
+              <div className="bg-blue-500/20 p-3 rounded-full mr-4">
+                <Edit className="h-6 w-6 text-blue-300" />
+              </div>
+              <h2 className="text-2xl font-bold text-white">✏️ Editar Cliente</h2>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">👤 Nombre completo</label>
+                <input
+                  type="text"
+                  value={editClientForm.name}
+                  onChange={(e) => setEditClientForm({...editClientForm, name: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Nombre del cliente"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">📧 Email</label>
+                <input
+                  type="email"
+                  value={editClientForm.email}
+                  onChange={(e) => setEditClientForm({...editClientForm, email: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="email@ejemplo.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">📞 Teléfono</label>
+                <input
+                  type="tel"
+                  value={editClientForm.phone}
+                  onChange={(e) => setEditClientForm({...editClientForm, phone: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Número de teléfono"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">🏢 Empresa</label>
+                <input
+                  type="text"
+                  value={editClientForm.company}
+                  onChange={(e) => setEditClientForm({...editClientForm, company: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Nombre de la empresa (opcional)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">📍 Dirección</label>
+                <input
+                  type="text"
+                  value={editClientForm.address}
+                  onChange={(e) => setEditClientForm({...editClientForm, address: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Dirección (opcional)"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">📝 Notas</label>
+                <textarea
+                  value={editClientForm.notes}
+                  onChange={(e) => setEditClientForm({...editClientForm, notes: e.target.value})}
+                  className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Notas adicionales (opcional)"
+                  rows={3}
+                />
+              </div>
+            </div>
+            
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setShowEditClientModal(false)}
+                className="flex-1 bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors font-medium"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleEditClient}
+                disabled={!editClientForm.name || !editClientForm.email}
+                className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+              >
+                💾 Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal para crear usuario */}
       {showCreateUserModal && (

@@ -13,26 +13,39 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Buscar usuario por email
-    const user = await prisma.user.findUnique({
-      where: { email }
-    })
+    // Solo permitir acceso al usuario administrador específico
+    if (email !== 'techfixuruguay@gmail.com') {
+      return NextResponse.json(
+        { error: 'Acceso no autorizado' },
+        { status: 401 }
+      )
+    }
 
-    if (!user) {
+    if (password !== 'Agustin2025') {
       return NextResponse.json(
         { error: 'Credenciales inválidas' },
         { status: 401 }
       )
     }
 
-    // Verificar contraseña
-    const isValidPassword = await verifyPassword(password, user.password)
+    // Buscar o crear el usuario administrador
+    let user = await prisma.user.findUnique({
+      where: { email: 'techfixuruguay@gmail.com' }
+    })
 
-    if (!isValidPassword) {
-      return NextResponse.json(
-        { error: 'Credenciales inválidas' },
-        { status: 401 }
-      )
+    if (!user) {
+      // Crear el usuario administrador si no existe
+      const bcrypt = require('bcryptjs')
+      const hashedPassword = await bcrypt.hash('Agustin2025', 10)
+      
+      user = await prisma.user.create({
+        data: {
+          name: 'Administrador TechFix',
+          email: 'techfixuruguay@gmail.com',
+          password: hashedPassword,
+          role: 'ADMIN'
+        }
+      })
     }
 
     // Generar token

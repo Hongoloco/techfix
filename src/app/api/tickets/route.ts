@@ -63,6 +63,33 @@ export async function POST(request: NextRequest) {
       userId = user.id
     }
 
+    // Buscar o crear cliente con los datos del ticket
+    let client = await prisma.client.findUnique({
+      where: { email }
+    })
+
+    if (!client) {
+      // Crear nuevo cliente con los datos del formulario
+      client = await prisma.client.create({
+        data: {
+          name,
+          email,
+          phone: phone || null,
+          company: null, // Se puede agregar al formulario después
+          address: null, // Se puede agregar al formulario después
+          notes: `Cliente creado automáticamente desde ticket: ${ticketTitle}`
+        }
+      })
+    } else {
+      // Actualizar información del cliente si es necesario
+      if (phone && !client.phone) {
+        await prisma.client.update({
+          where: { id: client.id },
+          data: { phone }
+        })
+      }
+    }
+
     // Convertir prioridad del formulario al formato de la DB
     let dbPriority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT' = 'MEDIUM'
     switch (priority) {
@@ -88,6 +115,7 @@ export async function POST(request: NextRequest) {
         priority: dbPriority,
         category: category || null,
         userId,
+        clientId: client.id, // Asociar con el cliente
         status: 'OPEN'
       },
       include: {
@@ -97,6 +125,15 @@ export async function POST(request: NextRequest) {
             name: true,
             email: true,
             role: true
+          }
+        },
+        client: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            company: true
           }
         }
       }

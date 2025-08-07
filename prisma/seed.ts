@@ -13,14 +13,14 @@ async function main() {
 
   // Admin
   const admin = await prisma.user.upsert({
-    where: { email: 'techfix@gmail.com' },
+    where: { email: 'techfixuruguay@gmail.com' },
     update: {
       name: 'Administrador TechFix',
       password: adminPassword,
       role: 'ADMIN'
     },
     create: {
-      email: 'techfix@gmail.com',
+      email: 'techfixuruguay@gmail.com',
       name: 'Administrador TechFix',
       password: adminPassword,
       role: 'ADMIN'
@@ -163,7 +163,7 @@ async function main() {
 
   console.log('✅ Base de datos poblada exitosamente!')
   console.log('\n👤 Usuarios creados:')
-  console.log('📧 Admin: techfix@gmail.com / Agustin2025')
+  console.log('📧 Admin: techfixuruguay@gmail.com / Agustin2025')
   console.log('📧 Agent: agent@techfix.com / agent123')
   console.log('📧 User: user@techfix.com / user123')
   console.log('\n📋 Tickets y FAQs creados exitosamente!')

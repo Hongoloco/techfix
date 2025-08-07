@@ -139,15 +139,76 @@ export async function DELETE(
       }
     }
 
-    // Eliminar el usuario
-    await prisma.user.delete({
-      where: { id: userId }
-    })
+    // No permitir eliminar el usuario administrador principal
+    if (userToDelete.email === 'techfixuruguay@gmail.com') {
+      return NextResponse.json({ 
+        error: 'No se puede eliminar el usuario administrador principal' 
+      }, { status: 400 })
+    }
+
+    // Verificar y manejar todas las relaciones antes de eliminar
+    console.log('Checking user relationships for user:', userId)
+
+    try {
+      // Usar una transacción para asegurar consistencia
+      await prisma.$transaction(async (tx) => {
+        // 1. Eliminar comentarios del usuario
+        const deletedComments = await tx.ticketComment.deleteMany({
+          where: { userId: userId }
+        })
+        console.log(`Deleted ${deletedComments.count} comments`)
+
+        // 2. Eliminar blog posts del usuario
+        const deletedBlogPosts = await tx.blogPost.deleteMany({
+          where: { authorId: userId }
+        })
+        console.log(`Deleted ${deletedBlogPosts.count} blog posts`)
+
+        // 3. Desasignar tickets asignados al usuario
+        const updatedAssignedTickets = await tx.ticket.updateMany({
+          where: { assignedToId: userId },
+          data: { assignedToId: null }
+        })
+        console.log(`Unassigned ${updatedAssignedTickets.count} tickets`)
+
+        // 4. Eliminar tickets creados por el usuario
+        const deletedTickets = await tx.ticket.deleteMany({
+          where: { userId: userId }
+        })
+        console.log(`Deleted ${deletedTickets.count} tickets created by user`)
+
+        // 5. Finalmente, eliminar el usuario
+        await tx.user.delete({
+          where: { id: userId }
+        })
+        console.log('User deleted successfully')
+      })
+    } catch (transactionError) {
+      console.error('Transaction failed:', transactionError)
+      throw transactionError
+    }
 
     return NextResponse.json({ message: 'Usuario eliminado exitosamente' })
 
   } catch (error) {
     console.error('Error deleting user:', error)
-    return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })
+    
+    // Proporcionar más detalles del error
+    if (error instanceof Error) {
+      console.error('Error message:', error.message)
+      console.error('Error stack:', error.stack)
+      
+      // Si el error es de restricción de clave foránea
+      if (error.message.includes('FOREIGN KEY constraint failed')) {
+        return NextResponse.json({ 
+          error: 'No se puede eliminar el usuario porque tiene registros asociados' 
+        }, { status: 400 })
+      }
+    }
+    
+    return NextResponse.json({ 
+      error: 'Error interno del servidor',
+      details: error instanceof Error ? error.message : 'Error desconocido'
+    }, { status: 500 })
   }
 }
