@@ -210,6 +210,132 @@ export function newTicketEmailTemplate(ticketData: any) {
   return { subject, html, text }
 }
 
+// Template para email de resolución con solicitud de calificación
+export function ticketResolvedEmailTemplate(ticketData: any) {
+  const subject = `✅ TICKET RESUELTO #${ticketData.id} - ${ticketData.title} - ¡Califica nuestro servicio!`
+  
+  const clientName = ticketData.client?.name || ticketData.user?.name || 'Cliente';
+  const clientEmail = ticketData.client?.email || ticketData.user?.email || '';
+  const ratingUrl = `${process.env.SITE_URL || 'https://techfix-pi.vercel.app'}/rate?ticket=${ticketData.id}&email=${encodeURIComponent(clientEmail)}&name=${encodeURIComponent(clientName)}`;
+  
+  const html = `
+    <div style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 700px; margin: 0 auto; background: #111827; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);">
+      <!-- Header con gradiente cyan como la web -->
+      <div style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; padding: 30px; text-align: center; position: relative;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%); pointer-events: none;"></div>
+        <h1 style="margin: 0; font-size: 32px; font-weight: 900; position: relative; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);">🛠️ TechFix Uruguay 🇺🇾</h1>
+        <h2 style="margin: 12px 0 0 0; font-size: 20px; font-weight: 600; opacity: 0.95; position: relative;">✅ TICKET RESUELTO</h2>
+      </div>
+      
+      <!-- Contenido principal con fondo oscuro -->
+      <div style="padding: 30px; background: #1F2937; position: relative;">
+        <!-- Efectos de fondo como la web -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.05) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(245, 158, 11, 0.05) 0%, transparent 50%); pointer-events: none;"></div>
+        
+        <!-- Mensaje de resolución -->
+        <div style="background: rgba(16, 185, 129, 0.1); border: 2px solid rgba(16, 185, 129, 0.3); border-radius: 16px; padding: 25px; margin-bottom: 25px; text-align: center; position: relative;">
+          <div style="font-size: 64px; margin-bottom: 15px;">🎉</div>
+          <h3 style="margin: 0 0 15px 0; color: #10B981; font-size: 24px; font-weight: 800;">¡Hola ${clientName}!</h3>
+          <p style="margin: 0; color: #D1F2EB; font-size: 18px; font-weight: 600; line-height: 1.6;">
+            Tu ticket <strong style="color: #6EE7B7;">#${ticketData.id}</strong> ha sido resuelto exitosamente.
+          </p>
+        </div>
+        
+        <!-- Card de información del ticket -->
+        <div style="background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(20px); border: 1px solid #374151; border-radius: 16px; padding: 25px; margin-bottom: 30px; position: relative; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);">
+          <h3 style="margin: 0 0 20px 0; color: #22D3EE; font-size: 18px; font-weight: 700; border-bottom: 2px solid #374151; padding-bottom: 10px;">📋 Resumen del Ticket</h3>
+          <div style="display: grid; gap: 12px;">
+            <p style="margin: 0; color: #F9FAFB; font-size: 15px; line-height: 1.6;"><strong style="color: #06B6D4;">🆔 ID:</strong> <span style="background: linear-gradient(135deg, #06B6D4, #22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; font-size: 16px;">#${ticketData.id}</span></p>
+            <p style="margin: 0; color: #F9FAFB; font-size: 15px; line-height: 1.6;"><strong style="color: #06B6D4;">📋 Título:</strong> ${ticketData.title}</p>
+            <p style="margin: 0; color: #F9FAFB; font-size: 15px; line-height: 1.6;">
+              <strong style="color: #06B6D4;">✅ Estado:</strong> 
+              <span style="background-color: #10B981; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);">
+                RESUELTO
+              </span>
+            </p>
+          </div>
+        </div>
+        
+        <!-- Llamada a la acción principal: Calificación -->
+        <div style="background: linear-gradient(135deg, #F59E0B 0%, #F97316 100%); border-radius: 20px; padding: 40px; text-align: center; margin: 30px 0; position: relative; overflow: hidden; border: 3px solid rgba(255, 255, 255, 0.2);">
+          <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 60%); pointer-events: none;"></div>
+          <div style="position: relative;">
+            <div style="font-size: 48px; margin-bottom: 20px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">⭐</div>
+            <h3 style="margin: 0 0 20px 0; color: white; font-size: 26px; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+              ¡Califica nuestro servicio!
+            </h3>
+            <p style="margin: 0 0 30px 0; color: rgba(255, 255, 255, 0.9); font-size: 18px; font-weight: 600; line-height: 1.6;">
+              Tu opinión es muy importante para nosotros.<br>
+              ¿Cómo fue tu experiencia con TechFix?
+            </p>
+            <a href="${ratingUrl}" 
+               style="display: inline-block; background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); color: white; padding: 20px 40px; text-decoration: none; border-radius: 15px; font-weight: 900; font-size: 20px; box-shadow: 0 12px 24px rgba(239, 68, 68, 0.4); transition: all 0.3s ease; border: 3px solid rgba(255, 255, 255, 0.3); text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+              <span style="font-size: 24px; margin-right: 12px; vertical-align: middle;">⭐</span>
+              <span style="vertical-align: middle;">CALIFICAR AHORA</span>
+            </a>
+            <p style="margin: 20px 0 0 0; color: rgba(255, 255, 255, 0.8); font-size: 14px; font-weight: 500;">
+              Solo te tomará 2 minutos y nos ayuda muchísimo
+            </p>
+          </div>
+        </div>
+        
+        <!-- Contacto directo -->
+        <div style="background: rgba(245, 158, 11, 0.1); border: 2px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 25px; text-align: center; position: relative; backdrop-filter: blur(10px); margin-bottom: 25px;">
+          <h3 style="margin: 0 0 20px 0; color: #F59E0B; font-size: 18px; font-weight: 800;">💬 ¿Necesitas algo más?</h3>
+          <div style="display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <a href="https://wa.me/59899252808?text=Hola%20TechFix!%20Mi%20ticket%20%23${ticketData.id}%20fue%20resuelto.%20Tengo%20una%20consulta..." 
+               style="display: inline-block; background: linear-gradient(135deg, #25d366 0%, #20ba5a 100%); color: white; padding: 15px 25px; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 16px; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4); transition: all 0.3s ease; min-width: 160px; text-align: center;">
+              <span style="font-size: 18px; margin-right: 8px;">📱</span>WhatsApp
+            </a>
+            <a href="mailto:techfixuruguay@gmail.com?subject=Consulta%20sobre%20ticket%20%23${ticketData.id}" 
+               style="display: inline-block; background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%); color: white; padding: 15px 25px; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 16px; box-shadow: 0 8px 20px rgba(6, 182, 212, 0.4); transition: all 0.3s ease; min-width: 160px; text-align: center;">
+              <span style="font-size: 18px; margin-right: 8px;">📧</span>Email
+            </a>
+          </div>
+        </div>
+        
+        <!-- Mensaje de agradecimiento -->
+        <div style="background: rgba(17, 24, 39, 0.8); border: 1px solid #374151; border-radius: 16px; padding: 25px; text-align: center; position: relative;">
+          <p style="margin: 0; color: #D1D5DB; font-size: 16px; line-height: 1.7;">
+            <strong style="color: #22D3EE;">¡Gracias por confiar en TechFix Uruguay!</strong><br>
+            Esperamos haber superado tus expectativas y estar aquí para ayudarte cuando nos necesites.
+          </p>
+        </div>
+      </div>
+      
+      <!-- Footer oscuro como la web -->
+      <div style="background: #374151; color: #D1D5DB; padding: 25px; text-align: center; border-top: 1px solid #4B5563;">
+        <h3 style="margin: 0 0 15px 0; color: #22D3EE; font-size: 18px; font-weight: 800;">🛠️ TechFix Uruguay - Soporte Técnico Profesional</h3>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 10px; flex-wrap: wrap;">
+          <span style="color: #F59E0B; font-weight: 600;">📱 WhatsApp: +59899252808</span>
+          <span style="color: #06B6D4; font-weight: 600;">📧 Email: techfixuruguay@gmail.com</span>
+        </div>
+        <p style="margin: 8px 0 0 0; font-size: 13px; color: #9CA3AF;">🕒 Horario: Lunes a Viernes 10:00 - 20:00 | 📍 Las Piedras, Uruguay</p>
+      </div>
+    </div>
+  `
+  
+  const text = `
+    ✅ TICKET RESUELTO #${ticketData.id} - ${ticketData.title}
+    
+    ¡Hola ${clientName}!
+    
+    Tu ticket #${ticketData.id} ha sido resuelto exitosamente.
+    
+    ¡Califica nuestro servicio!
+    Tu opinión es muy importante para nosotros.
+    ${ratingUrl}
+    
+    ¿Necesitas algo más?
+    WhatsApp: https://wa.me/59899252808
+    Email: techfixuruguay@gmail.com
+    
+    ¡Gracias por confiar en TechFix Uruguay!
+  `
+  
+  return { subject, html, text }
+}
+
 // Template para nueva cotización
 export function newQuoteEmailTemplate(quoteData: any) {
   const subject = `💰 NUEVA COTIZACIÓN - ${quoteData.serviceType} - ${quoteData.name}`

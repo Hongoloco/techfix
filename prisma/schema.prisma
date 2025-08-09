@@ -22,17 +22,18 @@ model User {
 }
 
 model Client {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  phone     String?
-  company   String?
-  address   String?
-  notes     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  quotes    Quote[]  @relation("ClientQuotes")
-  tickets   Ticket[] @relation("ClientTickets")
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  phone        String?
+  company      String?
+  address      String?
+  notes        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  quotes       Quote[]       @relation("ClientQuotes")
+  tickets      Ticket[]      @relation("ClientTickets")
+  testimonials Testimonial[]
 }
 
 model Ticket {
@@ -51,6 +52,7 @@ model Ticket {
   client       Client?         @relation("ClientTickets", fields: [clientId], references: [id])
   user         User            @relation("UserTickets", fields: [userId], references: [id], onDelete: Cascade)
   comments     TicketComment[]
+  testimonials Testimonial[]
 }
 
 model TicketComment {
@@ -62,6 +64,23 @@ model TicketComment {
   updatedAt DateTime @updatedAt
   ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  rating    Int      // 1-5 stars
+  comment   String
+  service   String?  // tipo de servicio
+  ticketId  String?  // referencia al ticket original
+  clientId  String?  // referencia al cliente
+  approved  Boolean  @default(false) // para moderar antes de mostrar
+  featured  Boolean  @default(false) // destacar en homepage
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ticket    Ticket?  @relation(fields: [ticketId], references: [id])
+  client    Client?  @relation(fields: [clientId], references: [id])
 }
 
 model Service {
