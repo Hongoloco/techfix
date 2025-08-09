@@ -44,7 +44,7 @@ export default function Home() {
           <div className="text-center">
             <div className="mb-8">
               <h1 className="hero-title">
-                TechFix Uruguay 🇺🇾
+                <span className="text-primary">TechFix</span> Uruguay 🇺🇾
               </h1>
             </div>
             
@@ -153,119 +153,113 @@ export default function Home() {
               <div className="text-4xl mb-4 text-center">🇺🇾</div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Empresa Local</h3>
               <p className="text-gray-600">Soporte en español, entendemos tu negocio</p>
-            </div>
-            <div className="professional-card text-center">
-              <div className="text-4xl mb-4 text-center">🏠</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Servicio a Domicilio</h3>
-              <p className="text-gray-600">Sin costo en Las Piedras y alrededores</p>
-              <p className="text-gray-500 text-sm mt-2 italic">Si sos de otra zona, consultá costos</p>
+              </div>
+              <div className="glass-card-readable modern-card text-center p-8">
+                <div className="text-5xl mb-6">🆓</div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">Visitas Gratuitas</h3>
+                <p className="text-gray-700 font-medium">Sin costo en Las Piedras y alrededores</p>
+                <p className="text-gray-600 text-sm mt-2 italic">Si sos de otra zona, consultá costos</p>
+              </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Servicios destacados */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-16">
-            Nuestros Servicios Principales
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="professional-card text-center">
-              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Cpu className="h-8 w-8 text-blue-600" />
+        {/* Servicios destacados */}
+        <div className="bg-white/10 backdrop-blur-lg py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-bold text-center text-white mb-16">
+              🔧 Nuestros Servicios Principales
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="modern-card card-hover bg-white">
+                <div className="text-center">
+                  <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <Cpu className="h-8 w-8 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">💻 Reparación de PC</h3>
+                  <p className="text-gray-600">Hardware, software, virus, formateo y optimización</p>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Reparación de PC</h3>
-              <p className="text-gray-600">Hardware, software, virus, formateo y optimización</p>
-            </div>
 
-            <div className="professional-card text-center">
-              <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Wifi className="h-8 w-8 text-green-600" />
+              <div className="modern-card card-hover bg-white">
+                <div className="text-center">
+                  <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <Wifi className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">🌐 Redes e Internet</h3>
+                  <p className="text-gray-600">WiFi, configuración de red, conexión a internet</p>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Redes e Internet</h3>
-              <p className="text-gray-600">WiFi, configuración de red, conexión a internet</p>
-            </div>
 
-            <div className="professional-card text-center">
-              <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Smartphone className="h-8 w-8 text-purple-600" />
+              <div className="modern-card card-hover bg-white">
+                <div className="text-center">
+                  <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <Smartphone className="h-8 w-8 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">📱 Dispositivos Móviles</h3>
+                  <p className="text-gray-600">Configuración, apps, problemas de conectividad</p>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Dispositivos Móviles</h3>
-              <p className="text-gray-600">Configuración, apps, problemas de conectividad</p>
-            </div>
 
-            <div className="professional-card text-center">
-              <div className="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-8 w-8 text-red-600" />
+              <div className="modern-card card-hover bg-white">
+                <div className="text-center">
+                  <div className="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <Shield className="h-8 w-8 text-red-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">🔒 Seguridad</h3>
+                  <p className="text-gray-600">Antivirus, protección de datos, backup</p>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Seguridad</h3>
-              <p className="text-gray-600">Antivirus, protección de datos, backup</p>
-            </div>
 
-            <div className="professional-card text-center">
-              <div className="bg-yellow-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-yellow-600" />
+              <div className="modern-card card-hover bg-white">
+                <div className="text-center">
+                  <div className="bg-yellow-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-8 w-8 text-yellow-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">👥 Soporte Empresarial</h3>
+                  <p className="text-gray-600">Mantenimiento de sistemas, consultorías IT</p>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Soporte Empresarial</h3>
-              <p className="text-gray-600">Mantenimiento de sistemas, consultorías IT</p>
-            </div>
 
-            <div className="professional-card text-center">
-              <div className="bg-indigo-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Zap className="h-8 w-8 text-indigo-600" />
+              <div className="modern-card card-hover bg-white">
+                <div className="text-center">
+                  <div className="bg-indigo-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <Zap className="h-8 w-8 text-indigo-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">⚡ Urgencias 24/7</h3>
+                  <p className="text-gray-600">Atención prioritaria para problemas críticos</p>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Urgencias 24/7</h3>
-              <p className="text-gray-600">Atención prioritaria para problemas críticos</p>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* CTA Final */}
-      <section className="py-16 bg-gray-900 text-white">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-6">
-            ¿Listo para resolver tu problema técnico?
-          </h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Contactanos ahora y recibe atención personalizada en español
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact" className="btn-professional btn-primary text-lg px-8 py-4">
-              <MessageCircle className="w-5 h-5" />
-              Contactar Ahora
-            </Link>
-            <a 
-              href="https://wa.me/59899252808?text=🛠️%20Hola%20TechFix%20Uruguay!%0A%0ANecesito%20ayuda%20técnica.%20¿Pueden%20asistirme?"
-              className="btn-professional btn-success text-lg px-8 py-4"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              WhatsApp Directo
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-800 text-gray-300 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex items-center justify-center mb-4">
-              <Cpu className="h-6 w-6 mr-2" />
-              <span className="font-bold text-white">TechFix Uruguay</span>
-            </div>
-            <p className="text-sm">
-              © 2024 TechFix Uruguay. Todos los derechos reservados.
+        {/* CTA Final */}
+        <div className="bg-gradient-to-r from-purple-900/50 to-blue-900/50 py-20">
+          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-bold text-white mb-6">
+              ¿Listo para resolver tu problema técnico? 🚀
+            </h2>
+            <p className="text-xl text-white/90 mb-8">
+              Contactanos ahora y recibe atención personalizada en español
             </p>
-            <p className="text-sm mt-2">
-              Soporte técnico profesional en Las Piedras y alrededores 🇺🇾
-            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/contact" className="btn-modern btn-success text-xl px-10 py-5 pulse-modern">
+                📞 Contactar Ahora
+              </Link>
+              <a 
+                href="https://wa.me/59899252808?text=🛠️%20Hola%20TechFix%20Uruguay!%0A%0ANecesito%20ayuda%20técnica.%20¿Pueden%20asistirme?"
+                className="btn-modern bg-green-600 hover:bg-green-700 text-xl px-10 py-5"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                💬 WhatsApp Directo
+              </a>
+            </div>
           </div>
         </div>
-      </footer>
+      </main>
 
       {/* WhatsApp flotante */}
       <WhatsAppFloatingButton />

@@ -1,0 +1,31 @@
+🔑 VARIABLES DE ENTORNO PARA VERCEL
+==========================================
+
+Copia y pega estas variables en Vercel:
+
+DATABASE_URL
+postgresql://user:pass@host:5432/database
+(Reemplaza con tu URL de Neon.tech)
+
+JWT_SECRET
+3048e68ed3ae896d98f4fa8ed8560a4c126ecb142c3d2781ba535b27a1190cd4
+
+ADMIN_EMAIL
+techfixuruguay@gmail.com
+
+ADMIN_PASSWORD
+TechFix2025!Admin
+
+NODE_ENV
+production
+
+BUSINESS_EMAIL
+techfixuruguay@gmail.com
+
+SITE_URL
+https://tu-dominio.vercel.app
+(Vercel te dará la URL después del deploy)
+
+==========================================
+🎯 Configurar estas 7 variables y ¡deploy listo!
+==========================================
