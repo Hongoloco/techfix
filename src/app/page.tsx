@@ -101,7 +101,7 @@ export default function Home() {
                   href="https://www.instagram.com/techfix_soporte_tecnico/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="dark-card flex items-center space-x-4 p-4"
+                  className="dark-card social-card flex items-center space-x-4 p-4"
                 >
                   <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-3 text-white">
                     <Image 
@@ -109,7 +109,7 @@ export default function Home() {
                       alt="Instagram" 
                       width={24} 
                       height={24}
-                      className="w-6 h-6"
+                      className="w-6 h-6 social-icon"
                     />
                   </div>
                   <div className="text-left">
@@ -122,7 +122,7 @@ export default function Home() {
                   href="https://www.facebook.com/profile.php?id=61579259244594"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="dark-card flex items-center space-x-4 p-4"
+                  className="dark-card social-card flex items-center space-x-4 p-4"
                 >
                   <div className="bg-blue-600 rounded-full p-3 text-white">
                     <Image 
@@ -130,7 +130,7 @@ export default function Home() {
                       alt="Facebook" 
                       width={24} 
                       height={24}
-                      className="w-6 h-6"
+                      className="w-6 h-6 social-icon"
                     />
                   </div>
                   <div className="text-left">
@@ -143,16 +143,18 @@ export default function Home() {
                   href="https://www.tiktok.com/@techfix_soporte_tecnico"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="dark-card flex items-center space-x-4 p-4"
+                  className="dark-card social-card flex items-center space-x-4 p-4"
                 >
-                  <div className="bg-black rounded-full p-3 text-white">
-                    <Image 
-                      src="/tiktok-logo-official.png" 
-                      alt="TikTok" 
-                      width={24} 
-                      height={24}
-                      className="w-6 h-6"
-                    />
+                  <div className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 rounded-full p-3 text-white relative overflow-hidden">
+                    {/* SVG de TikTok optimizado con colores oficiales */}
+                    <svg 
+                      className="w-6 h-6 social-icon" 
+                      viewBox="0 0 24 24" 
+                      fill="white"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-.88-.05A6.33 6.33 0 0 0 5.76 20.8a6.34 6.34 0 0 0 10.86-4.43V8.56a8.16 8.16 0 0 0 4.77 1.51V6.69z"/>
+                    </svg>
                   </div>
                   <div className="text-left">
                     <p className="font-medium text-gray-100">TikTok</p>

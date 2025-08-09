@@ -609,6 +609,100 @@ html, body {
 /* ESTILOS WHATSAPP FLOTANTE - TEMA OSCURO */
 /* ============================================ */
 
+/* Animaciones para botones de redes sociales */
+@keyframes social-hover {
+  0% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-3px) scale(1.02); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+@keyframes social-pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  }
+  50% { 
+    transform: scale(1.02); 
+    box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Estilos para tarjetas de redes sociales */
+.social-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.social-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  animation: social-pulse 2s infinite ease-in-out;
+}
+
+.social-card:hover::before {
+  left: 100%;
+}
+
+.social-card:active {
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* Animaciones específicas para iconos de redes sociales */
+.social-icon {
+  transition: all 0.3s ease;
+}
+
+.social-card:hover .social-icon {
+  transform: rotate(5deg) scale(1.1);
+}
+
+/* Animaciones específicas por red social */
+.social-card:nth-child(1):hover .social-icon {
+  /* Instagram - Rotación suave */
+  transform: rotate(-5deg) scale(1.15);
+  filter: brightness(1.2);
+}
+
+.social-card:nth-child(2):hover .social-icon {
+  /* Facebook - Pulso azul */
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+}
+
+.social-card:nth-child(3):hover .social-icon {
+  /* TikTok - Vibración colorida */
+  transform: rotate(10deg) scale(1.2);
+  filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.6));
+}
+
+/* Efecto de brillo para botones de redes sociales */
+@keyframes social-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.social-card:hover .social-icon::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: social-shimmer 0.6s ease-out;
+}
+
 /* Animaciones para el botón WhatsApp */
 @keyframes whatsapp-pulse {
   0%, 100% {
