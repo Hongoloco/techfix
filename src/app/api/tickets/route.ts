@@ -2,9 +2,19 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getTokenFromRequest, verifyToken } from '@/lib/auth'
 import { sendEmail, newTicketEmailTemplate } from '@/lib/email'
+import { ticketRateLimit } from '@/lib/rateLimit'
+import { validators, sanitizers, validateFields } from '@/lib/validation'
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting
+    if (!ticketRateLimit(request)) {
+      return NextResponse.json(
+        { error: 'Demasiados tickets enviados. Intenta de nuevo en un minuto.' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
     console.log('Received ticket data:', body)
     
@@ -24,7 +34,33 @@ export async function POST(request: NextRequest) {
     const ticketTitle = title || subject
     const ticketDescription = description || message
 
-    if (!name || !email || !ticketTitle || !ticketDescription) {
+    // Validación de campos
+    const validationResult = validateFields(
+      { title: ticketTitle, description: ticketDescription, name, email, phone },
+      {
+        title: validators.ticketTitle,
+        description: validators.ticketDescription,
+        name: validators.name,
+        email: validators.email,
+        phone: validators.phone
+      }
+    )
+
+    if (!validationResult.isValid) {
+      return NextResponse.json(
+        { error: 'Datos inválidos', details: validationResult.errors },
+        { status: 400 }
+      )
+    }
+
+    // Sanitizar datos
+    const sanitizedName = sanitizers.text(name)
+    const sanitizedEmail = sanitizers.email(email)
+    const sanitizedTitle = sanitizers.text(ticketTitle)
+    const sanitizedDescription = sanitizers.text(ticketDescription)
+    const sanitizedPhone = phone ? sanitizers.phone(phone) : null
+
+    if (!sanitizedName || !sanitizedEmail || !sanitizedTitle || !sanitizedDescription) {
       return NextResponse.json(
         { error: 'Nombre, email, asunto y mensaje son requeridos' },
         { status: 400 }

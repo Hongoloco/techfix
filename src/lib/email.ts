@@ -91,6 +91,14 @@ export function newTicketEmailTemplate(ticketData: any) {
                 ${ticketData.user.email}
               </a>
             </p>
+            ${ticketData.client && ticketData.client.phone ? `
+            <p style="margin: 8px 0;">
+              <strong style="color: #ffa726;">📱 Teléfono:</strong> 
+              <a href="tel:${ticketData.client.phone}" style="color: #25d366; text-decoration: none; font-weight: 600;">
+                ${ticketData.client.phone}
+              </a>
+            </p>
+            ` : ''}
           </div>
         </div>
         
@@ -113,9 +121,24 @@ export function newTicketEmailTemplate(ticketData: any) {
         <!-- Acciones rápidas -->
         <div style="background: linear-gradient(135deg, rgba(255, 165, 38, 0.15) 0%, rgba(255, 107, 53, 0.1) 100%); border: 2px solid rgba(255, 165, 38, 0.3); border-radius: 20px; padding: 25px; text-align: center;">
           <h3 style="margin: 0 0 15px 0; color: #ffa726; font-size: 18px; font-weight: 700;">⚡ ACCIONES RÁPIDAS</h3>
-          <a href="https://wa.me/59899252808?text=Hola%20${ticketData.user.name}!%20Recibimos%20tu%20ticket" 
+          
+          ${ticketData.client && ticketData.client.phone ? `
+          <a href="https://wa.me/${ticketData.client.phone.replace(/[^\d]/g, '')}?text=Hola%20${encodeURIComponent(ticketData.client.name)}!%20Recibimos%20tu%20ticket%20%23${ticketData.id}%20sobre%20%22${encodeURIComponent(ticketData.title)}%22.%20%C2%BFPodr%C3%ADamos%20hablar%20para%20ayudarte%20mejor%3F" 
              style="background: linear-gradient(135deg, #25d366 0%, #128c7e 100%); color: white; padding: 15px 25px; text-decoration: none; border-radius: 20px; font-weight: 700; display: inline-block; box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3); margin: 10px;">
-            📱 Responder por WhatsApp
+            📱 Contactar por WhatsApp al ${ticketData.client.phone}
+          </a>
+          ` : `
+          <a href="https://wa.me/59899252808?text=Hola%20${encodeURIComponent(ticketData.client ? ticketData.client.name : ticketData.user.name)}!%20Recibimos%20tu%20ticket%20%23${ticketData.id}%20sobre%20%22${encodeURIComponent(ticketData.title)}%22.%20%C2%BFPodr%C3%ADas%20proporcionarnos%20tu%20n%C3%BAmero%20de%20tel%C3%A9fono%3F" 
+             style="background: linear-gradient(135deg, #ffa726 0%, #ff7043 100%); color: white; padding: 15px 25px; text-decoration: none; border-radius: 20px; font-weight: 700; display: inline-block; box-shadow: 0 8px 25px rgba(255, 167, 38, 0.3); margin: 10px;">
+            📱 Solicitar número por WhatsApp
+          </a>
+          `}
+          
+          <br>
+          
+          <a href="mailto:${ticketData.client ? ticketData.client.email : ticketData.user.email}?subject=Re:%20Ticket%20%23${ticketData.id}%20-%20${encodeURIComponent(ticketData.title)}&body=Hola%20${encodeURIComponent(ticketData.client ? ticketData.client.name : ticketData.user.name)},%0A%0ARecibimos%20tu%20ticket%20de%20soporte%20y%20nos%20pondremos%20en%20contacto%20contigo%20pronto.%0A%0ASaludos,%0ATechFix%20Uruguay" 
+             style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 15px 25px; text-decoration: none; border-radius: 20px; font-weight: 700; display: inline-block; box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3); margin: 10px;">
+            📧 Responder por Email
           </a>
         </div>
       </div>
@@ -144,8 +167,9 @@ export function newTicketEmailTemplate(ticketData: any) {
     📝 Título: ${ticketData.title}
     ⚠️ Prioridad: ${ticketData.priority}
     🏷️ Categoría: ${ticketData.category || 'Sin categoría'}
-    👤 Cliente: ${ticketData.user.name}
-    📧 Email: ${ticketData.user.email}
+    👤 Cliente: ${ticketData.client ? ticketData.client.name : ticketData.user.name}
+    📧 Email: ${ticketData.client ? ticketData.client.email : ticketData.user.email}
+    ${ticketData.client && ticketData.client.phone ? `📱 Teléfono: ${ticketData.client.phone}` : '📱 Teléfono: No proporcionado'}
     
     📝 DESCRIPCIÓN DEL PROBLEMA:
     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -154,7 +178,10 @@ export function newTicketEmailTemplate(ticketData: any) {
     ⚡ ACCIONES RÁPIDAS:
     ━━━━━━━━━━━━━━━━━━━━━
     🔧 Ver en panel: ${process.env.SITE_URL || 'https://techfix-pi.vercel.app'}/admin
-    📱 WhatsApp al cliente: https://wa.me/59899252808
+    ${ticketData.client && ticketData.client.phone ? 
+      `📱 WhatsApp al cliente: https://wa.me/${ticketData.client.phone.replace(/[^\d]/g, '')}` : 
+      `📱 Solicitar número: https://wa.me/59899252808`
+    }
     
     ══════════════════════════════════════════════════════
     🛠️ TechFix Uruguay 🇺🇾 - Soporte Técnico Profesional

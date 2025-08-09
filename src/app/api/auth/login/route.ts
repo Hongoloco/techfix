@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { generateToken } from '@/lib/auth'
+import { generateToken, verifyPassword } from '@/lib/auth'
+import { authRateLimit } from '@/lib/rateLimit'
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting
+    if (!authRateLimit(request)) {
+      return NextResponse.json(
+        { error: 'Demasiados intentos de inicio de sesión. Intenta de nuevo en 15 minutos.' },
+        { status: 429 }
+      )
+    }
+
     const { email, password } = await request.json()
 
+    // Validación de entrada
     if (!email || !password) {
       return NextResponse.json(
         { error: 'Email y contraseña son requeridos' },
@@ -13,39 +23,34 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Solo permitir acceso al usuario administrador específico
-    if (email !== 'techfixuruguay@gmail.com') {
+    // Validar formato de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: 'Acceso no autorizado' },
-        { status: 401 }
+        { error: 'Formato de email inválido' },
+        { status: 400 }
       )
     }
 
-    if (password !== 'Agustin2025') {
+    // Buscar usuario en la base de datos
+    const user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() }
+    })
+
+    if (!user) {
       return NextResponse.json(
         { error: 'Credenciales inválidas' },
         { status: 401 }
       )
     }
 
-    // Buscar o crear el usuario administrador
-    let user = await prisma.user.findUnique({
-      where: { email: 'techfixuruguay@gmail.com' }
-    })
-
-    if (!user) {
-      // Crear el usuario administrador si no existe
-      const bcrypt = await import('bcryptjs')
-      const hashedPassword = await bcrypt.hash('Agustin2025', 10)
-      
-      user = await prisma.user.create({
-        data: {
-          name: 'Administrador TechFix',
-          email: 'techfixuruguay@gmail.com',
-          password: hashedPassword,
-          role: 'ADMIN'
-        }
-      })
+    // Verificar contraseña usando bcrypt
+    const isValidPassword = await verifyPassword(password, user.password)
+    if (!isValidPassword) {
+      return NextResponse.json(
+        { error: 'Credenciales inválidas' },
+        { status: 401 }
+      )
     }
 
     // Generar token

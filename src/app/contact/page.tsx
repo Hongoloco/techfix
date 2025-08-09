@@ -2,11 +2,16 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Send, MapPin, Clock, Mail, Phone, Zap } from 'lucide-react'
+import { Send, MapPin, Clock, Mail, Phone, Zap, AlertTriangle } from 'lucide-react'
 import { BusinessHours } from '@/components/BusinessHours'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
+import { LoadingSpinner, ButtonLoading } from '@/components/LoadingSpinner'
+import { validators, sanitizers } from '@/lib/validation'
+import { useAnalytics } from '@/lib/analytics'
 
 export default function ContactPage() {
+  const { track } = useAnalytics()
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,19 +22,72 @@ export default function ContactPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errors, setErrors] = useState<string[]>([])
+
+  const validateForm = () => {
+    const validationErrors: string[] = []
+    
+    const nameValidation = validators.name(formData.name)
+    if (!nameValidation.isValid) {
+      validationErrors.push(...nameValidation.errors)
+    }
+    
+    const emailValidation = validators.email(formData.email)
+    if (!emailValidation.isValid) {
+      validationErrors.push(...emailValidation.errors)
+    }
+    
+    if (formData.phone) {
+      const phoneValidation = validators.phone(formData.phone)
+      if (!phoneValidation.isValid) {
+        validationErrors.push(...phoneValidation.errors)
+      }
+    }
+    
+    const subjectValidation = validators.ticketTitle(formData.subject)
+    if (!subjectValidation.isValid) {
+      validationErrors.push(...subjectValidation.errors)
+    }
+    
+    const messageValidation = validators.ticketDescription(formData.message)
+    if (!messageValidation.isValid) {
+      validationErrors.push(...messageValidation.errors)
+    }
+    
+    setErrors(validationErrors)
+    return validationErrors.length === 0
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!validateForm()) {
+      return
+    }
+    
     setIsSubmitting(true)
+    setErrors([])
     
     try {
+      // Sanitizar datos antes de enviar
+      const sanitizedData = {
+        name: sanitizers.text(formData.name),
+        email: sanitizers.email(formData.email),
+        phone: formData.phone ? sanitizers.phone(formData.phone) : '',
+        subject: sanitizers.text(formData.subject),
+        message: sanitizers.text(formData.message),
+        priority: formData.priority
+      }
+
       const response = await fetch('/api/tickets', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(sanitizedData),
       })
+
+      const data = await response.json()
 
       if (response.ok) {
         setSubmitStatus('success')
@@ -41,11 +99,31 @@ export default function ContactPage() {
           message: '',
           priority: 'normal'
         })
+        
+        // Track successful form submission
+        track('contact_form_submit', {
+          success: true,
+          priority: formData.priority
+        })
       } else {
         setSubmitStatus('error')
+        setErrors(data.details || [data.error || 'Error al enviar el formulario'])
+        
+        // Track failed form submission
+        track('contact_form_submit', {
+          success: false,
+          error: data.error
+        })
       }
     } catch (error) {
       setSubmitStatus('error')
+      setErrors(['Error de conexión. Por favor, intenta de nuevo.'])
+      
+      // Track connection error
+      track('contact_form_submit', {
+        success: false,
+        error: 'connection_error'
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -221,20 +299,31 @@ export default function ContactPage() {
                 />
               </div>
 
-              <button
+              {/* Mostrar errores de validación */}
+              {errors.length > 0 && (
+                <div className="glass-card-readable border-l-4 border-red-500 p-4 mb-6">
+                  <div className="flex items-start">
+                    <AlertTriangle className="h-5 w-5 text-red-400 mt-0.5 mr-3" />
+                    <div>
+                      <h3 className="text-red-300 font-medium mb-2">Por favor, corrige los siguientes errores:</h3>
+                      <ul className="text-red-200 text-sm space-y-1">
+                        {errors.map((error, index) => (
+                          <li key={index}>• {error}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <ButtonLoading
                 type="submit"
-                disabled={isSubmitting}
+                loading={isSubmitting}
                 className="btn-modern btn-success w-full text-lg py-4 pulse-modern"
               >
-                {isSubmitting ? (
-                  <>⏳ Enviando...</>
-                ) : (
-                  <>
-                    <Send className="inline w-5 h-5 mr-2" />
-                    🚀 Enviar Ticket de Soporte
-                  </>
-                )}
-              </button>
+                <Send className="inline w-5 h-5 mr-2" />
+                🚀 Enviar Ticket de Soporte
+              </ButtonLoading>
             </form>
           </div>
 

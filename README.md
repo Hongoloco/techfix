@@ -1,42 +1,108 @@
 # TechFix - Sistema de Gestión de Tickets
 
-Sistema de gestión de tickets y clientes para servicios técnicos.
+Sistema de gestión de tickets y clientes para servicios técnicos mejorado con las mejores prácticas de desarrollo.
 
 ## 🚀 Características
 
-- ✅ Sistema de autenticación (admin único)
-- ✅ Gestión de tickets
+- ✅ Sistema de autenticación seguro
+- ✅ Gestión de tickets con validación avanzada
 - ✅ Gestión de clientes
-- ✅ Panel de administración
-- ✅ Formulario de contacto
+- ✅ Panel de administración optimizado
+- ✅ Formulario de contacto con validación
 - ✅ Integración con WhatsApp
+- ✅ Rate limiting para APIs
+- ✅ Logging estructurado
+- ✅ SEO optimizado
+- ✅ PWA (Progressive Web App)
+- ✅ Caché inteligente
+- ✅ Manejo de errores mejorado
+- ✅ Analytics integrado
+- ✅ Validación de datos robusta
+
+## 🔧 Mejoras Implementadas
+
+### Seguridad
+- ❌ **ELIMINADO**: Credenciales hardcodeadas
+- ✅ **AÑADIDO**: Autenticación basada en base de datos
+- ✅ **AÑADIDO**: Rate limiting en APIs críticas
+- ✅ **AÑADIDO**: Validación y sanitización de inputs
+- ✅ **AÑADIDO**: Headers de seguridad
+
+### Performance
+- ✅ **AÑADIDO**: Sistema de caché del servidor
+- ✅ **AÑADIDO**: Optimización de consultas DB
+- ✅ **AÑADIDO**: Lazy loading de componentes
+- ✅ **AÑADIDO**: Service Worker para caché
+
+### UX/UI
+- ✅ **AÑADIDO**: Loading states mejorados
+- ✅ **AÑADIDO**: Manejo de errores user-friendly
+- ✅ **AÑADIDO**: Validación en tiempo real
+- ✅ **AÑADIDO**: PWA capabilities
+
+### Monitoring
+- ✅ **AÑADIDO**: Logging estructurado
+- ✅ **AÑADIDO**: Analytics tracking
+- ✅ **AÑADIDO**: Error monitoring
+- ✅ **AÑADIDO**: Performance monitoring
+
+### SEO
+- ✅ **AÑADIDO**: Meta tags optimizados
+- ✅ **AÑADIDO**: Schema.org structured data
+- ✅ **AÑADIDO**: Sitemap.xml automático
+- ✅ **AÑADIDO**: Robots.txt optimizado
 
 ## 📋 Requisitos
 
 - Node.js 18 o superior
 - PostgreSQL (recomendado: Neon.tech gratuito)
 
-## ⚙️ Configuración
+## ⚙️ Setup Rápido
 
-### 1. Clonar el repositorio
+### Opción 1: Setup Automático (Recomendado)
+```bash
+git clone [tu-repo]
+cd techfix
+chmod +x setup.sh
+./setup.sh
+```
+
+### Opción 2: Setup Manual
+
+#### 1. Clonar el repositorio
 ```bash
 git clone [tu-repo]
 cd techfix
 ```
 
-### 2. Instalar dependencias
+#### 2. Instalar dependencias
 ```bash
 npm install
 ```
 
-### 3. Configurar base de datos PostgreSQL
+#### 3. Configurar variables de entorno
+```bash
+# Copia el archivo de ejemplo
+cp .env.example .env
 
-#### Opción A: Neon.tech (Recomendado - Gratuito)
+# Edita las variables necesarias
+nano .env
+```
+
+**Variables importantes:**
+- `DATABASE_URL`: URL de conexión a PostgreSQL
+- `JWT_SECRET`: Clave secreta para JWT (genera una segura)
+- `ADMIN_EMAIL`: Email del administrador
+- `ADMIN_PASSWORD`: Contraseña del administrador (segura)
+
+#### 4. Configurar base de datos PostgreSQL
+
+##### Opción A: Neon.tech (Recomendado - Gratuito)
 1. Ve a [neon.tech](https://neon.tech) y crea una cuenta
 2. Crea un nuevo proyecto
-3. Copia la URL de conexión
+3. Copia la URL de conexión a `DATABASE_URL` en .env
 
-#### Opción B: PostgreSQL local
+##### Opción B: PostgreSQL local
 ```bash
 # Ubuntu/Debian
 sudo apt install postgresql postgresql-contrib
@@ -45,9 +111,60 @@ sudo apt install postgresql postgresql-contrib
 brew install postgresql
 ```
 
-### 4. Configurar variables de entorno
+#### 5. Inicializar base de datos
 ```bash
-# Copia el archivo de ejemplo
+npx prisma generate
+npx prisma db push
+npx prisma db seed
+```
+
+#### 6. Ejecutar en desarrollo
+```bash
+npm run dev
+```
+
+## 📱 PWA Installation
+
+La aplicación está configurada como PWA. Los usuarios pueden:
+1. Visitar la web en mobile
+2. Elegir "Añadir a pantalla de inicio"
+3. Usar como app nativa
+
+## 🔧 Comandos Útiles
+
+```bash
+# Desarrollo
+npm run dev
+
+# Producción
+npm run build
+npm run start
+
+# Base de datos
+npx prisma studio      # Explorar DB
+npx prisma generate    # Regenerar cliente
+npx prisma db push     # Aplicar cambios schema
+npx prisma db seed     # Poblar datos iniciales
+
+# Linting
+npm run lint
+npm run lint:fix
+```
+
+## 📊 Monitoring y Analytics
+
+### Variables de entorno opcionales para monitoring:
+```bash
+# Google Analytics
+GOOGLE_ANALYTICS_ID="G-XXXXXXXXXX"
+
+# Sentry (Error tracking)
+SENTRY_DSN="https://xxxxx.ingest.sentry.io/xxxxx"
+
+# Otras herramientas
+HOTJAR_ID="1234567"
+CLARITY_PROJECT_ID="xxxxxxxxx"
+```
 cp .env.example .env
 
 # Edita .env con tus datos:

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import HydrationFix from "@/components/HydrationFix";
+import { generateSEO, organizationSchema } from '@/lib/seo'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,10 +14,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "TechFix Uruguay - Soporte Técnico Profesional",
-  description: "Servicios de soporte técnico profesional en Uruguay. Soluciones rápidas y efectivas para todos tus problemas tecnológicos.",
-};
+export const metadata: Metadata = generateSEO()
 
 export default function RootLayout({
   children,
@@ -32,6 +30,12 @@ export default function RootLayout({
         <link 
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" 
           rel="stylesheet" 
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema)
+          }}
         />
       </head>
       <body
