@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getTokenFromRequest, verifyToken } from '@/lib/auth'
-import { sendEmail, newTicketEmailTemplate } from '@/lib/email'
+import { sendEmail, newTicketEmailTemplate } from '@/lib/email_new'
 import { ticketRateLimit } from '@/lib/rateLimit'
 import { validators, sanitizers, validateFields } from '@/lib/validation'
 
