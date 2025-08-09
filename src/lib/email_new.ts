@@ -118,24 +118,61 @@ export function newTicketEmailTemplate(ticketData: any) {
           </a>
         </div>
 
-        <!-- Card de acciones rápidas -->
+        <!-- Card de acciones rápidas con WhatsApp más prominente -->
         <div style="background: rgba(245, 158, 11, 0.1); border: 2px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 25px; text-align: center; position: relative; backdrop-filter: blur(10px);">
-          <h3 style="margin: 0 0 20px 0; color: #F59E0B; font-size: 18px; font-weight: 700;">⚡ ACCIONES RÁPIDAS</h3>
-          <div style="display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;">
-            ${ticketData.client?.phone ? `
-              <a href="https://wa.me/${ticketData.client.phone.replace(/[^0-9]/g, '')}?text=Hola%20${encodeURIComponent(ticketData.client.name || ticketData.user.name)}!%20Recibimos%20tu%20ticket%20%23${ticketData.id}%20-%20${encodeURIComponent(ticketData.title)}.%20Estamos%20revisando%20tu%20solicitud%20y%20te%20contactaremos%20pronto." 
-                 style="display: inline-block; background: linear-gradient(135deg, #25d366 0%, #20ba5a 100%); color: white; padding: 14px 24px; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 14px; box-shadow: 0 6px 12px rgba(37, 211, 102, 0.3); transition: all 0.3s ease;">
-                📱 WhatsApp al Cliente
-              </a>
-            ` : `
-              <span style="display: inline-block; background: #6B7280; color: white; padding: 14px 24px; border-radius: 12px; font-weight: 700; font-size: 14px; opacity: 0.7;">
-                📱 Sin WhatsApp (no hay teléfono)
-              </span>
-            `}
-            <a href="tel:59899252808" 
-               style="display: inline-block; background: linear-gradient(135deg, #374151 0%, #4B5563 100%); color: white; padding: 14px 24px; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 14px; box-shadow: 0 6px 12px rgba(55, 65, 81, 0.3); border: 1px solid #6B7280;">
-              📞 Llamar Oficina
+          <h3 style="margin: 0 0 25px 0; color: #F59E0B; font-size: 20px; font-weight: 800;">⚡ ACCIONES RÁPIDAS</h3>
+          
+          <!-- Botón principal de WhatsApp MÁS GRANDE Y VISIBLE -->
+          ${ticketData.client?.phone ? `
+          <div style="margin-bottom: 25px;">
+            <a href="https://wa.me/${ticketData.client.phone.replace(/[^0-9]/g, '')}?text=Hola%20${encodeURIComponent(ticketData.client.name || ticketData.user.name)}!%20Recibimos%20tu%20ticket%20%23${ticketData.id}%20-%20${encodeURIComponent(ticketData.title)}.%20Estamos%20revisando%20tu%20solicitud%20y%20te%20contactaremos%20pronto." 
+               style="display: inline-block; background: linear-gradient(135deg, #25d366 0%, #20ba5a 100%); color: white; padding: 25px 50px; text-decoration: none; border-radius: 20px; font-weight: 900; font-size: 22px; box-shadow: 0 15px 30px rgba(37, 211, 102, 0.6); transition: all 0.3s ease; border: 4px solid rgba(255, 255, 255, 0.4); min-width: 350px; position: relative; overflow: hidden; text-transform: uppercase; letter-spacing: 1px; transform: scale(1); animation: pulse 2s infinite;">
+              <span style="font-size: 32px; margin-right: 18px; vertical-align: middle; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));">📱</span>
+              <span style="vertical-align: middle; text-shadow: 0 3px 6px rgba(0,0,0,0.4);">WhatsApp Directo</span>
             </a>
+          </div>
+          <div style="background: rgba(16, 185, 129, 0.15); border: 2px solid rgba(16, 185, 129, 0.4); border-radius: 14px; padding: 15px 25px; margin: 20px auto; max-width: 380px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">
+            <p style="margin: 0; color: #10B981; font-size: 16px; font-weight: 700;">
+              💬 Contacto directo con ${ticketData.client.name || ticketData.user.name}
+            </p>
+            <p style="margin: 6px 0 0 0; color: #6EE7B7; font-size: 14px; font-weight: 600;">
+              📞 ${ticketData.client.phone}
+            </p>
+          </div>
+          ` : `
+          <div style="margin-bottom: 25px;">
+            <div style="display: inline-block; background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%); color: white; padding: 25px 50px; border-radius: 20px; font-weight: 900; font-size: 22px; opacity: 0.7; min-width: 350px; border: 4px solid rgba(255, 255, 255, 0.1); text-transform: uppercase; letter-spacing: 1px;">
+              <span style="font-size: 32px; margin-right: 18px; vertical-align: middle;">📱</span>
+              <span style="vertical-align: middle;">Sin WhatsApp</span>
+            </div>
+          </div>
+          <div style="background: rgba(156, 163, 175, 0.15); border: 2px solid rgba(156, 163, 175, 0.4); border-radius: 14px; padding: 15px 25px; margin: 20px auto; max-width: 380px;">
+            <p style="margin: 0; color: #9CA3AF; font-size: 16px; font-weight: 700;">
+              ⚠️ No hay teléfono disponible
+            </p>
+            <p style="margin: 6px 0 0 0; color: #6B7280; font-size: 14px;">
+              El cliente no proporcionó número de WhatsApp
+            </p>
+          </div>
+          `}
+          
+          <!-- Botones secundarios responsive -->
+          <div style="display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 25px;">
+            <a href="tel:59899252808" 
+               style="display: inline-block; background: linear-gradient(135deg, #374151 0%, #4B5563 100%); color: white; padding: 16px 28px; text-decoration: none; border-radius: 14px; font-weight: 700; font-size: 16px; box-shadow: 0 8px 20px rgba(55, 65, 81, 0.5); border: 2px solid #6B7280; transition: all 0.3s ease; min-width: 180px; text-align: center;">
+              <span style="font-size: 18px; margin-right: 10px;">📞</span>Llamar Oficina
+            </a>
+            <a href="mailto:techfixuruguay@gmail.com?subject=Ticket%20%23${ticketData.id}%20-%20${encodeURIComponent(ticketData.title)}" 
+               style="display: inline-block; background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%); color: white; padding: 16px 28px; text-decoration: none; border-radius: 14px; font-weight: 700; font-size: 16px; box-shadow: 0 8px 20px rgba(6, 182, 212, 0.5); transition: all 0.3s ease; min-width: 180px; text-align: center;">
+              <span style="font-size: 18px; margin-right: 10px;">📧</span>Email Directo
+            </a>
+          </div>
+          
+          <!-- Mensaje para móvil -->
+          <div style="margin-top: 25px; padding: 18px; background: rgba(6, 182, 212, 0.08); border: 2px solid rgba(6, 182, 212, 0.3); border-radius: 14px;">
+            <p style="margin: 0; color: #22D3EE; font-size: 15px; font-weight: 700; text-align: center;">
+              📱 Optimizado para móvil y desktop - Los botones se adaptan automáticamente
+            </p>
           </div>
         </div>
       </div>
@@ -187,28 +224,26 @@ export function newQuoteEmailTemplate(quoteData: any) {
       <div style="padding: 30px; background-color: #f8fafc;">
         <div style="background-color: white; padding: 25px; border-radius: 8px; margin-bottom: 25px;">
           <h3>Información de la Cotización</h3>
-          <p><strong>🔧 Servicio:</strong> ${quoteData.serviceType}</p>
           <p><strong>👤 Cliente:</strong> ${quoteData.name}</p>
-          <p><strong>📧 Email:</strong> <a href="mailto:${quoteData.email}" style="color: #2563eb;">${quoteData.email}</a></p>
-          <p><strong>📱 Teléfono:</strong> ${quoteData.phone}</p>
-          <p><strong>📅 Fecha de contacto:</strong> ${new Date().toLocaleDateString('es-UY')}</p>
+          <p><strong>📧 Email:</strong> ${quoteData.email}</p>
+          <p><strong>🏢 Empresa:</strong> ${quoteData.company || 'No especificada'}</p>
+          <p><strong>📱 Teléfono:</strong> ${quoteData.phone || 'No proporcionado'}</p>
+          <p><strong>🔧 Tipo de Servicio:</strong> ${quoteData.serviceType}</p>
+          <p><strong>💰 Presupuesto:</strong> ${quoteData.budget || 'No especificado'}</p>
         </div>
         
         <div style="background-color: white; padding: 25px; border-radius: 8px; margin-bottom: 25px;">
-          <h3>📝 Descripción del Servicio:</h3>
+          <h3>📝 Descripción:</h3>
           <div style="background-color: #f8fafc; padding: 20px; border-left: 4px solid #2563eb;">
             ${quoteData.description.replace(/\n/g, '<br>')}
           </div>
         </div>
         
-        <div style="background-color: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 20px; text-align: center;">
-          <h3 style="margin: 0 0 10px 0; color: #92400e;">⚡ ACCIONES RÁPIDAS</h3>
-          <p style="margin: 10px 0;">
-            <a href="https://wa.me/59899252808?text=Hola%20${quoteData.name}!%20Recibimos%20tu%20solicitud%20de%20cotización" 
-               style="background-color: #25d366; color: white; padding: 12px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">
-              📱 Responder por WhatsApp
-            </a>
-          </p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${process.env.SITE_URL || 'https://techfix-pi.vercel.app'}/admin" 
+             style="background-color: #2563eb; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+            💼 VER EN PANEL DE ADMINISTRACIÓN
+          </a>
         </div>
       </div>
       
@@ -221,17 +256,18 @@ export function newQuoteEmailTemplate(quoteData: any) {
   `
   
   const text = `
-    💰 NUEVA COTIZACIÓN - ${quoteData.serviceType}
+    💰 NUEVA COTIZACIÓN - ${quoteData.serviceType} - ${quoteData.name}
     
-    Cliente: ${quoteData.name}
-    Email: ${quoteData.email}
-    Teléfono: ${quoteData.phone}
-    Servicio: ${quoteData.serviceType}
+    Cliente: ${quoteData.name} (${quoteData.email})
+    Empresa: ${quoteData.company || 'No especificada'}
+    Teléfono: ${quoteData.phone || 'No proporcionado'}
+    Tipo de Servicio: ${quoteData.serviceType}
+    Presupuesto: ${quoteData.budget || 'No especificado'}
     
     Descripción:
     ${quoteData.description}
     
-    WhatsApp al cliente: https://wa.me/59899252808
+    Ver en panel: ${process.env.SITE_URL || 'https://techfix-pi.vercel.app'}/admin
   `
   
   return { subject, html, text }
