@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { Star, CheckCircle, AlertCircle } from 'lucide-react';
 
 interface FormData {
@@ -12,7 +13,7 @@ interface FormData {
   service: string;
 }
 
-export default function RatePage() {
+function RatePageContent() {
   const searchParams = useSearchParams();
   const ticketId = searchParams.get('ticket');
   const clientEmail = searchParams.get('email');
@@ -83,12 +84,12 @@ export default function RatePage() {
               />
             ))}
           </div>
-          <a
+          <Link
             href="/"
             className="inline-block bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-700 transition-all duration-300"
           >
             Volver al inicio
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -239,5 +240,20 @@ export default function RatePage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function RatePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto mb-4"></div>
+          <p className="text-gray-300">Cargando...</p>
+        </div>
+      </div>
+    }>
+      <RatePageContent />
+    </Suspense>
   );
 }
