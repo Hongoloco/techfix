@@ -728,11 +728,18 @@ html, body {
   transition: all 0.1s ease;
 }
 
-/* Icono WhatsApp más grande */
-.whatsapp-round img {
+/* Icono WhatsApp más grande - SVG optimizado */
+.whatsapp-round svg {
   width: 48px !important;
   height: 48px !important;
+  color: white !important;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transition: all 0.3s ease;
+}
+
+.whatsapp-round:hover svg {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
 }
 
 /* Responsive para móviles */
@@ -744,7 +751,7 @@ html, body {
     right: 20px !important;
   }
   
-  .whatsapp-round img {
+  .whatsapp-round svg {
     width: 40px !important;
     height: 40px !important;
   }
@@ -762,7 +769,7 @@ html, body {
     right: 15px !important;
   }
   
-  .whatsapp-round img {
+  .whatsapp-round svg {
     width: 36px !important;
     height: 36px !important;
   }
