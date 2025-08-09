@@ -109,6 +109,14 @@ html, body {
   transition: all 0.3s ease;
 }
 
+.logo-icon-large {
+  width: 64px;
+  height: 64px;
+  animation: float 4s ease-in-out infinite, glow 3s ease-in-out infinite alternate, spin 20s linear infinite;
+  filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.5));
+  transition: all 0.3s ease;
+}
+
 .logo-dark:hover .logo-icon {
   animation: bounce 0.6s ease-in-out, glow 2s ease-in-out infinite alternate;
   filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.6));
@@ -128,6 +136,27 @@ html, body {
 @keyframes glow {
   from { filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.3)); }
   to { filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.8)); }
+}
+
+@keyframes glow-text {
+  0% {
+    text-shadow: 
+      0 0 20px rgba(6, 182, 212, 0.8),
+      0 0 40px rgba(6, 182, 212, 0.6),
+      0 0 60px rgba(6, 182, 212, 0.4);
+  }
+  50% {
+    text-shadow: 
+      0 0 30px rgba(6, 182, 212, 1),
+      0 0 60px rgba(6, 182, 212, 0.8),
+      0 0 90px rgba(34, 211, 238, 0.6);
+  }
+  100% {
+    text-shadow: 
+      0 0 20px rgba(6, 182, 212, 0.8),
+      0 0 40px rgba(6, 182, 212, 0.6),
+      0 0 60px rgba(6, 182, 212, 0.4);
+  }
 }
 
 /* Cards oscuras modernas */
@@ -224,6 +253,21 @@ html, body {
   transform: translateY(-2px);
 }
 
+.btn-yellow-dark {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1f2937;
+  border: 1px solid #f59e0b;
+  backdrop-filter: blur(10px);
+  font-weight: 600;
+}
+
+.btn-yellow-dark:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-color: #d97706;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+}
+
 .btn-success-dark {
   background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
   color: white;
@@ -303,13 +347,14 @@ html, body {
 .hero-title-dark {
   font-size: 3.5rem;
   font-weight: 900;
-  color: var(--text-primary);
+  color: #06B6D4;
   margin-bottom: 1.5rem;
   line-height: 1.1;
-  background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-color) 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  text-shadow: 
+    0 0 20px rgba(6, 182, 212, 0.8),
+    0 0 40px rgba(6, 182, 212, 0.6),
+    0 0 60px rgba(6, 182, 212, 0.4);
+  animation: glow-text 3s ease-in-out infinite alternate;
 }
 
 .hero-subtitle-dark {

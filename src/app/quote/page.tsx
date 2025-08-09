@@ -2,8 +2,9 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
-import { Send, Cpu, Calculator, Mail, Phone } from 'lucide-react'
+import { Send, Calculator, Mail, Phone } from 'lucide-react'
 
 function QuoteForm() {
   const [formData, setFormData] = useState({
@@ -12,8 +13,7 @@ function QuoteForm() {
     company: '',
     phone: '',
     serviceType: '',
-    description: '',
-    budget: ''
+    description: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -67,13 +67,15 @@ function QuoteForm() {
         <header className="dark-header border-b border-white/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
-              <Link href="/" className="logo-dark flex items-center space-x-3">
-                <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
-                  <Cpu className="h-6 w-6 text-white" />
-                </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                  TechFix Uruguay 🇺🇾
-                </span>
+              <Link href="/" className="logo-dark">
+                <Image 
+                  src="/techfix-logo.svg" 
+                  alt="TechFix Uruguay" 
+                  width={48} 
+                  height={48}
+                  className="logo-icon"
+                />
+                <span>TechFix Uruguay 🇺🇾</span>
               </Link>
               <nav className="nav-dark hidden md:flex items-center space-x-6">
                 <Link href="/" className="nav-link-dark">
@@ -98,7 +100,7 @@ function QuoteForm() {
                   ¡Cotización Enviada!
                 </h1>
                 <p className="text-lg text-gray-600">
-                  Gracias por solicitar una cotización. Te contactaremos dentro de las próximas 2 horas para brindarte un presupuesto personalizado.
+                  Gracias por solicitar una cotización. Te contactaremos dentro de las próximas 2 horas para brindarte una propuesta personalizada.
                 </p>
               </div>
               
@@ -123,13 +125,15 @@ function QuoteForm() {
       <header className="dark-header border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            <Link href="/" className="logo-dark flex items-center space-x-3">
-              <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
-                <Cpu className="h-6 w-6 text-white" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                TechFix Uruguay 🇺🇾
-              </span>
+            <Link href="/" className="logo-dark">
+              <Image 
+                src="/techfix-logo.svg" 
+                alt="TechFix Uruguay" 
+                width={48} 
+                height={48}
+                className="logo-icon"
+              />
+              <span>TechFix Uruguay 🇺🇾</span>
             </Link>
             <nav className="nav-dark hidden md:flex items-center space-x-6">
               <Link href="/" className="nav-link-dark">
@@ -149,11 +153,20 @@ function QuoteForm() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-white mb-6 glow-text">
-            Solicitar Cotización
-          </h1>
+          <div className="mb-8">
+            <h1 className="hero-title-dark flex items-center justify-center gap-4">
+              <Image 
+                src="/techfix-logo.svg" 
+                alt="TechFix Uruguay Logo" 
+                width={64} 
+                height={64}
+                className="logo-icon-large animate-bounce"
+              />
+              <span className="animate-pulse">Solicitar Cotización</span>
+            </h1>
+          </div>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-            Obtén un presupuesto personalizado para tus necesidades técnicas.
+            Obtén una cotización personalizada para tus necesidades técnicas.
             <br />
             <span className="text-purple-400 font-semibold">Respuesta garantizada en menos de 2 horas.</span>
           </p>
@@ -275,25 +288,6 @@ function QuoteForm() {
                   />
                 </div>
 
-                <div className="form-group-dark">
-                  <label htmlFor="budget" className="form-label-dark">
-                    Presupuesto estimado (opcional)
-                  </label>
-                  <select
-                    id="budget"
-                    name="budget"
-                    value={formData.budget}
-                    onChange={handleChange}
-                    className="form-input-dark form-select-dark"
-                  >
-                    <option value="">No tengo presupuesto definido</option>
-                    <option value="500-2000">$500 - $2,000</option>
-                    <option value="2000-5000">$2,000 - $5,000</option>
-                    <option value="5000-10000">$5,000 - $10,000</option>
-                    <option value="10000+">Más de $10,000</option>
-                  </select>
-                </div>
-
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -324,7 +318,7 @@ function QuoteForm() {
               <ul className="space-y-3 text-gray-300">
                 <li className="flex items-start">
                   <span className="w-2 h-2 bg-purple-500 rounded-full mt-2 mr-3 flex-shrink-0 animate-pulse"></span>
-                  <span>Presupuestos sin compromiso</span>
+                  <span>Cotizaciones sin compromiso</span>
                 </li>
                 <li className="flex items-start">
                   <span className="w-2 h-2 bg-purple-500 rounded-full mt-2 mr-3 flex-shrink-0 animate-pulse"></span>
@@ -332,7 +326,7 @@ function QuoteForm() {
                 </li>
                 <li className="flex items-start">
                   <span className="w-2 h-2 bg-purple-500 rounded-full mt-2 mr-3 flex-shrink-0 animate-pulse"></span>
-                  <span>Precios competitivos y transparentes</span>
+                  <span>Servicio profesional y transparente</span>
                 </li>
                 <li className="flex items-start">
                   <span className="w-2 h-2 bg-purple-500 rounded-full mt-2 mr-3 flex-shrink-0 animate-pulse"></span>
@@ -371,33 +365,6 @@ function QuoteForm() {
                 </div>
               </div>
             </div>
-
-            <div className="card-dark glass-effect">
-              <h3 className="text-xl font-bold text-white mb-4 glow-text">
-                Servicios Populares
-              </h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Reparación PC</span>
-                  <span className="font-medium text-purple-400">Desde $500</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Configuración Red</span>
-                  <span className="font-medium text-purple-400">Desde $800</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Mantenimiento</span>
-                  <span className="font-medium text-purple-400">Desde $300</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Consultoría</span>
-                  <span className="font-medium text-purple-400">$1200/hora</span>
-                </div>
-                <p className="text-xs text-gray-500 mt-3">
-                  * Precios orientativos. Cotización final según el caso específico.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </main>
@@ -407,9 +374,13 @@ function QuoteForm() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center mb-4">
-              <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center mr-3">
-                <Cpu className="h-5 w-5 text-white" />
-              </div>
+              <Image 
+                src="/techfix-logo.svg" 
+                alt="TechFix Uruguay" 
+                width={32} 
+                height={32}
+                className="logo-icon mr-3"
+              />
               <span className="font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 TechFix Uruguay
               </span>

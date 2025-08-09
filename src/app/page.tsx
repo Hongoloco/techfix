@@ -61,8 +61,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="mb-8">
-              <h1 className="hero-title-dark">
-                TechFix Uruguay 🇺🇾
+              <h1 className="hero-title-dark flex items-center justify-center gap-4">
+                <Image 
+                  src="/techfix-logo.svg" 
+                  alt="TechFix Uruguay Logo" 
+                  width={64} 
+                  height={64}
+                  className="logo-icon-large animate-bounce"
+                />
+                <span className="animate-pulse">TechFix Uruguay 🇺🇾</span>
               </h1>
             </div>
             
@@ -78,7 +85,7 @@ export default function Home() {
                 <Ticket className="w-6 h-6" />
                 Crear Ticket de Soporte
               </Link>
-              <Link href="/quote" className="btn-dark btn-secondary-dark text-lg px-8 py-4">
+              <Link href="/quote" className="btn-dark btn-yellow-dark text-lg px-8 py-4">
                 <MessageCircle className="w-6 h-6" />
                 Solicitar Cotización
               </Link>
@@ -98,11 +105,11 @@ export default function Home() {
                 >
                   <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-3 text-white">
                     <Image 
-                      src="/instagram-icon.svg" 
+                      src="/instagram-logo.png" 
                       alt="Instagram" 
                       width={24} 
                       height={24}
-                      className="w-6 h-6 filter invert"
+                      className="w-6 h-6"
                     />
                   </div>
                   <div className="text-left">
@@ -119,11 +126,11 @@ export default function Home() {
                 >
                   <div className="bg-blue-600 rounded-full p-3 text-white">
                     <Image 
-                      src="/facebook-icon.svg" 
+                      src="/facebook-logo.png" 
                       alt="Facebook" 
                       width={24} 
                       height={24}
-                      className="w-6 h-6 filter invert"
+                      className="w-6 h-6"
                     />
                   </div>
                   <div className="text-left">
@@ -140,11 +147,11 @@ export default function Home() {
                 >
                   <div className="bg-black rounded-full p-3 text-white">
                     <Image 
-                      src="/tiktok-icon.svg" 
+                      src="/tiktok-logo-official.png" 
                       alt="TikTok" 
                       width={24} 
                       height={24}
-                      className="w-6 h-6 filter invert"
+                      className="w-6 h-6"
                     />
                   </div>
                   <div className="text-left">

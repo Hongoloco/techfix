@@ -54,18 +54,15 @@ export function WhatsAppFloatingButton() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <WhatsAppButton
-        message="🆘 ¡Hola TechFix Uruguay!
+        message="¡Hola TechFix Uruguay! 👋
 
-Tengo un problema técnico y necesito ayuda urgente.
+Me interesa conocer más sobre sus servicios de soporte técnico.
 
-¿Pueden asistirme por favor?"
+¿Podrían ayudarme con una consulta?"
         className="whatsapp-round whatsapp-float"
       >
         <WhatsAppIcon className="h-8 w-8 text-white" />
       </WhatsAppButton>
-      <div className="whatsapp-badge absolute -top-1 -right-1 text-white text-xs h-6 w-6 flex items-center justify-center font-bold border-2 border-white">
-        SOS
-      </div>
     </div>
   )
 }

@@ -80,11 +80,11 @@ export default function Home() {
                 >
                   <div className="bg-blue-600 rounded-full p-3 text-white">
                     <Image 
-                      src="/instagram-icon.svg" 
+                      src="/instagram-logo.png" 
                       alt="Instagram" 
                       width={20} 
                       height={20}
-                      className="w-5 h-5 filter invert"
+                      className="w-5 h-5"
                     />
                   </div>
                   <div className="text-left">
@@ -101,11 +101,11 @@ export default function Home() {
                 >
                   <div className="bg-blue-800 rounded-full p-3 text-white">
                     <Image 
-                      src="/facebook-icon.svg" 
+                      src="/facebook-logo.png" 
                       alt="Facebook" 
                       width={20} 
                       height={20}
-                      className="w-5 h-5 filter invert"
+                      className="w-5 h-5"
                     />
                   </div>
                   <div className="text-left">
@@ -122,11 +122,11 @@ export default function Home() {
                 >
                   <div className="bg-black rounded-full p-3 text-white">
                     <Image 
-                      src="/tiktok-icon.svg" 
+                      src="/tiktok-logo.png" 
                       alt="TikTok" 
                       width={20} 
                       height={20}
-                      className="w-5 h-5 filter invert"
+                      className="w-5 h-5"
                     />
                   </div>
                   <div className="text-left">

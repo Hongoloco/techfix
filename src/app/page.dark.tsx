@@ -98,11 +98,11 @@ export default function Home() {
                 >
                   <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-3 text-white">
                     <Image 
-                      src="/instagram-icon.svg" 
+                      src="/instagram-logo.png" 
                       alt="Instagram" 
                       width={24} 
                       height={24}
-                      className="w-6 h-6 filter invert"
+                      className="w-6 h-6"
                     />
                   </div>
                   <div className="text-left">
@@ -119,11 +119,11 @@ export default function Home() {
                 >
                   <div className="bg-blue-600 rounded-full p-3 text-white">
                     <Image 
-                      src="/facebook-icon.svg" 
+                      src="/facebook-logo.png" 
                       alt="Facebook" 
                       width={24} 
                       height={24}
-                      className="w-6 h-6 filter invert"
+                      className="w-6 h-6"
                     />
                   </div>
                   <div className="text-left">
@@ -140,11 +140,11 @@ export default function Home() {
                 >
                   <div className="bg-black rounded-full p-3 text-white">
                     <Image 
-                      src="/tiktok-icon.svg" 
+                      src="/tiktok-logo-better.png" 
                       alt="TikTok" 
                       width={24} 
                       height={24}
-                      className="w-6 h-6 filter invert"
+                      className="w-6 h-6"
                     />
                   </div>
                   <div className="text-left">
