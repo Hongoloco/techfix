@@ -1,16 +1,17 @@
 #!/bin/bash
 
-# Script para alternar entre diseño profesional y original
-# Uso: ./toggle-design.sh [professional|original]
+# Script para alternar entre diseños
+# Uso: ./toggle-design.sh [dark|professional|original]
 
 PROJECT_DIR="/workspaces/techfix"
 
 show_help() {
     echo "TechFix Uruguay - Alternador de Diseño"
     echo ""
-    echo "Uso: $0 [professional|original|status]"
+    echo "Uso: $0 [dark|professional|original|status]"
     echo ""
     echo "Comandos:"
+    echo "  dark          - Aplica el diseño oscuro moderno (actual)"
     echo "  professional  - Aplica el diseño profesional (corporativo)"
     echo "  original      - Restaura el diseño original (llamativo)"
     echo "  status        - Muestra qué diseño está activo actualmente"
@@ -24,9 +25,10 @@ show_help() {
 }
 
 check_status() {
-    if [ -f "$PROJECT_DIR/src/app/globals.professional.css" ]; then
-        # Comparar archivos para determinar cuál está activo
-        if cmp -s "$PROJECT_DIR/src/app/globals.css" "$PROJECT_DIR/src/app/globals.professional.css"; then
+    if [ -f "$PROJECT_DIR/src/app/globals.dark.css" ]; then
+        if cmp -s "$PROJECT_DIR/src/app/globals.css" "$PROJECT_DIR/src/app/globals.dark.css"; then
+            echo "dark"
+        elif cmp -s "$PROJECT_DIR/src/app/globals.css" "$PROJECT_DIR/src/app/globals.professional.css"; then
             echo "professional"
         else
             echo "original"
@@ -34,6 +36,37 @@ check_status() {
     else
         echo "original"
     fi
+}
+
+apply_dark() {
+    echo "🌙 Aplicando diseño oscuro moderno..."
+    
+    # Verificar que existen los archivos oscuros
+    if [ ! -f "$PROJECT_DIR/src/app/globals.dark.css" ]; then
+        echo "❌ Error: No se encuentra el archivo de estilos oscuros"
+        exit 1
+    fi
+    
+    # Aplicar estilos oscuros
+    cp "$PROJECT_DIR/src/app/globals.dark.css" "$PROJECT_DIR/src/app/globals.css"
+    
+    # Aplicar páginas oscuras
+    if [ -f "$PROJECT_DIR/src/app/page.dark.tsx" ]; then
+        cp "$PROJECT_DIR/src/app/page.dark.tsx" "$PROJECT_DIR/src/app/page.tsx"
+    fi
+    
+    if [ -f "$PROJECT_DIR/src/app/contact/page.dark.tsx" ]; then
+        cp "$PROJECT_DIR/src/app/contact/page.dark.tsx" "$PROJECT_DIR/src/app/contact/page.tsx"
+    fi
+    
+    echo "✅ Diseño oscuro aplicado correctamente"
+    echo "🌙 Características del diseño oscuro:"
+    echo "   - Modo oscuro con gradientes sutiles"
+    echo "   - Logo animado con efectos de flotación"
+    echo "   - Partículas de fondo animadas"
+    echo "   - Colores cian y dorados como acentos"
+    echo "   - Enfoque en modernidad y tecnología"
+    echo "   - Email corregido: techifixuruguay@gmail.com"
 }
 
 apply_professional() {
@@ -108,17 +141,27 @@ show_status() {
     current_design=$(check_status)
     echo "📊 Estado actual del diseño: $current_design"
     
-    if [ "$current_design" = "professional" ]; then
-        echo "💼 Diseño profesional está activo"
-        echo "   - Ideal para presentaciones empresariales"
-        echo "   - Mayor credibilidad corporativa"
-        echo "   - Apariencia formal y seria"
-    else
-        echo "🌈 Diseño original está activo"
-        echo "   - Más llamativo y vibrante"
-        echo "   - Mayor impacto visual"
-        echo "   - Apariencia moderna y creativa"
-    fi
+    case "$current_design" in
+        "dark")
+            echo "🌙 Diseño oscuro moderno está activo"
+            echo "   - Modo oscuro con efectos modernos"
+            echo "   - Logo animado con partículas"
+            echo "   - Ideal para desarrolladores y tech enthusiasts"
+            echo "   - Apariencia futurista y tecnológica"
+            ;;
+        "professional")
+            echo "💼 Diseño profesional está activo"
+            echo "   - Ideal para presentaciones empresariales"
+            echo "   - Mayor credibilidad corporativa"
+            echo "   - Apariencia formal y seria"
+            ;;
+        *)
+            echo "🌈 Diseño original está activo"
+            echo "   - Más llamativo y vibrante"
+            echo "   - Mayor impacto visual"
+            echo "   - Apariencia moderna y creativa"
+            ;;
+    esac
 }
 
 # Verificar que estamos en el directorio correcto
@@ -129,6 +172,9 @@ fi
 
 # Procesar argumentos
 case "${1:-status}" in
+    "dark")
+        apply_dark
+        ;;
     "professional")
         apply_professional
         ;;

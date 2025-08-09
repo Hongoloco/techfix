@@ -1,0 +1,68 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Robot Body -->
+  <rect x="120" y="180" width="160" height="140" rx="20" fill="#6B7280" stroke="#374151" stroke-width="4"/>
+  
+  <!-- Robot Screen -->
+  <rect x="140" y="200" width="120" height="80" rx="10" fill="#06B6D4" stroke="#0891B2" stroke-width="3"/>
+  
+  <!-- Robot Eyes -->
+  <circle cx="170" cy="230" r="8" fill="#1F2937"/>
+  <circle cx="230" cy="230" r="8" fill="#1F2937"/>
+  <circle cx="172" cy="228" r="3" fill="#FFFFFF"/>
+  <circle cx="232" cy="228" r="3" fill="#FFFFFF"/>
+  
+  <!-- Robot Mouth -->
+  <path d="M 180 255 Q 200 265 220 255" stroke="#1F2937" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Robot Cheeks -->
+  <circle cx="155" cy="250" r="4" fill="#EF4444"/>
+  <circle cx="245" cy="250" r="4" fill="#EF4444"/>
+  
+  <!-- Robot Antenna -->
+  <line x1="200" y1="180" x2="200" y2="150" stroke="#374151" stroke-width="4"/>
+  <circle cx="200" cy="140" r="8" fill="#06B6D4" stroke="#0891B2" stroke-width="2"/>
+  
+  <!-- Robot Arms -->
+  <rect x="80" y="220" width="40" height="20" rx="10" fill="#6B7280" stroke="#374151" stroke-width="3"/>
+  <rect x="280" y="220" width="40" height="20" rx="10" fill="#6B7280" stroke="#374151" stroke-width="3"/>
+  
+  <!-- Robot Hands -->
+  <circle cx="70" cy="230" r="15" fill="#6B7280" stroke="#374151" stroke-width="3"/>
+  <circle cx="330" cy="230" r="15" fill="#6B7280" stroke="#374151" stroke-width="3"/>
+  
+  <!-- Tools -->
+  <!-- Wrench in left hand -->
+  <g transform="translate(70,230) rotate(-45)">
+    <rect x="-15" y="-3" width="30" height="6" rx="3" fill="#94A3B8"/>
+    <circle cx="-12" cy="0" r="4" fill="none" stroke="#94A3B8" stroke-width="2"/>
+    <circle cx="12" cy="0" r="4" fill="none" stroke="#94A3B8" stroke-width="2"/>
+  </g>
+  
+  <!-- Hammer in right hand -->
+  <g transform="translate(330,230) rotate(45)">
+    <rect x="-15" y="-2" width="20" height="4" rx="2" fill="#8B4513"/>
+    <rect x="5" y="-6" width="15" height="12" rx="2" fill="#94A3B8"/>
+  </g>
+  
+  <!-- Robot Legs -->
+  <rect x="150" y="320" width="25" height="40" rx="12" fill="#6B7280" stroke="#374151" stroke-width="3"/>
+  <rect x="225" y="320" width="25" height="40" rx="12" fill="#6B7280" stroke="#374151" stroke-width="3"/>
+  
+  <!-- Robot Feet -->
+  <ellipse cx="162" cy="370" rx="20" ry="10" fill="#374151"/>
+  <ellipse cx="237" cy="370" rx="20" ry="10" fill="#374151"/>
+  
+  <!-- Sparkles/Stars around robot -->
+  <g fill="#F59E0B">
+    <polygon points="100,120 102,126 108,126 103,130 105,136 100,132 95,136 97,130 92,126 98,126" opacity="0.8"/>
+    <polygon points="310,140 312,146 318,146 313,150 315,156 310,152 305,156 307,150 302,146 308,146" opacity="0.8"/>
+    <polygon points="90,300 92,306 98,306 93,310 95,316 90,312 85,316 87,310 82,306 88,306" opacity="0.8"/>
+    <polygon points="320,290 322,296 328,296 323,300 325,306 320,302 315,306 317,300 312,296 318,296" opacity="0.8"/>
+  </g>
+  
+  <!-- Additional decorative elements -->
+  <circle cx="50" cy="200" r="3" fill="#06B6D4" opacity="0.6"/>
+  <circle cx="350" cy="180" r="3" fill="#06B6D4" opacity="0.6"/>
+  <circle cx="80" cy="160" r="2" fill="#F59E0B" opacity="0.7"/>
+  <circle cx="320" cy="320" r="2" fill="#F59E0B" opacity="0.7"/>
+</svg>

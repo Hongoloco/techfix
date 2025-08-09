@@ -2,8 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Send, MapPin, Clock, Mail, Phone, Zap, AlertTriangle } from 'lucide-react'
-import Image from 'next/image'
+import { Send, MapPin, Clock, Mail, Phone, Zap, AlertTriangle, Cpu } from 'lucide-react'
 import { BusinessHours } from '@/components/BusinessHours'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
 import { LoadingSpinner, ButtonLoading } from '@/components/LoadingSpinner'
@@ -100,6 +99,7 @@ export default function ContactPage() {
           priority: 'normal'
         })
         
+        // Track successful form submission
         track('contact_form_submit', {
           success: true,
           priority: sanitizedData.priority
@@ -108,6 +108,7 @@ export default function ContactPage() {
         setSubmitStatus('error')
         setErrors(data.details || [data.error || 'Error al enviar el formulario'])
         
+        // Track failed form submission
         track('contact_form_submit', {
           success: false,
           error: data.error
@@ -117,6 +118,7 @@ export default function ContactPage() {
       setSubmitStatus('error')
       setErrors(['Error de conexión. Por favor, intenta de nuevo.'])
       
+      // Track connection error
       track('contact_form_submit', {
         success: false,
         error: 'connection_error'
@@ -134,44 +136,26 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="dark-layout">
-      {/* Partículas de fondo */}
-      <div className="particles">
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className="particle"
-            style={{
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 6}s`,
-              animationDuration: `${6 + Math.random() * 4}s`
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Header oscuro */}
-      <header className="dark-header">
+    <div className="professional-layout">
+      {/* Header profesional */}
+      <header className="professional-header">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            <Link href="/" className="logo-dark">
-              <Image 
-                src="/techfix-logo.svg" 
-                alt="TechFix Uruguay" 
-                width={48} 
-                height={48}
-                className="logo-icon"
-              />
-              <span>TechFix Uruguay 🇺🇾</span>
+            <Link href="/" className="logo-professional">
+              <Cpu className="h-8 w-8" />
+              TechFix Uruguay 🇺🇾
             </Link>
-            <nav className="nav-dark hidden md:flex">
-              <Link href="/" className="nav-link-dark">
+            <nav className="nav-professional hidden md:flex">
+              <Link href="/" className="nav-link">
                 Inicio
               </Link>
-              <Link href="/quote" className="nav-link-dark">
+              <Link href="/services" className="nav-link">
+                Servicios
+              </Link>
+              <Link href="/quote" className="nav-link">
                 Cotización
               </Link>
-              <Link href="/login" className="btn-dark btn-primary-dark">
+              <Link href="/login" className="btn-professional btn-primary">
                 Iniciar Sesión
               </Link>
             </nav>
@@ -182,10 +166,10 @@ export default function ContactPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-gray-100 mb-6">
+          <h1 className="text-4xl font-bold text-gray-900 mb-6">
             Contactanos Ahora
           </h1>
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Estamos aquí para resolver todos tus problemas técnicos.
             <br />
             Soporte profesional en Las Piedras y alrededores
@@ -194,13 +178,13 @@ export default function ContactPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Formulario de contacto */}
-          <div className="form-dark">
-            <h2 className="text-2xl font-bold text-gray-100 mb-8 text-center">
+          <div className="form-professional">
+            <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
               Crear Ticket de Soporte
             </h2>
             
             {submitStatus === 'success' && (
-              <div className="alert-dark alert-success-dark">
+              <div className="alert alert-success">
                 <p>
                   ✅ ¡Ticket creado exitosamente! Te contactaremos pronto.
                 </p>
@@ -208,7 +192,7 @@ export default function ContactPage() {
             )}
             
             {submitStatus === 'error' && (
-              <div className="alert-dark alert-error-dark">
+              <div className="alert alert-error">
                 <p>
                   ❌ Error al enviar el ticket. Intenta de nuevo o contáctanos por WhatsApp.
                 </p>
@@ -216,7 +200,7 @@ export default function ContactPage() {
             )}
             
             {errors.length > 0 && (
-              <div className="alert-dark alert-warning-dark">
+              <div className="alert alert-warning">
                 <ul className="list-disc list-inside">
                   {errors.map((error, index) => (
                     <li key={index}>{error}</li>
@@ -226,8 +210,8 @@ export default function ContactPage() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="form-group-dark">
-                <label htmlFor="name" className="form-label-dark">
+              <div className="form-group">
+                <label htmlFor="name" className="form-label">
                   Nombre completo *
                 </label>
                 <input
@@ -236,14 +220,14 @@ export default function ContactPage() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="form-input-dark"
+                  className="form-input"
                   required
                   placeholder="Ej: Juan Pérez"
                 />
               </div>
 
-              <div className="form-group-dark">
-                <label htmlFor="email" className="form-label-dark">
+              <div className="form-group">
+                <label htmlFor="email" className="form-label">
                   Email *
                 </label>
                 <input
@@ -252,14 +236,14 @@ export default function ContactPage() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="form-input-dark"
+                  className="form-input"
                   required
                   placeholder="Ej: juan@gmail.com"
                 />
               </div>
 
-              <div className="form-group-dark">
-                <label htmlFor="phone" className="form-label-dark">
+              <div className="form-group">
+                <label htmlFor="phone" className="form-label">
                   Teléfono (opcional)
                 </label>
                 <input
@@ -268,13 +252,13 @@ export default function ContactPage() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="form-input-dark"
+                  className="form-input"
                   placeholder="Ej: 099123456"
                 />
               </div>
 
-              <div className="form-group-dark">
-                <label htmlFor="priority" className="form-label-dark">
+              <div className="form-group">
+                <label htmlFor="priority" className="form-label">
                   Prioridad
                 </label>
                 <select
@@ -282,7 +266,7 @@ export default function ContactPage() {
                   name="priority"
                   value={formData.priority}
                   onChange={handleChange}
-                  className="form-input-dark form-select-dark"
+                  className="form-input form-select"
                 >
                   <option value="normal">Normal</option>
                   <option value="urgent">Urgente</option>
@@ -290,8 +274,8 @@ export default function ContactPage() {
                 </select>
               </div>
 
-              <div className="form-group-dark">
-                <label htmlFor="subject" className="form-label-dark">
+              <div className="form-group">
+                <label htmlFor="subject" className="form-label">
                   Asunto del problema *
                 </label>
                 <input
@@ -300,14 +284,14 @@ export default function ContactPage() {
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
-                  className="form-input-dark"
+                  className="form-input"
                   required
                   placeholder="Ej: Mi PC no enciende"
                 />
               </div>
 
-              <div className="form-group-dark">
-                <label htmlFor="message" className="form-label-dark">
+              <div className="form-group">
+                <label htmlFor="message" className="form-label">
                   Descripción del problema *
                 </label>
                 <textarea
@@ -315,7 +299,7 @@ export default function ContactPage() {
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  className="form-input-dark form-textarea-dark"
+                  className="form-input form-textarea"
                   rows={5}
                   required
                   placeholder="Describe tu problema técnico con el mayor detalle posible..."
@@ -325,7 +309,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-dark btn-primary-dark w-full"
+                className="btn-professional btn-primary w-full"
               >
                 {isSubmitting ? (
                   <ButtonLoading text="Enviando..." />
@@ -341,26 +325,26 @@ export default function ContactPage() {
 
           {/* Información de contacto */}
           <div className="space-y-8">
-            <div className="dark-card">
-              <h3 className="text-xl font-bold text-gray-100 mb-4 flex items-center">
-                <Phone className="w-5 h-5 mr-2 text-cyan-400" />
+            <div className="professional-card">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <Phone className="w-5 h-5 mr-2 text-blue-600" />
                 Contacto Directo
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <Mail className="w-4 h-4 mr-3 text-gray-400" />
-                  <span className="text-gray-300">techifixuruguay@gmail.com</span>
+                  <Mail className="w-4 h-4 mr-3 text-gray-500" />
+                  <span className="text-gray-600">techifixuruguay@gmail.com</span>
                 </div>
                 <div className="flex items-center">
-                  <Phone className="w-4 h-4 mr-3 text-gray-400" />
-                  <span className="text-gray-300">+598 99 252 808</span>
+                  <Phone className="w-4 h-4 mr-3 text-gray-500" />
+                  <span className="text-gray-600">+598 99 252 808</span>
                 </div>
                 <div className="mt-4">
                   <a
                     href="https://wa.me/59899252808?text=🛠️%20Hola%20TechFix%20Uruguay!%0A%0ANecesito%20ayuda%20técnica.%20¿Pueden%20asistirme?"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-dark btn-success-dark w-full"
+                    className="btn-professional btn-success w-full"
                   >
                     WhatsApp Directo
                   </a>
@@ -368,12 +352,12 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="dark-card">
-              <h3 className="text-xl font-bold text-gray-100 mb-4 flex items-center">
-                <MapPin className="w-5 h-5 mr-2 text-cyan-400" />
+            <div className="professional-card">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <MapPin className="w-5 h-5 mr-2 text-blue-600" />
                 Zona de Cobertura
               </h3>
-              <div className="space-y-2 text-gray-300">
+              <div className="space-y-2 text-gray-600">
                 <p><strong>Principal:</strong> Las Piedras</p>
                 <p><strong>También atendemos:</strong></p>
                 <ul className="list-disc list-inside ml-4 space-y-1">
@@ -385,31 +369,31 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="dark-card">
-              <h3 className="text-xl font-bold text-gray-100 mb-4 flex items-center">
-                <Clock className="w-5 h-5 mr-2 text-cyan-400" />
+            <div className="professional-card">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <Clock className="w-5 h-5 mr-2 text-blue-600" />
                 Horarios de Atención
               </h3>
               <BusinessHours />
             </div>
 
-            <div className="dark-card">
-              <h3 className="text-xl font-bold text-gray-100 mb-4 flex items-center">
-                <Zap className="w-5 h-5 mr-2 text-cyan-400" />
+            <div className="professional-card">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <Zap className="w-5 h-5 mr-2 text-blue-600" />
                 Tiempo de Respuesta
               </h3>
-              <div className="space-y-2 text-gray-300">
+              <div className="space-y-2 text-gray-600">
                 <div className="flex justify-between">
                   <span>Normal:</span>
-                  <span className="font-medium text-cyan-400">1-2 horas</span>
+                  <span className="font-medium">1-2 horas</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Urgente:</span>
-                  <span className="font-medium text-orange-400">30 minutos</span>
+                  <span className="font-medium text-orange-600">30 minutos</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Crítico:</span>
-                  <span className="font-medium text-red-400">Inmediato</span>
+                  <span className="font-medium text-red-600">Inmediato</span>
                 </div>
               </div>
             </div>
@@ -417,24 +401,18 @@ export default function ContactPage() {
         </div>
       </main>
 
-      {/* Footer oscuro */}
-      <footer className="footer-dark">
+      {/* Footer */}
+      <footer className="bg-gray-800 text-gray-300 py-8 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex items-center justify-center mb-4">
-              <Image 
-                src="/techfix-logo.svg" 
-                alt="TechFix Uruguay" 
-                width={32} 
-                height={32}
-                className="mr-3"
-              />
+              <Cpu className="h-6 w-6 mr-2" />
               <span className="font-bold text-white">TechFix Uruguay</span>
             </div>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm">
               © 2024 TechFix Uruguay. Todos los derechos reservados.
             </p>
-            <p className="text-sm mt-2 text-gray-400">
+            <p className="text-sm mt-2">
               Soporte técnico profesional en Las Piedras y alrededores 🇺🇾
             </p>
           </div>
