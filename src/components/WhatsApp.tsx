@@ -39,14 +39,15 @@ export function WhatsAppButton({
   )
 }
 
-// Componente de icono de WhatsApp oficial usando PNG
+// Componente de icono de WhatsApp oficial usando PNG con mejores estilos
 const WhatsAppIcon = ({ className = "h-6 w-6" }: { className?: string }) => (
   <Image
     src="/whatsapp-logo.png"
     alt="WhatsApp"
-    width={24}
-    height={24}
-    className={className}
+    width={48}
+    height={48}
+    className={`${className} transition-all duration-300 filter drop-shadow-md`}
+    priority
   />
 )
 
@@ -61,7 +62,7 @@ Me interesa conocer más sobre sus servicios de soporte técnico.
 ¿Podrían ayudarme con una consulta?"
         className="whatsapp-round whatsapp-float"
       >
-        <WhatsAppIcon className="h-8 w-8 text-white" />
+        <WhatsAppIcon className="h-12 w-12 text-white" />
       </WhatsAppButton>
     </div>
   )

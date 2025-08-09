@@ -604,3 +604,166 @@ html, body {
   .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .lg\:col-span-2 { grid-column: span 2 / span 2; }
 }
+
+/* ============================================ */
+/* ESTILOS WHATSAPP FLOTANTE - TEMA OSCURO */
+/* ============================================ */
+
+/* Animaciones para el botón WhatsApp */
+@keyframes whatsapp-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 8px 25px rgba(37, 211, 102, 0.4),
+      0 4px 12px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(6, 182, 212, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 
+      0 12px 35px rgba(37, 211, 102, 0.6),
+      0 6px 15px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(6, 182, 212, 0.3);
+  }
+}
+
+@keyframes whatsapp-bounce {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.1) rotate(-5deg) translateY(-8px); }
+  50% { transform: scale(1.15) rotate(0deg) translateY(-12px); }
+  75% { transform: scale(1.1) rotate(5deg) translateY(-8px); }
+  100% { transform: scale(1) rotate(0deg) translateY(0px); }
+}
+
+@keyframes whatsapp-glow {
+  0%, 100% {
+    box-shadow: 
+      0 8px 25px rgba(37, 211, 102, 0.4),
+      0 4px 12px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(6, 182, 212, 0.2),
+      inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 15px 40px rgba(37, 211, 102, 0.6),
+      0 8px 20px rgba(0, 0, 0, 0.4),
+      0 0 35px rgba(6, 182, 212, 0.4),
+      inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Botón flotante base */
+.whatsapp-float {
+  animation: whatsapp-pulse 3s infinite ease-in-out;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.whatsapp-float:hover {
+  animation: whatsapp-bounce 0.8s ease-in-out;
+}
+
+/* Botón redondo WhatsApp mejorado - Tema Oscuro */
+.whatsapp-round {
+  background: linear-gradient(135deg, 
+    #25d366 0%, 
+    #20b954 30%, 
+    var(--primary-color) 70%, 
+    var(--primary-dark) 100%);
+  border-radius: 50% !important;
+  width: 80px !important;
+  height: 80px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 
+    0 12px 30px rgba(37, 211, 102, 0.5),
+    0 6px 15px rgba(0, 0, 0, 0.4),
+    0 0 25px rgba(6, 182, 212, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(6, 182, 212, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto de brillo interno */
+.whatsapp-round::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    transparent 100%);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.whatsapp-round:hover::before {
+  opacity: 1;
+}
+
+.whatsapp-round:hover {
+  transform: scale(1.15) translateY(-4px);
+  box-shadow: 
+    0 20px 45px rgba(37, 211, 102, 0.7),
+    0 10px 25px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(6, 182, 212, 0.5),
+    inset 0 4px 8px rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, 
+    #2ee673 0%, 
+    #25d366 30%, 
+    var(--primary-light) 70%, 
+    var(--primary-color) 100%);
+  border-color: rgba(6, 182, 212, 0.6);
+  animation: whatsapp-glow 2s infinite ease-in-out;
+}
+
+.whatsapp-round:active {
+  transform: scale(1.1) translateY(-2px);
+  transition: all 0.1s ease;
+}
+
+/* Icono WhatsApp más grande */
+.whatsapp-round img {
+  width: 48px !important;
+  height: 48px !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .whatsapp-round {
+    width: 70px !important;
+    height: 70px !important;
+    bottom: 20px !important;
+    right: 20px !important;
+  }
+  
+  .whatsapp-round img {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
+  .whatsapp-round:hover {
+    transform: scale(1.1) translateY(-3px);
+  }
+}
+
+@media (max-width: 480px) {
+  .whatsapp-round {
+    width: 65px !important;
+    height: 65px !important;
+    bottom: 15px !important;
+    right: 15px !important;
+  }
+  
+  .whatsapp-round img {
+    width: 36px !important;
+    height: 36px !important;
+  }
+}

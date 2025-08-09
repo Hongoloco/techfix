@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechFix - Preview Botón WhatsApp</title>
+    <style>
+        /* Variables CSS para modo oscuro */
+        :root {
+          --primary-color: #06B6D4;
+          --primary-dark: #0891B2;
+          --primary-light: #22D3EE;
+          --text-primary: #F9FAFB;
+          --bg-primary: #111827;
+          --bg-secondary: #1F2937;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+          color: var(--text-primary);
+          min-height: 100vh;
+          position: relative;
+          overflow-x: hidden;
+        }
+
+        /* Fondo con efectos */
+        body::before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: 
+            radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+          pointer-events: none;
+          z-index: -1;
+        }
+
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 4rem 2rem;
+          text-align: center;
+        }
+
+        h1 {
+          font-size: 3rem;
+          margin-bottom: 1rem;
+          background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+          font-size: 1.25rem;
+          color: #D1D5DB;
+          margin-bottom: 3rem;
+        }
+
+        .demo-section {
+          background: rgba(31, 41, 55, 0.5);
+          border-radius: 1rem;
+          padding: 2rem;
+          margin: 2rem 0;
+          border: 1px solid #374151;
+        }
+
+        /* Animaciones para el botón WhatsApp */
+        @keyframes whatsapp-pulse {
+          0%, 100% {
+            transform: scale(1);
+            box-shadow: 
+              0 8px 25px rgba(37, 211, 102, 0.4),
+              0 4px 12px rgba(0, 0, 0, 0.3),
+              0 0 20px rgba(6, 182, 212, 0.2);
+          }
+          50% {
+            transform: scale(1.05);
+            box-shadow: 
+              0 12px 35px rgba(37, 211, 102, 0.6),
+              0 6px 15px rgba(0, 0, 0, 0.4),
+              0 0 30px rgba(6, 182, 212, 0.3);
+          }
+        }
+
+        @keyframes whatsapp-bounce {
+          0% { transform: scale(1) rotate(0deg); }
+          25% { transform: scale(1.1) rotate(-5deg) translateY(-8px); }
+          50% { transform: scale(1.15) rotate(0deg) translateY(-12px); }
+          75% { transform: scale(1.1) rotate(5deg) translateY(-8px); }
+          100% { transform: scale(1) rotate(0deg) translateY(0px); }
+        }
+
+        @keyframes whatsapp-glow {
+          0%, 100% {
+            box-shadow: 
+              0 8px 25px rgba(37, 211, 102, 0.4),
+              0 4px 12px rgba(0, 0, 0, 0.3),
+              0 0 20px rgba(6, 182, 212, 0.2),
+              inset 0 2px 4px rgba(255, 255, 255, 0.1);
+          }
+          50% {
+            box-shadow: 
+              0 15px 40px rgba(37, 211, 102, 0.6),
+              0 8px 20px rgba(0, 0, 0, 0.4),
+              0 0 35px rgba(6, 182, 212, 0.4),
+              inset 0 2px 4px rgba(255, 255, 255, 0.2);
+          }
+        }
+
+        /* Botón flotante base */
+        .whatsapp-float {
+          animation: whatsapp-pulse 3s infinite ease-in-out;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .whatsapp-float:hover {
+          animation: whatsapp-bounce 0.8s ease-in-out;
+        }
+
+        /* Botón redondo WhatsApp mejorado - Tema Oscuro */
+        .whatsapp-round {
+          background: linear-gradient(135deg, 
+            #25d366 0%, 
+            #20b954 30%, 
+            var(--primary-color) 70%, 
+            var(--primary-dark) 100%);
+          border-radius: 50% !important;
+          width: 80px !important;
+          height: 80px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          box-shadow: 
+            0 12px 30px rgba(37, 211, 102, 0.5),
+            0 6px 15px rgba(0, 0, 0, 0.4),
+            0 0 25px rgba(6, 182, 212, 0.3),
+            inset 0 2px 4px rgba(255, 255, 255, 0.1);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          border: 2px solid rgba(6, 182, 212, 0.3);
+          position: relative;
+          overflow: hidden;
+          cursor: pointer;
+          text-decoration: none;
+        }
+
+        /* Efecto de brillo interno */
+        .whatsapp-round::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(45deg, 
+            transparent 0%, 
+            rgba(255, 255, 255, 0.1) 50%, 
+            transparent 100%);
+          border-radius: 50%;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .whatsapp-round:hover::before {
+          opacity: 1;
+        }
+
+        .whatsapp-round:hover {
+          transform: scale(1.15) translateY(-4px);
+          box-shadow: 
+            0 20px 45px rgba(37, 211, 102, 0.7),
+            0 10px 25px rgba(0, 0, 0, 0.5),
+            0 0 40px rgba(6, 182, 212, 0.5),
+            inset 0 4px 8px rgba(255, 255, 255, 0.2);
+          background: linear-gradient(135deg, 
+            #2ee673 0%, 
+            #25d366 30%, 
+            var(--primary-light) 70%, 
+            var(--primary-color) 100%);
+          border-color: rgba(6, 182, 212, 0.6);
+          animation: whatsapp-glow 2s infinite ease-in-out;
+        }
+
+        .whatsapp-round:active {
+          transform: scale(1.1) translateY(-2px);
+          transition: all 0.1s ease;
+        }
+
+        /* Icono WhatsApp más grande */
+        .whatsapp-round img {
+          width: 48px !important;
+          height: 48px !important;
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Botón flotante */
+        .floating-button {
+          position: fixed;
+          bottom: 2rem;
+          right: 2rem;
+          z-index: 1000;
+        }
+
+        /* Responsive para móviles */
+        @media (max-width: 768px) {
+          .whatsapp-round {
+            width: 70px !important;
+            height: 70px !important;
+          }
+          
+          .whatsapp-round img {
+            width: 40px !important;
+            height: 40px !important;
+          }
+          
+          .whatsapp-round:hover {
+            transform: scale(1.1) translateY(-3px);
+          }
+
+          .floating-button {
+            bottom: 1.5rem;
+            right: 1.5rem;
+          }
+
+          h1 {
+            font-size: 2rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .whatsapp-round {
+            width: 65px !important;
+            height: 65px !important;
+          }
+          
+          .whatsapp-round img {
+            width: 36px !important;
+            height: 36px !important;
+          }
+
+          .floating-button {
+            bottom: 1rem;
+            right: 1rem;
+          }
+        }
+
+        .features {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 1.5rem;
+          margin-top: 2rem;
+        }
+
+        .feature {
+          background: rgba(55, 65, 81, 0.3);
+          padding: 1.5rem;
+          border-radius: 0.75rem;
+          border: 1px solid #4B5563;
+        }
+
+        .feature h3 {
+          color: var(--primary-color);
+          margin-bottom: 0.5rem;
+        }
+
+        .note {
+          background: rgba(245, 158, 11, 0.1);
+          border: 1px solid rgba(245, 158, 11, 0.3);
+          padding: 1rem;
+          border-radius: 0.5rem;
+          margin-top: 2rem;
+          color: #FCD34D;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 TechFix Uruguay</h1>
+        <p class="subtitle">Nuevo Botón WhatsApp Mejorado</p>
+        
+        <div class="demo-section">
+            <h2 style="color: var(--primary-color); margin-bottom: 1rem;">✨ Características del Nuevo Botón</h2>
+            
+            <div class="features">
+                <div class="feature">
+                    <h3>📱 Más Grande y Visible</h3>
+                    <p>80px en desktop, 70px en tablet, 65px en móvil</p>
+                </div>
+                
+                <div class="feature">
+                    <h3>🎨 Diseño Moderno</h3>
+                    <p>Gradiente verde-cyan, sombras dinámicas, efectos de brillo</p>
+                </div>
+                
+                <div class="feature">
+                    <h3>📳 Animaciones Suaves</h3>
+                    <p>Pulso continuo, rebote al hover, efectos de luminosidad</p>
+                </div>
+                
+                <div class="feature">
+                    <h3>📱 Totalmente Responsivo</h3>
+                    <p>Se adapta perfectamente a móviles y tablets</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="note">
+            <strong>💡 Prueba del Botón:</strong> Mira el botón flotante en la esquina inferior derecha. Pasa el mouse sobre él para ver las animaciones.
+        </div>
+    </div>
+
+    <!-- Botón WhatsApp Flotante -->
+    <div class="floating-button">
+        <a href="https://wa.me/59899252808?text=¡Hola%20TechFix%20Uruguay!%20👋%0A%0AMe%20interesa%20conocer%20más%20sobre%20sus%20servicios%20de%20soporte%20técnico.%0A%0A¿Podrían%20ayudarme%20con%20una%20consulta?" 
+           class="whatsapp-round whatsapp-float" 
+           target="_blank"
+           rel="noopener noreferrer">
+            <img src="/whatsapp-logo.png" alt="WhatsApp" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTI0IDQ4QzM3LjI1NDggNDggNDggMzcuMjU0OCA0OCAyNEM0OCAxMC43NDUyIDM3LjI1NDggMCAyNCAwQzEwLjc0NTIgMCAwIDEwLjc0NTIgMCAyNEMwIDI4LjY1MDcgMS4zOTk1IDMzLjExNzMgMy45NTMzIDM3LjAwN0w1LjEzNjY3IDQyLjI4MDBMNS4yODY2NyA0Mi4zMzMzQzUuNTY2NjcgNDMuMTEzMyA2LjEwNjY3IDQzLjc1MzMgNi44MjY2NyA0NC4wNjY3TDEwLjk5IDQ1LjA1MzNDMTUuMDAzMyA0Ni42NzMzIDE5LjQzIDQ4IDI0IDQ4WiIgZmlsbD0iIzI1RDM2NiIvPgo8cGF0aCBkPSJNMTIuNjY2NyAzNS4zNzMzQzEwLjU5MzMgMzEuNjYgMTAuNTkzMyAyNi45MzMzIDEwLjU5MzMgMjRDMTAuNTkzMyAxNi42IDEwLjU5MzMgOS4zMzMzMyAxMi42NjY3IDUuNjJDMTIuOTEzMyA1LjE4IDEzLjMxMzMgNS4wMjY2NyAxMy43NDY3IDUuMDI2NjdIMzQuMjUzM0MzNC42ODY3IDUuMDI2NjcgMzUuMDg2NyA1LjE4IDM1LjMzMzMgNS42MkMzNy40MDY3IDkuMzMzMzMgMzcuNDA2NyAxNi42IDM3LjQwNjcgMjRDMzcuNDA2NyAyNi45MzMzIDM3LjQwNjcgMzEuNjYgMzUuMzMzMyAzNS4zNzMzQzM1LjA4NjcgMzUuODEzMyAzNC42ODY3IDM1Ljk2NjcgMzQuMjUzMyAzNS45NjY3SDEzLjc0NjdDMTMuMzEzMyAzNS45NjY3IDEyLjkxMzMgMzUuODEzMyAxMi42NjY3IDM1LjM3MzNaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K'" />
+        </a>
+    </div>
+</body>
+</html>
