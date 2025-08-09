@@ -140,5 +140,17 @@ export const sanitizers = {
   
   phone: (phone: string): string => {
     return phone.replace(/\D/g, '')
+  },
+  
+  name: (name: string): string => {
+    return name.trim().replace(/[<>]/g, '').replace(/\s+/g, ' ')
+  },
+  
+  ticketTitle: (title: string): string => {
+    return title.trim().replace(/[<>]/g, '').replace(/\s+/g, ' ')
+  },
+  
+  ticketDescription: (description: string): string => {
+    return description.trim().replace(/[<>]/g, '')
   }
 }

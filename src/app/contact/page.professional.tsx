@@ -312,7 +312,9 @@ export default function ContactPage() {
                 className="btn-professional btn-primary w-full"
               >
                 {isSubmitting ? (
-                  <ButtonLoading text="Enviando..." />
+                  <ButtonLoading loading={true}>
+                    Enviando...
+                  </ButtonLoading>
                 ) : (
                   <>
                     <Send className="w-5 h-5" />
