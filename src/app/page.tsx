@@ -2,6 +2,7 @@ import { Ticket, MessageCircle, Clock, CheckCircle, Zap, Shield, Users, Smartpho
 import Link from 'next/link'
 import Image from 'next/image'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
+import TestimonialsSection from '@/components/TestimonialsSection'
 
 export default function Home() {
   return (
@@ -249,6 +250,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Sección de Testimonios con Sistema de Estrellas */}
+      <TestimonialsSection />
 
       {/* CTA Final */}
       <section className="py-20 relative">

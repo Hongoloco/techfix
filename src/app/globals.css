@@ -703,6 +703,143 @@ html, body {
   animation: social-shimmer 0.6s ease-out;
 }
 
+/* ============================================ */
+/* ESTILOS TESTIMONIOS - SISTEMA DE ESTRELLAS */
+/* ============================================ */
+
+/* Animaciones para las tarjetas de testimonios */
+@keyframes testimonial-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes star-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.8));
+  }
+}
+
+@keyframes quote-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Estilos para las tarjetas de testimonios */
+.testimonial-card {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.testimonial-card:hover {
+  animation: testimonial-float 3s ease-in-out infinite;
+}
+
+.testimonial-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: linear-gradient(135deg, transparent, rgba(6, 182, 212, 0.5), transparent);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: subtract;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.testimonial-card:hover::before {
+  opacity: 1;
+}
+
+/* Animación para las estrellas */
+.testimonial-card:hover .star-rating {
+  animation: star-glow 2s ease-in-out infinite;
+}
+
+/* Efecto para el icono de comillas */
+.testimonial-card:hover .quote-icon {
+  animation: quote-pulse 2s ease-in-out infinite;
+}
+
+/* Gradiente de texto para calificaciones */
+.rating-gradient {
+  background: linear-gradient(135deg, #FCD34D, #F59E0B);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Efectos de hover para controles del carrusel */
+.carousel-control {
+  transition: all 0.3s ease;
+  background: rgba(31, 41, 55, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.carousel-control:hover {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: #06B6D4;
+  transform: scale(1.1);
+}
+
+/* Indicadores del carrusel */
+.carousel-indicator {
+  transition: all 0.3s ease;
+}
+
+.carousel-indicator.active {
+  background: linear-gradient(135deg, #06B6D4, #22D3EE);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.6);
+}
+
+/* Efectos de partículas para testimonios */
+@keyframes testimonial-particle {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0);
+  }
+}
+
+.testimonial-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #06B6D4;
+  border-radius: 50%;
+  animation: testimonial-particle 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Responsive para testimonios */
+@media (max-width: 768px) {
+  .testimonial-card {
+    margin-bottom: 1rem;
+  }
+  
+  .testimonial-card .quote-icon {
+    transform: scale(0.8);
+  }
+}
+
 /* Animaciones para el botón WhatsApp */
 @keyframes whatsapp-pulse {
   0%, 100% {
