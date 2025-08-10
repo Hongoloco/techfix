@@ -181,7 +181,7 @@ export function newTicketEmailTemplate(ticketData: any) {
       <div style="background: #374151; color: #D1D5DB; padding: 25px; text-align: center; border-top: 1px solid #4B5563;">
         <h3 style="margin: 0 0 15px 0; color: #22D3EE; font-size: 18px; font-weight: 800;">🛠️ TechFix Uruguay - Soporte Técnico Profesional</h3>
         <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 10px; flex-wrap: wrap;">
-          <span style="color: #F59E0B; font-weight: 600;">📱 WhatsApp: +59899252808</span>
+          <span style="color: #F59E0B; font-weight: 600;">🏢 Oficina: +59899252808</span>
           <span style="color: #06B6D4; font-weight: 600;">📧 Email: techfixuruguay@gmail.com</span>
         </div>
         <p style="margin: 8px 0 0 0; font-size: 13px; color: #9CA3AF;">🕒 Horario: Lunes a Viernes 10:00 - 20:00 | 📍 Las Piedras, Uruguay</p>
@@ -307,7 +307,7 @@ export function ticketResolvedEmailTemplate(ticketData: any) {
       <div style="background: #374151; color: #D1D5DB; padding: 25px; text-align: center; border-top: 1px solid #4B5563;">
         <h3 style="margin: 0 0 15px 0; color: #22D3EE; font-size: 18px; font-weight: 800;">🛠️ TechFix Uruguay - Soporte Técnico Profesional</h3>
         <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 10px; flex-wrap: wrap;">
-          <span style="color: #F59E0B; font-weight: 600;">📱 WhatsApp: +59899252808</span>
+          <span style="color: #F59E0B; font-weight: 600;">🏢 Oficina: +59899252808</span>
           <span style="color: #06B6D4; font-weight: 600;">📧 Email: techfixuruguay@gmail.com</span>
         </div>
         <p style="margin: 8px 0 0 0; font-size: 13px; color: #9CA3AF;">🕒 Horario: Lunes a Viernes 10:00 - 20:00 | 📍 Las Piedras, Uruguay</p>
@@ -375,7 +375,7 @@ export function newQuoteEmailTemplate(quoteData: any) {
       
       <div style="background-color: #374151; color: white; padding: 20px; text-align: center;">
         <h3 style="margin: 0 0 10px 0;">🛠️ TechFix Uruguay - Soporte Técnico Profesional</h3>
-        <p style="margin: 5px 0;">📱 WhatsApp: +59899252808 | 📧 Email: techfixuruguay@gmail.com</p>
+        <p style="margin: 5px 0;">🏢 Oficina: +59899252808 | 📧 Email: techfixuruguay@gmail.com</p>
         <p style="margin: 5px 0; font-size: 12px;">🕒 Horario: Lunes a Viernes 10:00 - 20:00 | 📍 Las Piedras, Uruguay</p>
       </div>
     </div>
