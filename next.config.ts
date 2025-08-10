@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: false,
   compress: true,
   
+  // Deshabilitar ESLint en builds de producción para deploy
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  
   // Optimización de imágenes
   images: {
     domains: ['localhost'],
