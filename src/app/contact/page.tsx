@@ -73,7 +73,7 @@ export default function ContactPage() {
       const sanitizedData = {
         name: sanitizers.name(formData.name),
         email: sanitizers.email(formData.email),
-        phone: formData.phone ? sanitizers.phone(formData.phone) : '',
+        phone: formData.phone ? sanitizers.phone(formData.phone) : null,
         subject: sanitizers.ticketTitle(formData.subject),
         message: sanitizers.ticketDescription(formData.message),
         priority: formData.priority

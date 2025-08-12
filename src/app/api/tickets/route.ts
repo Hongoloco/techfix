@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     const sanitizedEmail = sanitizers.email(email)
     const sanitizedTitle = sanitizers.text(ticketTitle)
     const sanitizedDescription = sanitizers.text(ticketDescription)
-    const sanitizedPhone = phone ? sanitizers.phone(phone) : null
+    const sanitizedPhone = phone && phone.trim() !== '' ? sanitizers.phone(phone) : null
 
     if (!sanitizedName || !sanitizedEmail || !sanitizedTitle || !sanitizedDescription) {
       return NextResponse.json(
@@ -78,21 +78,21 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Si no hay usuario autenticado, crear uno temporal o buscar por email
+    // Si no hay usuario autenticado, usar el usuario administrador principal
     if (!userId) {
-      // Buscar si ya existe un usuario con este email
+      // Buscar el usuario administrador principal (techfixuruguay@gmail.com)
       let user = await prisma.user.findUnique({
-        where: { email }
+        where: { email: 'techfixuruguay@gmail.com' }
       })
 
       if (!user) {
-        // Crear usuario temporal
+        // Si no existe, crearlo como admin principal
         user = await prisma.user.create({
           data: {
-            name,
-            email,
-            password: '', // Password vacío para usuarios temporales
-            role: 'USER'
+            name: 'TechFix Uruguay',
+            email: 'techfixuruguay@gmail.com',
+            password: '', // Se puede configurar después
+            role: 'ADMIN'
           }
         })
       }
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
         data: {
           name,
           email,
-          phone: phone || null,
+          phone: sanitizedPhone,
           company: null, // Se puede agregar al formulario después
           address: null, // Se puede agregar al formulario después
           notes: `Cliente creado automáticamente desde ticket: ${ticketTitle}`
@@ -118,10 +118,10 @@ export async function POST(request: NextRequest) {
       })
     } else {
       // Actualizar información del cliente si es necesario
-      if (phone && !client.phone) {
+      if (sanitizedPhone && !client.phone) {
         await prisma.client.update({
           where: { id: client.id },
-          data: { phone }
+          data: { phone: sanitizedPhone }
         })
       }
     }

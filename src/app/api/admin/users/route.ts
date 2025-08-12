@@ -44,61 +44,11 @@ export async function GET(request: NextRequest) {
 // Crear nuevo usuario
 export async function POST(request: NextRequest) {
   try {
-    const tokenData = verifyTokenFromRequest(request)
-    if (!tokenData) {
-      return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-    }
-
-    // Verificar que el usuario sea admin
-    const adminUser = await prisma.user.findUnique({
-      where: { id: tokenData.userId }
-    })
-
-    if (!adminUser || adminUser.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-    }
-
-    const { name, email, password, role } = await request.json()
-
-    // Validaciones
-    if (!name || !email || !password) {
-      return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 })
-    }
-
-    if (!['USER', 'AGENT', 'ADMIN'].includes(role)) {
-      return NextResponse.json({ error: 'Rol inválido' }, { status: 400 })
-    }
-
-    // Verificar si el email ya existe
-    const existingUser = await prisma.user.findUnique({
-      where: { email }
-    })
-
-    if (existingUser) {
-      return NextResponse.json({ error: 'El email ya está registrado' }, { status: 400 })
-    }
-
-    // Encriptar contraseña
-    const hashedPassword = await bcrypt.hash(password, 10)
-
-    // Crear usuario
-    const newUser = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true
-      }
-    })
-
-    return NextResponse.json(newUser, { status: 201 })
+    // Creación de usuarios deshabilitada - solo se permite el usuario administrador principal
+    return NextResponse.json(
+      { error: 'La creación de nuevos usuarios está deshabilitada. Solo se permite el usuario administrador principal.' },
+      { status: 403 }
+    )
 
   } catch (error) {
     console.error('Error creating user:', error)

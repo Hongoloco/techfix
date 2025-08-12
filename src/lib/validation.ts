@@ -139,6 +139,7 @@ export const sanitizers = {
   },
   
   phone: (phone: string): string => {
+    if (!phone || phone.trim() === '') return ''
     return phone.replace(/\D/g, '')
   },
   
