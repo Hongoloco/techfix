@@ -167,25 +167,111 @@ export async function DELETE(
       return NextResponse.json({ error: 'Acceso denegado' }, { status: 403 })
     }
 
-    // Verificar que el cliente existe
+    // Verificar que el cliente existe y obtener información sobre datos relacionados
     const existingClient = await prisma.client.findUnique({
-      where: { id }
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            tickets: true,
+            quotes: true,
+            testimonials: true
+          }
+        }
+      }
     })
 
     if (!existingClient) {
       return NextResponse.json({ error: 'Cliente no encontrado' }, { status: 404 })
     }
 
-    // Eliminar cliente (esto también eliminará tickets y quotes relacionados por cascada)
-    await prisma.client.delete({
-      where: { id }
-    })
+    const clientName = existingClient.name
+    const clientEmail = existingClient.email
+    
+    console.log(`Attempting to delete client: ${clientName} (${clientEmail})`)
+    console.log(`Related data: ${existingClient._count.tickets} tickets, ${existingClient._count.quotes} quotes, ${existingClient._count.testimonials} testimonials`)
 
-    return NextResponse.json({ message: 'Cliente eliminado exitosamente' })
+    try {
+      // Usar una transacción para eliminar todo de forma segura
+      const result = await prisma.$transaction(async (tx) => {
+        // 1. Eliminar comentarios de tickets relacionados
+        const ticketsWithComments = await tx.ticket.findMany({
+          where: { clientId: id },
+          select: { id: true }
+        })
+        
+        if (ticketsWithComments.length > 0) {
+          await tx.ticketComment.deleteMany({
+            where: {
+              ticketId: {
+                in: ticketsWithComments.map(t => t.id)
+              }
+            }
+          })
+        }
+
+        // 2. Eliminar testimonios relacionados
+        await tx.testimonial.deleteMany({
+          where: { clientId: id }
+        })
+
+        // 3. Eliminar tickets relacionados
+        await tx.ticket.deleteMany({
+          where: { clientId: id }
+        })
+
+        // 4. Eliminar cotizaciones relacionadas
+        await tx.quote.deleteMany({
+          where: { clientId: id }
+        })
+
+        // 5. Finalmente eliminar el cliente
+        const deletedClient = await tx.client.delete({
+          where: { id }
+        })
+
+        return {
+          deletedClient,
+          deletedData: {
+            tickets: existingClient._count.tickets,
+            quotes: existingClient._count.quotes,
+            testimonials: existingClient._count.testimonials
+          }
+        }
+      })
+
+      console.log(`Client deleted successfully: ${clientName} (${clientEmail})`)
+      console.log(`Deleted related data: ${result.deletedData.tickets} tickets, ${result.deletedData.quotes} quotes, ${result.deletedData.testimonials} testimonials`)
+
+      return NextResponse.json({ 
+        message: 'Cliente eliminado exitosamente',
+        deletedClient: {
+          id: result.deletedClient.id,
+          name: result.deletedClient.name,
+          email: result.deletedClient.email
+        },
+        deletedRelatedData: result.deletedData
+      })
+
+    } catch (prismaError: any) {
+      console.error('Prisma error when deleting client:', prismaError)
+      
+      return NextResponse.json(
+        { 
+          error: 'Error en la base de datos al eliminar el cliente',
+          details: prismaError.message || 'Error desconocido en la transacción'
+        },
+        { status: 500 }
+      )
+    }
+
   } catch (error) {
     console.error('Error al eliminar cliente:', error)
     return NextResponse.json(
-      { error: 'Error interno del servidor' },
+      { 
+        error: 'Error interno del servidor',
+        details: error instanceof Error ? error.message : 'Error desconocido'
+      },
       { status: 500 }
     )
   }

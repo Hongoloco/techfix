@@ -635,19 +635,76 @@ export default function AdminDashboard() {
 
   const handleDeleteClient = useCallback(async (clientId: string) => {
     const client = clients?.find(c => c.id === clientId)
-    if (!client || !confirm(`¿Estás seguro de que quieres eliminar a ${client.name}?`)) return
+    if (!client) {
+      showNotification('error', 'Error', 'Cliente no encontrado')
+      return
+    }
+    
+    const confirmMessage = `⚠️ ELIMINACIÓN PERMANENTE ⚠️
+
+¿Estás seguro de que quieres eliminar al cliente "${client.name}"?
+
+Esta acción eliminará PERMANENTEMENTE:
+• Toda la información del cliente
+• Todos los tickets asociados  
+• Todas las cotizaciones asociadas
+• Todos los comentarios en tickets
+• Todos los testimonios relacionados
+
+❌ Esta acción NO se puede deshacer
+
+¿Continuar con la eliminación?`
+    
+    if (!confirm(confirmMessage)) return
+    
     try {
       console.log('Attempting to delete client:', clientId, client.name)
-      await deleteClientMutation(`/api/admin/clients/${clientId}`, {
+      
+      const response = await deleteClientMutation(`/api/admin/clients/${clientId}`, {
         method: 'DELETE'
       })
-      console.log('Client deleted successfully')
+      
+      console.log('Client deleted successfully:', response)
       refetchClients()
-      showNotification('success', '¡Cliente eliminado!', `${client.name} ha sido eliminado del sistema.`)
+      
+      // Mensaje de éxito más informativo
+      let successMessage = `${client.name} ha sido eliminado del sistema correctamente.`
+      if (response.deletedRelatedData) {
+        const { tickets, quotes, testimonials } = response.deletedRelatedData
+        const parts = []
+        if (tickets > 0) parts.push(`${tickets} ticket${tickets > 1 ? 's' : ''}`)
+        if (quotes > 0) parts.push(`${quotes} cotización${quotes > 1 ? 'es' : ''}`)
+        if (testimonials > 0) parts.push(`${testimonials} testimonio${testimonials > 1 ? 's' : ''}`)
+        
+        if (parts.length > 0) {
+          successMessage += `\n\nTambién se eliminaron: ${parts.join(', ')}`
+        }
+      }
+      
+      showNotification('success', '¡Cliente eliminado!', successMessage)
     } catch (error) {
       console.error('Error deleting client:', error)
-      const errorMessage = error instanceof Error ? error.message : 'Error desconocido'
-      showNotification('error', 'Error al eliminar', `No se pudo eliminar el cliente: ${errorMessage}`)
+      
+      // Manejo mejorado de errores
+      let errorMessage = 'Error desconocido al eliminar el cliente'
+      
+      if (error instanceof Error) {
+        if (error.message.includes('400')) {
+          errorMessage = 'No se puede eliminar el cliente porque tiene datos relacionados que impiden su eliminación'
+        } else if (error.message.includes('404')) {
+          errorMessage = 'El cliente no fue encontrado'
+        } else if (error.message.includes('403')) {
+          errorMessage = 'No tienes permisos para eliminar este cliente'
+        } else if (error.message.includes('401')) {
+          errorMessage = 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente'
+        } else if (error.message.includes('500')) {
+          errorMessage = 'Error interno del servidor. Por favor, intenta nuevamente'
+        } else {
+          errorMessage = error.message
+        }
+      }
+      
+      showNotification('error', 'Error al eliminar cliente', errorMessage)
     }
   }, [deleteClientMutation, clients, refetchClients, showNotification])
 
