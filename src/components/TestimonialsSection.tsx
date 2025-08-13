@@ -99,15 +99,6 @@ export default function TestimonialsSection() {
 
   const defaultTestimonials: Testimonial[] = [
     {
-      id: 'default-1',
-      name: 'María González',
-      rating: 5,
-      comment: 'Excelente servicio de reparación de mi iPhone. Muy profesional y rápido.',
-      service: 'Reparación de iPhone',
-      createdAt: '2024-12-15T10:00:00Z',
-      featured: true
-    },
-    {
       id: 'default-2', 
       name: 'Carlos Rodríguez',
       rating: 5,
