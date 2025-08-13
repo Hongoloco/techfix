@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { Send, Calculator, Mail, Phone } from 'lucide-react'
+import { useToast } from '@/components/Toast'
 
 function QuoteForm() {
   const [formData, setFormData] = useState({
@@ -13,11 +14,14 @@ function QuoteForm() {
     company: '',
     phone: '',
     serviceType: '',
-    description: ''
+    description: '',
+    budget: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [errors, setErrors] = useState<string[]>([])
 
+  const { showToast, ToastComponent } = useToast()
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -30,6 +34,7 @@ function QuoteForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setErrors([])
 
     try {
       const response = await fetch('/api/quotes', {
@@ -40,14 +45,27 @@ function QuoteForm() {
         body: JSON.stringify(formData)
       })
 
+      const data = await response.json()
+
       if (response.ok) {
         setSubmitted(true)
+        showToast('¡Cotización enviada exitosamente! Te contactaremos pronto.', 'success')
       } else {
-        alert('Error al enviar la cotización. Por favor intenta nuevamente.')
+        // Manejo específico de errores
+        if (response.status === 400 && data.details) {
+          // Errores de validación
+          const errorMessages = Object.values(data.details).flat() as string[]
+          setErrors(errorMessages)
+          showToast('Por favor corrige los errores en el formulario', 'error')
+        } else if (response.status === 500) {
+          showToast('Error del servidor. Por favor intenta más tarde.', 'error')
+        } else {
+          showToast(data.error || 'Error al enviar la cotización. Por favor intenta nuevamente.', 'error')
+        }
       }
     } catch (error) {
       console.error('Error submitting quote:', error)
-      alert('Error al enviar la cotización. Por favor intenta nuevamente.')
+      showToast('Error de conexión. Verifica tu internet e intenta nuevamente.', 'error')
     } finally {
       setIsSubmitting(false)
     }
@@ -250,6 +268,27 @@ function QuoteForm() {
                 </div>
 
                 <div className="form-group-dark">
+                  <label htmlFor="budget" className="form-label-dark">
+                    Presupuesto estimado (opcional)
+                  </label>
+                  <select
+                    id="budget"
+                    name="budget"
+                    value={formData.budget}
+                    onChange={handleChange}
+                    className="form-input-dark form-select-dark"
+                  >
+                    <option value="">Selecciona un rango</option>
+                    <option value="Menos de $500">Menos de $500</option>
+                    <option value="$500 - $1000">$500 - $1000</option>
+                    <option value="$1000 - $2500">$1000 - $2500</option>
+                    <option value="$2500 - $5000">$2500 - $5000</option>
+                    <option value="Más de $5000">Más de $5000</option>
+                    <option value="A definir">A definir</option>
+                  </select>
+                </div>
+
+                <div className="form-group-dark">
                   <label htmlFor="serviceType" className="form-label-dark">
                     Tipo de servicio *
                   </label>
@@ -287,6 +326,21 @@ function QuoteForm() {
                     placeholder="Describe detalladamente qué necesitas, cuántos equipos, ubicación, etc."
                   />
                 </div>
+
+                {/* Mostrar errores de validación */}
+                {errors.length > 0 && (
+                  <div className="bg-red-900/50 border border-red-500 rounded-lg p-4">
+                    <h4 className="text-red-400 font-medium mb-2">Por favor corrige los siguientes errores:</h4>
+                    <ul className="text-red-300 text-sm space-y-1">
+                      {errors.map((error, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="w-1 h-1 bg-red-400 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                          {error}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 <button
                   type="submit"
@@ -394,6 +448,9 @@ function QuoteForm() {
           </div>
         </div>
       </footer>
+      
+      {/* Toast notifications */}
+      {ToastComponent}
     </div>
   )
 }
