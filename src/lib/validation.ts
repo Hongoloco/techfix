@@ -67,10 +67,11 @@ export const validators = {
     const errors: string[] = []
     
     if (phone) {
-      // Formato uruguayo: +598 XX XXX XXX o 09X XXX XXX
-      const phoneRegex = /^(\+598|0)9[1-9]\d{6}$/
-      if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
-        errors.push('Formato de teléfono inválido (ej: 099123456 o +59899123456)')
+      // Formato uruguayo más flexible: acepta +598, 598, 09X, etc.
+      const cleanPhone = phone.replace(/\s|-/g, '')
+      const phoneRegex = /^(\+?598)?0?9[1-9]\d{6,7}$/
+      if (!phoneRegex.test(cleanPhone)) {
+        errors.push('Formato de teléfono inválido (ej: 099123456, +59899123456, o 59899123456)')
       }
     }
     
@@ -140,7 +141,32 @@ export const sanitizers = {
   
   phone: (phone: string): string => {
     if (!phone || phone.trim() === '') return ''
-    return phone.replace(/\D/g, '')
+    
+    // Eliminar espacios y guiones, mantener solo números y el + inicial
+    let cleanPhone = phone.replace(/[\s-]/g, '')
+    
+    // Si empieza con +598, mantenerlo
+    if (cleanPhone.startsWith('+598')) {
+      return cleanPhone
+    }
+    
+    // Si empieza con 598, agregar el +
+    if (cleanPhone.startsWith('598')) {
+      return '+' + cleanPhone
+    }
+    
+    // Si empieza con 09, agregar +598
+    if (cleanPhone.startsWith('09')) {
+      return '+598' + cleanPhone.substring(1)
+    }
+    
+    // Si es solo el número (99123456), agregar +598
+    if (/^9[1-9]\d{6,7}$/.test(cleanPhone)) {
+      return '+598' + cleanPhone
+    }
+    
+    // En cualquier otro caso, devolver solo números
+    return cleanPhone.replace(/\D/g, '')
   },
   
   name: (name: string): string => {

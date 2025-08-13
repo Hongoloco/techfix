@@ -19,6 +19,16 @@ export interface EmailOptions {
 
 export async function sendEmail(options: EmailOptions) {
   try {
+    // Verificar si hay configuración SMTP
+    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      console.log('⚠️ SMTP no configurado. Email simulado:', {
+        to: options.to,
+        subject: options.subject,
+        preview: options.text?.substring(0, 100) + '...'
+      })
+      return { success: true, messageId: 'simulated-' + Date.now() }
+    }
+
     const info = await transporter.sendMail({
       from: process.env.SMTP_FROM,
       to: options.to,
