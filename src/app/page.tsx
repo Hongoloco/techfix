@@ -64,7 +64,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section oscura moderna */}
-      <section className="hero-dark pt-16 sm:pt-20 md:pt-24">
+      <section className="hero-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20">
           <div className="text-center">
             <div className="mb-6 sm:mb-8">
