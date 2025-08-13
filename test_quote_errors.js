@@ -38,8 +38,7 @@ const testQuoteErrors = async () => {
         phone: '+59899123456',
         company: 'Empresa Test',
         serviceType: 'Reparación de computadoras',
-        description: 'Necesito reparar una laptop que no enciende. El equipo es una Dell Inspiron de 2019.',
-        budget: '$500 - $1000'
+        description: 'Necesito reparar una laptop que no enciende. El equipo es una Dell Inspiron de 2019.'
       })
     });
     

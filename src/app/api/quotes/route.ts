@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     console.log('Received quote data:', body)
     
-    const { name, email, company, phone, serviceType, description, budget } = body
+    const { name, email, company, phone, serviceType, description } = body
 
     // Validación mejorada
     const validationResult = validateFields(
@@ -37,7 +37,6 @@ export async function POST(request: NextRequest) {
     const sanitizedPhone = phone && phone.trim() !== '' ? sanitizers.phone(phone) : null
     const sanitizedServiceType = sanitizers.text(serviceType)
     const sanitizedDescription = sanitizers.text(description)
-    const sanitizedBudget = budget ? sanitizers.text(budget) : null
 
     console.log('📝 DEBUG COTIZACIÓN: DATOS SANITIZADOS');
     console.log('sanitizedName:', sanitizedName);
@@ -53,7 +52,6 @@ export async function POST(request: NextRequest) {
         phone: sanitizedPhone,
         serviceType: sanitizedServiceType,
         description: sanitizedDescription,
-        budget: sanitizedBudget,
         status: 'PENDING'
       }
     })

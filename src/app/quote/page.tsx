@@ -14,8 +14,7 @@ function QuoteForm() {
     company: '',
     phone: '',
     serviceType: '',
-    description: '',
-    budget: ''
+    description: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -265,27 +264,6 @@ function QuoteForm() {
                       placeholder="Ej: 099123456"
                     />
                   </div>
-                </div>
-
-                <div className="form-group-dark">
-                  <label htmlFor="budget" className="form-label-dark">
-                    Presupuesto estimado (opcional)
-                  </label>
-                  <select
-                    id="budget"
-                    name="budget"
-                    value={formData.budget}
-                    onChange={handleChange}
-                    className="form-input-dark form-select-dark"
-                  >
-                    <option value="">Selecciona un rango</option>
-                    <option value="Menos de $500">Menos de $500</option>
-                    <option value="$500 - $1000">$500 - $1000</option>
-                    <option value="$1000 - $2500">$1000 - $2500</option>
-                    <option value="$2500 - $5000">$2500 - $5000</option>
-                    <option value="Más de $5000">Más de $5000</option>
-                    <option value="A definir">A definir</option>
-                  </select>
                 </div>
 
                 <div className="form-group-dark">
