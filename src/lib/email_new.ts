@@ -37,6 +37,20 @@ export async function sendEmail(options: EmailOptions) {
 
 // Template para nuevo ticket
 export function newTicketEmailTemplate(ticketData: any) {
+  // ⚠️ DEBUG: Verificar datos del cliente
+  console.log('='.repeat(50));
+  console.log('🔍 DEBUG EMAIL TEMPLATE:');
+  console.log('ticketData.id:', ticketData.id);
+  console.log('ticketData.client existe:', !!ticketData.client);
+  if (ticketData.client) {
+    console.log('ticketData.client.name:', ticketData.client.name);
+    console.log('ticketData.client.email:', ticketData.client.email);
+    console.log('ticketData.client.phone:', ticketData.client.phone);
+  } else {
+    console.log('❌ ticketData.client es null/undefined');
+  }
+  console.log('='.repeat(50));
+  
   const subject = `🆘 NUEVO TICKET #${ticketData.id} - ${ticketData.title} [${ticketData.priority}]`
   
   const priorityColors: { [key: string]: string } = {

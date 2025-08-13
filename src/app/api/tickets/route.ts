@@ -60,6 +60,12 @@ export async function POST(request: NextRequest) {
     const sanitizedDescription = sanitizers.text(ticketDescription)
     const sanitizedPhone = phone && phone.trim() !== '' ? sanitizers.phone(phone) : null
 
+    console.log('📝 DEBUG: DATOS SANITIZADOS');
+    console.log('sanitizedName:', sanitizedName);
+    console.log('sanitizedEmail:', sanitizedEmail);
+    console.log('sanitizedPhone:', sanitizedPhone);
+    console.log('phone original:', phone);
+
     if (!sanitizedName || !sanitizedEmail || !sanitizedTitle || !sanitizedDescription) {
       return NextResponse.json(
         { error: 'Nombre, email, asunto y mensaje son requeridos' },
@@ -104,8 +110,11 @@ export async function POST(request: NextRequest) {
       where: { email }
     })
 
+    console.log('🔍 DEBUG: CLIENTE EXISTENTE:', client);
+
     if (!client) {
       // Crear nuevo cliente con los datos del formulario
+      console.log('🆕 Creando nuevo cliente con teléfono:', sanitizedPhone);
       client = await prisma.client.create({
         data: {
           name,
@@ -116,13 +125,17 @@ export async function POST(request: NextRequest) {
           notes: `Cliente creado automáticamente desde ticket: ${ticketTitle}`
         }
       })
+      console.log('✅ Cliente creado:', client);
     } else {
       // Actualizar información del cliente si es necesario
       if (sanitizedPhone && !client.phone) {
+        console.log('📱 Actualizando teléfono del cliente existente:', sanitizedPhone);
         await prisma.client.update({
           where: { id: client.id },
           data: { phone: sanitizedPhone }
         })
+        client.phone = sanitizedPhone; // Actualizar objeto local
+        console.log('✅ Cliente actualizado con teléfono');
       }
     }
 
@@ -177,6 +190,12 @@ export async function POST(request: NextRequest) {
 
     // Enviar notificación por email
     try {
+      console.log('🚨 DEBUG: DATOS ANTES DEL EMAIL');
+      console.log('ticket.id:', ticket.id);
+      console.log('ticket.client:', ticket.client);
+      console.log('ticket.client?.phone:', ticket.client?.phone);
+      console.log('ticket completo:', JSON.stringify(ticket, null, 2));
+      
       const emailTemplate = newTicketEmailTemplate(ticket)
       await sendEmail({
         to: process.env.BUSINESS_EMAIL || 'techfixuruguay@gmail.com',
@@ -184,6 +203,8 @@ export async function POST(request: NextRequest) {
         html: emailTemplate.html,
         text: emailTemplate.text
       })
+      
+      console.log('✅ Email enviado exitosamente');
     } catch (emailError) {
       console.error('Error sending email notification:', emailError)
       // No fallar el ticket si el email falla
