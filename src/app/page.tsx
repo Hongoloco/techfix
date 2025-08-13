@@ -47,13 +47,16 @@ export default function Home() {
                 Iniciar Sesión
               </Link>
             </nav>
-            {/* Menú móvil mejorado */}
-            <div className="md:hidden flex items-center gap-2">
-              <Link href="/contact" className="btn-dark btn-secondary-dark text-xs px-3 py-2">
-                📞 Contacto
+            {/* Menú móvil ultra-compacto */}
+            <div className="md:hidden flex items-center gap-1">
+              <Link href="/contact" className="btn-dark btn-secondary-dark mobile-header-btn">
+                📞
               </Link>
-              <Link href="/login" className="btn-dark btn-primary-dark text-xs px-3 py-2">
-                Iniciar
+              <Link href="/quote" className="btn-dark btn-yellow-dark mobile-header-btn">
+                💰
+              </Link>
+              <Link href="/login" className="btn-dark btn-primary-dark mobile-header-btn">
+                👤
               </Link>
             </div>
           </div>
@@ -61,8 +64,8 @@ export default function Home() {
       </header>
 
       {/* Hero Section oscura moderna */}
-      <section className="hero-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="hero-dark pt-16 sm:pt-20 md:pt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20">
           <div className="text-center">
             <div className="mb-6 sm:mb-8">
               <h1 className="hero-title-dark flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
