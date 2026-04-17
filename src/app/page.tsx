@@ -104,7 +104,7 @@ export default function Home() {
               </h3>
               <div className="flex justify-center max-w-4xl mx-auto">
                 <a
-                  href="https://www.google.com/maps/place/Techfix/data=!4m2!3m1!1s0x0:0x6ff56ec394549e75?sa=X&ved=1t:2428&ictx=111"
+                  href="https://www.google.com/maps/place/Techfix/@-34.7265213,-56.2162785,7146m/data=!3m1!1e3!4m8!3m7!1s0xa2403487bcb0c1d7:0x6ff56ec394549e75!8m2!3d-34.7265213!4d-56.2162785!9m1!1b1!16s%2Fg%2F11xtz1ysbb?entry=ttu&g_ep=EgoyMDI2MDQxNC4wIKXMDSoASAFQAw%3D%3D"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="dark-card social-card flex items-center space-x-3 sm:space-x-4 p-4 sm:p-5 w-full max-w-xl"
@@ -230,7 +230,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-xl mx-auto">
               <a
-                href="https://www.google.com/maps/place/Techfix/data=!4m2!3m1!1s0x0:0x6ff56ec394549e75?sa=X&ved=1t:2428&ictx=111"
+                href="https://www.google.com/maps/place/Techfix/@-34.7265213,-56.2162785,7146m/data=!3m1!1e3!4m8!3m7!1s0xa2403487bcb0c1d7:0x6ff56ec394549e75!8m2!3d-34.7265213!4d-56.2162785!9m1!1b1!16s%2Fg%2F11xtz1ysbb?entry=ttu&g_ep=EgoyMDI2MDQxNC4wIKXMDSoASAFQAw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-dark btn-primary-dark text-base sm:text-lg px-6 sm:px-8 py-4 w-full sm:w-auto"
