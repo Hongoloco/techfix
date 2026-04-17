@@ -1,17 +1,39 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Ticket, Eye, EyeOff } from 'lucide-react'
 
-export default function LoginPage() {
+function LoginContent() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const token = searchParams.get('token')
+    const google = searchParams.get('google')
+    const urlError = searchParams.get('error')
+
+    if (token && google === 'ok') {
+      localStorage.setItem('token', token)
+      localStorage.setItem('user', JSON.stringify({ email: 'ale21rock@gmail.com', role: 'ADMIN', name: 'Ale' }))
+      router.push('/admin')
+      return
+    }
+
+    if (urlError === 'unauthorized_google') {
+      setError('Solo ale21rock@gmail.com puede iniciar sesión con Google')
+    } else if (urlError === 'google_config') {
+      setError('Falta configurar Google OAuth en Vercel')
+    } else if (urlError === 'google_callback' || urlError === 'google_token') {
+      setError('Falló el inicio de sesión con Google')
+    }
+  }, [router, searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,11 +52,9 @@ export default function LoginPage() {
       const data = await response.json()
 
       if (response.ok) {
-        // Guardar token en localStorage
         localStorage.setItem('token', data.token)
         localStorage.setItem('user', JSON.stringify(data.user))
-        
-        // Redirigir según el rol
+
         if (data.user.role === 'ADMIN' || data.user.role === 'AGENT') {
           router.push('/admin')
         } else {
@@ -63,10 +83,9 @@ export default function LoginPage() {
             Iniciar Sesión
           </h2>
           <p className="mt-2 text-center text-sm text-white/80">
-            O{' '}
-            <Link href="/register" className="font-medium text-yellow-300 hover:text-yellow-200 transition-colors">
-              crear una cuenta nueva
-            </Link>
+            <span className="font-medium text-yellow-300">
+              acceso restringido al administrador
+            </span>
           </p>
         </div>
 
@@ -108,11 +127,7 @@ export default function LoginPage() {
                 className="absolute right-3 top-11 text-white/60 hover:text-white transition-colors"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? (
-                  <EyeOff className="h-5 w-5" />
-                ) : (
-                  <Eye className="h-5 w-5" />
-                )}
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
           </div>
@@ -123,7 +138,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          <div>
+          <div className="space-y-3">
             <button
               type="submit"
               disabled={isLoading}
@@ -131,6 +146,14 @@ export default function LoginPage() {
             >
               {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </button>
+
+            <a
+              href="/api/auth/google"
+              className="group relative w-full btn-modern py-4 text-lg font-semibold card-hover block text-center"
+              style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '12px' }}
+            >
+              Ingresar con Google
+            </a>
           </div>
 
           <div className="text-center">
@@ -141,5 +164,13 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen gradient-animated" />}>
+      <LoginContent />
+    </Suspense>
   )
 }
