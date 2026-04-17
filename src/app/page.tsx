@@ -97,74 +97,24 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Redes Sociales mejoradas para móvil */}
+            {/* Google Maps */}
             <div className="mb-16 sm:mb-20 px-4">
               <h3 className="text-lg sm:text-xl font-semibold text-gray-300 mb-6 sm:mb-8 text-center">
-                Síguenos en nuestras redes sociales
+                Encontranos en Google
               </h3>
-              <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-6 max-w-4xl mx-auto">
+              <div className="flex justify-center max-w-4xl mx-auto">
                 <a
-                  href="https://www.instagram.com/techfix_soporte_tecnico/"
+                  href="https://www.google.com/maps/place/Techfix/data=!4m2!3m1!1s0x0:0x6ff56ec394549e75?sa=X&ved=1t:2428&ictx=111"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="dark-card social-card flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 w-full sm:w-auto"
+                  className="dark-card social-card flex items-center space-x-3 sm:space-x-4 p-4 sm:p-5 w-full max-w-xl"
                 >
-                  <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-2 sm:p-3 text-white flex-shrink-0">
-                    <Image 
-                      src="/instagram-logo.png" 
-                      alt="Instagram" 
-                      width={20} 
-                      height={20}
-                      className="w-5 h-5 sm:w-6 sm:h-6 social-icon"
-                    />
+                  <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-full p-3 sm:p-4 text-white flex-shrink-0">
+                    <MapPin className="w-6 h-6 sm:w-7 sm:h-7 social-icon" />
                   </div>
                   <div className="text-left min-w-0 flex-1">
-                    <p className="font-medium text-gray-100 text-sm sm:text-base truncate">Instagram</p>
-                    <p className="text-gray-400 text-xs sm:text-sm truncate">@techfix_soporte_tecnico</p>
-                  </div>
-                </a>
-
-                <a
-                  href="https://www.facebook.com/profile.php?id=61579259244594"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="dark-card social-card flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 w-full sm:w-auto"
-                >
-                  <div className="bg-blue-600 rounded-full p-2 sm:p-3 text-white flex-shrink-0">
-                    <Image 
-                      src="/facebook-logo.png" 
-                      alt="Facebook" 
-                      width={20} 
-                      height={20}
-                      className="w-5 h-5 sm:w-6 sm:h-6 social-icon"
-                    />
-                  </div>
-                  <div className="text-left min-w-0 flex-1">
-                    <p className="font-medium text-gray-100 text-sm sm:text-base truncate">Facebook</p>
-                    <p className="text-gray-400 text-xs sm:text-sm truncate">TechFix Uruguay</p>
-                  </div>
-                </a>
-
-                <a
-                  href="https://www.tiktok.com/@techfix_soporte_tecnico"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="dark-card social-card flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 w-full sm:w-auto"
-                >
-                  <div className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 rounded-full p-2 sm:p-3 text-white relative overflow-hidden flex-shrink-0">
-                    {/* SVG de TikTok optimizado con colores oficiales */}
-                    <svg 
-                      className="w-5 h-5 sm:w-6 sm:h-6 social-icon" 
-                      viewBox="0 0 24 24" 
-                      fill="white"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-.88-.05A6.33 6.33 0 0 0 5.76 20.8a6.34 6.34 0 0 0 10.86-4.43V8.56a8.16 8.16 0 0 0 4.77 1.51V6.69z"/>
-                    </svg>
-                  </div>
-                  <div className="text-left min-w-0 flex-1">
-                    <p className="font-medium text-gray-100 text-sm sm:text-base truncate">TikTok</p>
-                    <p className="text-gray-400 text-xs sm:text-sm truncate">@techfix_soporte_tecnico</p>
+                    <p className="font-medium text-gray-100 text-sm sm:text-base truncate">Google Maps</p>
+                    <p className="text-gray-400 text-xs sm:text-sm">Ver ficha y ubicación de TechFix</p>
                   </div>
                 </a>
               </div>
