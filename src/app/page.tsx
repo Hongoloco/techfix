@@ -212,29 +212,39 @@ export default function Home() {
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 sm:mb-6">
               <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-                ¿Por qué elegir TechFix?
+                Opiniones reales en Google
               </span>
             </h2>
             <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-2">
-              Estamos arrancando, así que preferimos ser claros y honestos antes que vender humo. La idea es ayudarte bien, responder rápido y darte soluciones reales.
+              Preferimos mostrarte reseñas reales en Google antes que llenar la web con opiniones inventadas. Ahí podés ver la ficha, ubicación y valoraciones reales.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            <div className="dark-card text-center p-5 sm:p-6">
-              <MessageCircle className="w-10 h-10 mx-auto text-cyan-400 mb-4" />
-              <h3 className="text-lg font-bold text-gray-100 mb-3">Comunicación clara</h3>
-              <p className="text-gray-400 text-sm sm:text-base">Te explicamos qué pasa y qué conviene hacer, sin vueltas raras ni tecnicismos innecesarios.</p>
+          <div className="max-w-4xl mx-auto dark-card p-6 sm:p-8 text-center">
+            <div className="flex justify-center mb-4">
+              <MapPin className="w-12 h-12 text-cyan-400" />
             </div>
-            <div className="dark-card text-center p-5 sm:p-6">
-              <MapPin className="w-10 h-10 mx-auto text-cyan-400 mb-4" />
-              <h3 className="text-lg font-bold text-gray-100 mb-3">Atención por coordinación</h3>
-              <p className="text-gray-400 text-sm sm:text-base">No vendemos un local físico que no existe. Trabajamos remoto o presencial según el problema.</p>
-            </div>
-            <div className="dark-card text-center p-5 sm:p-6">
-              <Wrench className="w-10 h-10 mx-auto text-cyan-400 mb-4" />
-              <h3 className="text-lg font-bold text-gray-100 mb-3">Soluciones reales</h3>
-              <p className="text-gray-400 text-sm sm:text-base">Nos enfocamos en dejar funcionando tu equipo, red o sistema, con trato humano y seguimiento.</p>
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">TechFix en Google Maps</h3>
+            <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-8 max-w-2xl mx-auto">
+              Podés entrar a nuestra ficha de Google para ver ubicación, presencia online y dejar tu opinión cuando trabajemos juntos.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-xl mx-auto">
+              <a
+                href="https://www.google.com/maps/place/Techfix/data=!4m2!3m1!1s0x0:0x6ff56ec394549e75?sa=X&ved=1t:2428&ictx=111"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-dark btn-primary-dark text-base sm:text-lg px-6 sm:px-8 py-4 w-full sm:w-auto"
+              >
+                <span>Ver opiniones en Google</span>
+              </a>
+              <a
+                href="https://search.google.com/local/writereview?placeid=ChIJdV6UlMNu9W8R"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-dark btn-success-dark text-base sm:text-lg px-6 sm:px-8 py-4 w-full sm:w-auto"
+              >
+                <span>Dejar una reseña</span>
+              </a>
             </div>
           </div>
         </div>
