@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import HydrationFix from "@/components/HydrationFix";
 import { generateSEO, organizationSchema } from '@/lib/seo'
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,7 @@ export default function RootLayout({
       >
         <HydrationFix />
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
