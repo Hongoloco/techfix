@@ -6,9 +6,14 @@ export async function POST(request: NextRequest) {
   try {
     const secret = request.headers.get('x-bootstrap-secret')
     const expected = process.env.ADMIN_BOOTSTRAP_SECRET
+    const fallback = process.env.ADMIN_PASSWORD
 
-    if (!expected || secret !== expected) {
+    if ((expected && secret !== expected) || (!expected && fallback && secret !== fallback)) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    }
+
+    if (!expected && !fallback) {
+      return NextResponse.json({ error: 'Falta configurar secreto de bootstrap en Vercel' }, { status: 500 })
     }
 
     const { email, password, name } = await request.json()
