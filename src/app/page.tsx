@@ -1,8 +1,7 @@
-import { Ticket, MessageCircle, Clock, CheckCircle, Zap, Shield, Users, Smartphone, Wifi } from 'lucide-react'
+import { Ticket, MessageCircle, Clock, CheckCircle, Zap, Shield, Users, Smartphone, Wifi, MapPin, MonitorSmartphone, Wrench } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
-import TestimonialsSection from '@/components/TestimonialsSection'
 
 export default function Home() {
   return (
@@ -81,20 +80,20 @@ export default function Home() {
             </div>
             
             <p className="hero-subtitle-dark text-sm sm:text-base md:text-lg lg:text-xl px-2 sm:px-4">
-              Soporte técnico profesional en Las Piedras y alrededores.
+              Soporte técnico en Las Piedras y alrededores.
               <br className="hidden sm:block" />
-              <span className="block sm:inline">Resolvemos todos tus problemas tecnológicos con rapidez y eficiencia.</span>
+              <span className="block sm:inline">Te ayudamos con PCs, WiFi, configuración, redes y problemas técnicos con atención rápida, clara y por coordinación.</span>
             </p>
 
             {/* Botones de acción principales mejorados para móvil */}
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-12 sm:mb-16 px-4">
-              <Link href="/contact" className="btn-dark btn-primary-dark text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 w-full sm:w-auto max-w-xs">
-                <Ticket className="w-5 h-5 sm:w-6 sm:h-6" />
-                <span className="text-sm sm:text-base">Crear Ticket de Soporte</span>
-              </Link>
-              <Link href="/quote" className="btn-dark btn-yellow-dark text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 w-full sm:w-auto max-w-xs">
+              <a href="https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20quiero%20hacer%20una%20consulta" target="_blank" rel="noopener noreferrer" className="btn-dark btn-primary-dark text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 w-full sm:w-auto max-w-xs">
                 <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
-                <span className="text-sm sm:text-base">Solicitar Cotización</span>
+                <span className="text-sm sm:text-base">Escribir por WhatsApp</span>
+              </a>
+              <Link href="/contact" className="btn-dark btn-yellow-dark text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 w-full sm:w-auto max-w-xs">
+                <Ticket className="w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="text-sm sm:text-base">Enviar consulta</span>
               </Link>
             </div>
 
@@ -185,14 +184,14 @@ export default function Home() {
             </div>
             <div className="dark-card text-center p-4 sm:p-6">
               <div className="text-4xl sm:text-5xl mb-4 sm:mb-6 text-center">🇺🇾</div>
-              <h3 className="text-lg sm:text-xl font-bold text-gray-100 mb-3 sm:mb-4">Empresa Local</h3>
-              <p className="text-gray-400 text-sm sm:text-base">Soporte en español, entendemos tu negocio</p>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-100 mb-3 sm:mb-4">Atención cercana</h3>
+              <p className="text-gray-400 text-sm sm:text-base">Soporte en español, claro y sin tecnicismos innecesarios</p>
             </div>
             <div className="dark-card text-center p-4 sm:p-6 sm:col-span-2 lg:col-span-1">
-              <div className="text-4xl sm:text-5xl mb-4 sm:mb-6 text-center">🏠</div>
-              <h3 className="text-lg sm:text-xl font-bold text-gray-100 mb-3 sm:mb-4">Servicio a Domicilio</h3>
-              <p className="text-gray-400 text-sm sm:text-base">Sin costo en Las Piedras y alrededores</p>
-              <p className="text-gray-500 text-xs sm:text-sm mt-2 italic">Si sos de otra zona, consultá costos</p>
+              <div className="text-4xl sm:text-5xl mb-4 sm:mb-6 text-center">📍</div>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-100 mb-3 sm:mb-4">Por coordinación</h3>
+              <p className="text-gray-400 text-sm sm:text-base">Soporte remoto y asistencia presencial según el caso</p>
+              <p className="text-gray-500 text-xs sm:text-sm mt-2 italic">Las Piedras y alrededores</p>
             </div>
           </div>
         </div>
@@ -210,8 +209,8 @@ export default function Home() {
               <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center mx-auto mb-4 sm:mb-6">
                 <Smartphone className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-3 sm:mb-4">Reparación de PC</h3>
-              <p className="text-gray-400 text-sm sm:text-base">Hardware, software, virus, formateo y optimización</p>
+              <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-3 sm:mb-4">Reparación y optimización de PC</h3>
+              <p className="text-gray-400 text-sm sm:text-base">Limpieza de virus, formateo, programas, lentitud y mejora de rendimiento</p>
             </div>
 
             <div className="dark-card text-center p-4 sm:p-6">
@@ -219,46 +218,99 @@ export default function Home() {
                 <Wifi className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
               <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-3 sm:mb-4">Redes e Internet</h3>
-              <p className="text-gray-400 text-sm sm:text-base">WiFi, configuración de red, conexión a internet</p>
+              <p className="text-gray-400 text-sm sm:text-base">Problemas de WiFi, routers, impresoras en red y conexión a internet</p>
             </div>
 
             <div className="dark-card text-center p-4 sm:p-6">
               <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center mx-auto mb-4 sm:mb-6">
                 <Smartphone className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-3 sm:mb-4">Dispositivos Móviles</h3>
-              <p className="text-gray-400 text-sm sm:text-base">Configuración, apps, problemas de conectividad</p>
+              <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-3 sm:mb-4">Soporte remoto</h3>
+              <p className="text-gray-400 text-sm sm:text-base">Configuración, cuentas, errores comunes, accesos y asistencia técnica a distancia</p>
             </div>
 
             <div className="dark-card text-center p-4 sm:p-6">
               <div className="bg-gradient-to-r from-red-500 to-orange-500 rounded-full w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center mx-auto mb-4 sm:mb-6">
                 <Shield className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-3 sm:mb-4">Seguridad</h3>
-              <p className="text-gray-400 text-sm sm:text-base">Antivirus, protección de datos, backup</p>
+              <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-3 sm:mb-4">Seguridad y backups</h3>
+              <p className="text-gray-400 text-sm sm:text-base">Antivirus, protección de datos y respaldo de información importante</p>
             </div>
 
             <div className="dark-card text-center p-4 sm:p-6 sm:col-span-2 lg:col-span-1">
               <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center mx-auto mb-4 sm:mb-6">
                 <Users className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-3 sm:mb-4">Soporte Empresarial</h3>
-              <p className="text-gray-400 text-sm sm:text-base">Mantenimiento de sistemas, consultorías IT</p>
+              <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-3 sm:mb-4">Consultoría IT</h3>
+              <p className="text-gray-400 text-sm sm:text-base">Ayuda para elegir equipos, ordenar sistemas y resolver necesidades técnicas reales</p>
             </div>
 
             <div className="dark-card text-center p-4 sm:p-6 lg:col-span-3 xl:col-span-1">
               <div className="bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center mx-auto mb-4 sm:mb-6">
                 <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-3 sm:mb-4">Urgencias 24/7</h3>
-              <p className="text-gray-400 text-sm sm:text-base">Atención prioritaria para problemas críticos</p>
+              <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-3 sm:mb-4">Desarrollo web</h3>
+              <p className="text-gray-400 text-sm sm:text-base">Webs, formularios y soluciones digitales simples para negocios y profesionales</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Sección de Testimonios con Sistema de Estrellas */}
-      <TestimonialsSection />
+      <section className="py-16 sm:py-20 px-4 bg-gradient-to-b from-gray-900 to-gray-800 relative overflow-hidden">
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 sm:mb-6">
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                ¿Por qué elegir TechFix?
+              </span>
+            </h2>
+            <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-2">
+              Estamos arrancando, así que preferimos ser claros y honestos antes que vender humo. La idea es ayudarte bien, responder rápido y darte soluciones reales.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="dark-card text-center p-5 sm:p-6">
+              <MessageCircle className="w-10 h-10 mx-auto text-cyan-400 mb-4" />
+              <h3 className="text-lg font-bold text-gray-100 mb-3">Comunicación clara</h3>
+              <p className="text-gray-400 text-sm sm:text-base">Te explicamos qué pasa y qué conviene hacer, sin vueltas raras ni tecnicismos innecesarios.</p>
+            </div>
+            <div className="dark-card text-center p-5 sm:p-6">
+              <MapPin className="w-10 h-10 mx-auto text-cyan-400 mb-4" />
+              <h3 className="text-lg font-bold text-gray-100 mb-3">Atención por coordinación</h3>
+              <p className="text-gray-400 text-sm sm:text-base">No vendemos un local físico que no existe. Trabajamos remoto o presencial según el problema.</p>
+            </div>
+            <div className="dark-card text-center p-5 sm:p-6">
+              <Wrench className="w-10 h-10 mx-auto text-cyan-400 mb-4" />
+              <h3 className="text-lg font-bold text-gray-100 mb-3">Soluciones reales</h3>
+              <p className="text-gray-400 text-sm sm:text-base">Nos enfocamos en dejar funcionando tu equipo, red o sistema, con trato humano y seguimiento.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 sm:py-20 px-4 bg-gray-900/40">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-black text-white mb-4">Preguntas frecuentes</h2>
+            <p className="text-gray-300 text-sm sm:text-base">Lo que suelen preguntar antes de escribir.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {[
+              ['¿Atienden solo en Las Piedras?', 'Trabajamos principalmente en Las Piedras y alrededores. También podemos evaluar casos remotos o coordinar según zona.'],
+              ['¿Tienen local físico?', 'No atendemos con mostrador al público. La atención es por coordinación, remoto o presencial según el caso.'],
+              ['¿Puedo consultar por WhatsApp?', 'Sí. Es la forma más rápida para contarnos el problema y orientarte sobre qué conviene hacer.'],
+              ['¿Hacen soporte remoto?', 'Sí. Muchos problemas de configuración, cuentas, accesos o programas se pueden resolver sin visita.']
+            ].map(([title, text]) => (
+              <div key={title} className="dark-card p-5 sm:p-6">
+                <h3 className="text-lg font-bold text-white mb-3">{title}</h3>
+                <p className="text-gray-400 text-sm sm:text-base leading-relaxed">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* CTA Final mejorado para móvil */}
       <section className="py-16 sm:py-20 relative">
@@ -268,12 +320,12 @@ export default function Home() {
               ¿Listo para resolver tu problema técnico?
             </h2>
             <p className="text-lg sm:text-xl text-gray-300 mb-8 sm:mb-10">
-              Contactanos ahora y recibe atención personalizada en español
+              Escribinos por WhatsApp o mandanos tu consulta y coordinamos una solución.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center max-w-lg mx-auto">
               <Link href="/contact" className="btn-dark btn-primary-dark text-base sm:text-lg px-6 sm:px-10 py-4 sm:py-5 w-full sm:w-auto">
                 <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
-                <span>Contactar Ahora</span>
+                <span>Enviar consulta</span>
               </Link>
               <a 
                 href="https://wa.me/59899252808?text=🛠️%20Hola%20TechFix%20Uruguay!%0A%0ANecesito%20ayuda%20técnica.%20¿Pueden%20asistirme?"
@@ -306,10 +358,10 @@ export default function Home() {
               © 2024 TechFix Uruguay. Todos los derechos reservados.
             </p>
             <p className="text-xs sm:text-sm text-gray-400 mb-2">
-              Soporte técnico profesional en Las Piedras y alrededores 🇺🇾
+              Soporte técnico en Las Piedras y alrededores 🇺🇾
             </p>
             <div className="text-xs sm:text-sm text-cyan-400 space-y-1 sm:space-y-0 sm:space-x-4">
-              <div className="block sm:inline">📧 techifixuruguay@gmail.com</div>
+              <div className="block sm:inline">📧 techfixuruguay@gmail.com</div>
               <div className="block sm:inline">📱 +598 99 252 808</div>
             </div>
           </div>
