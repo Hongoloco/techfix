@@ -1,4 +1,4 @@
-import { Ticket, MessageCircle, Clock, CheckCircle, Zap, Shield, Users, Smartphone, Wifi, MapPin, MonitorSmartphone, Wrench } from 'lucide-react'
+import { Ticket, MessageCircle, Zap, Shield, Users, Smartphone, Wifi, MapPin, Wrench } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'

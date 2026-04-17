@@ -4,6 +4,8 @@ import "./globals.css";
 import HydrationFix from "@/components/HydrationFix";
 import { generateSEO, organizationSchema } from '@/lib/seo'
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://techfix.uy'
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -14,7 +16,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = generateSEO()
+export const metadata: Metadata = {
+  ...generateSEO(),
+  metadataBase: new URL(siteUrl),
+}
 
 export default function RootLayout({
   children,
