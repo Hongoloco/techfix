@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import HydrationFix from "@/components/HydrationFix";
 import { generateSEO, organizationSchema } from '@/lib/seo'
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://techfix.uy'
 
@@ -50,6 +51,7 @@ export default function RootLayout({
       >
         <HydrationFix />
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );

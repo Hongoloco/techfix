@@ -23,6 +23,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/nodemailer": "^6.4.17",
     "@types/pg": "^8.15.5",
+    "@vercel/speed-insights": "^2.0.0",
     "bcryptjs": "^3.0.2",
     "jose": "^6.2.2",
     "jose": "^6.1.0",
