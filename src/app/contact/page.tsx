@@ -351,7 +351,7 @@ export default function ContactPage() {
               <div className="space-y-3">
                 <div className="flex items-center">
                   <Mail className="w-4 h-4 mr-3 text-gray-400" />
-                  <span className="text-gray-300">techifixuruguay@gmail.com</span>
+                  <span className="text-gray-300">techfixuruguay@gmail.com</span>
                 </div>
                 <div className="flex items-center">
                   <Phone className="w-4 h-4 mr-3 text-gray-400" />

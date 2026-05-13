@@ -290,7 +290,7 @@ export default function Home() {
               Soporte técnico profesional en Las Piedras y alrededores 🇺🇾
             </p>
             <p className="text-sm mt-2 text-cyan-400">
-              📧 techifixuruguay@gmail.com | 📱 +598 99 252 808
+              📧 techfixuruguay@gmail.com | 📱 +598 99 252 808
             </p>
           </div>
         </div>
