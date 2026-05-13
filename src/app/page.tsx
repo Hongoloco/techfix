@@ -143,9 +143,9 @@ export default function Home() {
       </header>
 
       <section className="hero-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-20">
-          <div className="grid lg:grid-cols-[1.25fr_0.75fr] gap-8 lg:gap-10 items-center">
-            <div>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-20">
+          <div className="grid lg:grid-cols-[minmax(0,700px)_380px] justify-center gap-8 lg:gap-10 items-center">
+            <div className="w-full max-w-3xl mx-auto">
               <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-xs sm:text-sm text-cyan-300 mb-5">
                 <CheckCircle2 className="w-4 h-4" />
                 Soporte técnico en Las Piedras y alrededores
@@ -192,7 +192,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="dark-card p-6 sm:p-8">
+            <div className="dark-card p-6 sm:p-8 w-full max-w-md mx-auto">
               <div className="flex items-center gap-3 mb-5">
                 <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full p-3 text-black">
                   <Star className="w-5 h-5" />
