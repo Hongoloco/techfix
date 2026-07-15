@@ -134,68 +134,42 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="dark-layout">
-      {/* Partículas de fondo */}
-      <div className="particles">
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className="particle"
-            style={{
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 6}s`,
-              animationDuration: `${6 + Math.random() * 4}s`
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Header oscuro */}
-      <header className="dark-header">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="logo-dark">
-              <Image 
-                src="/techfix-logo.svg" 
-                alt="TechFix Uruguay" 
-                width={48} 
-                height={48}
-                className="logo-icon"
-              />
-              <span>TechFix Uruguay 🇺🇾</span>
-            </Link>
-            <nav className="nav-dark hidden md:flex">
-              <Link href="/" className="nav-link-dark">
-                Inicio
-              </Link>
-              <Link href="/quote" className="nav-link-dark">
-                Cotización
-              </Link>
-              <Link href="/login" className="btn-dark btn-primary-dark">
-                Iniciar Sesión
-              </Link>
-            </nav>
-          </div>
-        </div>
+    <div className="techfix-premium tf-quote-page">
+      <header className="tf-nav">
+        <Link href="/" className="tf-logo" aria-label="TechFix Uruguay">
+          <img src="/techfix-logo.svg" alt="" aria-hidden="true" />
+          <span>TechFix</span>
+          <i aria-hidden="true">✳︎</i>
+        </Link>
+        <nav className="tf-nav-links" aria-label="Navegacion principal">
+          <Link href="/">Inicio</Link>
+          <span>,</span>
+          <Link href="/quote">Cotizacion</Link>
+          <span>,</span>
+          <Link href="/contact">Contacto</Link>
+        </nav>
+        <a
+          href="https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20tecnica"
+          className="tf-nav-cta"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Escribir ahora
+        </a>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="tf-quote-shell">
         {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-gray-100 mb-6">
-            Contactanos Ahora
-          </h1>
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-            Estamos aquí para resolver todos tus problemas técnicos.
-            <br />
-            Soporte profesional en Las Piedras y alrededores
-          </p>
+        <div className="tf-quote-intro">
+          <p className="tf-kicker">Contacto</p>
+          <h1>Contanos que esta fallando.</h1>
+          <p>Creas un ticket o nos escribis por WhatsApp. Te respondemos con el siguiente paso claro.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="tf-quote-layout">
           {/* Formulario de contacto */}
-          <div className="form-dark">
-            <h2 className="text-2xl font-bold text-gray-100 mb-8 text-center">
+          <div className="tf-quote-form tf-glass-card">
+            <h2>
               Crear Ticket de Soporte
             </h2>
             
@@ -342,8 +316,8 @@ export default function ContactPage() {
           </div>
 
           {/* Información de contacto */}
-          <div className="space-y-8">
-            <div className="dark-card">
+          <div className="tf-quote-aside">
+            <div className="tf-glass-card">
               <h3 className="text-xl font-bold text-gray-100 mb-4 flex items-center">
                 <Phone className="w-5 h-5 mr-2 text-cyan-400" />
                 Contacto Directo
@@ -370,7 +344,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="dark-card">
+            <div className="tf-glass-card">
               <h3 className="text-xl font-bold text-gray-100 mb-4 flex items-center">
                 <MapPin className="w-5 h-5 mr-2 text-cyan-400" />
                 Zona de Cobertura
@@ -387,7 +361,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="dark-card">
+            <div className="tf-glass-card">
               <h3 className="text-xl font-bold text-gray-100 mb-4 flex items-center">
                 <Clock className="w-5 h-5 mr-2 text-cyan-400" />
                 Horarios de Atención
@@ -395,7 +369,7 @@ export default function ContactPage() {
               <BusinessHours />
             </div>
 
-            <div className="dark-card">
+            <div className="tf-glass-card">
               <h3 className="text-xl font-bold text-gray-100 mb-4 flex items-center">
                 <Zap className="w-5 h-5 mr-2 text-cyan-400" />
                 Tiempo de Respuesta

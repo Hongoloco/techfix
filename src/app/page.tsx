@@ -49,6 +49,55 @@ const reviewHighlights = [
   'Perfil de Google actualizado con sitio, telefono y horario.',
 ]
 
+function AnimatedRepairBot() {
+  return (
+    <svg className="tf-repair-bot" viewBox="0 0 180 180" role="img" aria-label="Robot tecnico animado">
+      <defs>
+        <linearGradient id="botBody" x1="32" y1="24" x2="148" y2="158" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F8FEFF" />
+          <stop offset="1" stopColor="#A7EEF9" />
+        </linearGradient>
+        <linearGradient id="botScreen" x1="48" y1="44" x2="132" y2="100" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#07283D" />
+          <stop offset="1" stopColor="#0C8DC4" />
+        </linearGradient>
+      </defs>
+
+      <circle className="tf-bot-halo" cx="90" cy="90" r="82" />
+      <g className="tf-bot-character">
+        <path className="tf-bot-steam" d="M139 36c9 7 9 16 0 24M151 48c7 6 7 13 0 20" />
+        <path className="tf-bot-pipe" d="M132 68h25c8 0 14 6 14 14v18" />
+        <circle className="tf-bot-bolt" cx="135" cy="68" r="5" />
+
+        <rect className="tf-bot-body" x="42" y="34" width="96" height="104" rx="28" />
+        <rect className="tf-bot-face" x="55" y="48" width="70" height="48" rx="18" />
+        <circle className="tf-bot-eye tf-bot-eye-left" cx="77" cy="72" r="5" />
+        <circle className="tf-bot-eye tf-bot-eye-right" cx="103" cy="72" r="5" />
+        <path className="tf-bot-mouth" d="M78 83c8 8 20 8 28 0" />
+
+        <path className="tf-bot-antenna" d="M90 34V20" />
+        <circle className="tf-bot-light" cx="90" cy="17" r="6" />
+        <path className="tf-bot-light-rays" d="M90 4v6M77 10l5 5M103 10l-5 5" />
+
+        <g className="tf-bot-arm tf-bot-arm-left">
+          <path d="M45 86c-18 2-28 14-30 30" />
+          <circle cx="15" cy="118" r="7" />
+        </g>
+
+        <g className="tf-bot-arm tf-bot-arm-right">
+          <path d="M134 89c18 5 25 17 21 34" />
+          <g className="tf-bot-wrench">
+            <path d="M149 112l18 18" />
+            <path d="M165 124l8-8M169 128l8-8" />
+          </g>
+        </g>
+
+        <path className="tf-bot-shadow" d="M55 148c20 10 51 10 70 0" />
+      </g>
+    </svg>
+  )
+}
+
 export default function Home() {
   return (
     <main className="techfix-premium">
@@ -100,7 +149,7 @@ export default function Home() {
           </p>
 
           <div className="tf-title-lockup">
-            <img src="/techfix-logo.svg" alt="" aria-hidden="true" />
+            <AnimatedRepairBot />
             <h1>Tu tecnologia funcionando, sin vueltas.</h1>
           </div>
 
