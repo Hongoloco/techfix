@@ -118,6 +118,8 @@ const defaultSiteSettings: SiteSettings = {
 const whatsappNumber = '+598 99 252 808'
 const whatsappHref = 'https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20con%20un%20problema%20t%C3%A9cnico'
 const instagramHref = 'https://instagram.com/techfix_soporte_tecnico'
+const facebookHref = 'https://www.facebook.com/profile.php?id=61579259244594'
+const tiktokHref = 'https://www.tiktok.com/@techfix_soporte_tecnico'
 
 function downloadTextFile(filename: string, content: string, type = 'text/plain;charset=utf-8') {
   const blob = new Blob([content], { type })
@@ -595,6 +597,16 @@ export default function AdminDashboard() {
       setNotification(prev => ({ ...prev, show: false }))
     }, 5000)
   }, [])
+
+  const copyToClipboard = useCallback(async (label: string, value: string) => {
+    try {
+      await navigator.clipboard.writeText(value)
+      showNotification('success', 'Copiado', `${label} quedo en el portapapeles.`)
+    } catch (error) {
+      console.error('Error copying social link:', error)
+      showNotification('error', 'No se pudo copiar', 'El navegador no permitio copiar automaticamente.')
+    }
+  }, [showNotification])
 
   const updateSiteSettingField = useCallback((field: keyof SiteSettings, value: string) => {
     setSiteSettingsForm(prev => ({ ...prev, [field]: value }))
@@ -1356,196 +1368,139 @@ Esta acción eliminará PERMANENTEMENTE:
             )}
 
             {activeTab === 'social' && (
-              <div>
-                <div className="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
-                  <h2 className="text-xl font-semibold text-gray-800">Gestión de Redes Sociales</h2>
+              <div className="space-y-6">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <p className="admin-kicker">Canales publicos</p>
+                    <h2 className="text-xl font-semibold text-gray-800">Redes y contacto</h2>
+                    <p className="mt-1 text-sm text-gray-600">
+                      Enlaces reales para revisar perfiles, copiar URLs y probar el contacto directo.
+                    </p>
+                  </div>
                   <button
-                    className="inline-flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+                    className="inline-flex items-center justify-center rounded-md bg-yellow-400 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-yellow-300"
                     onClick={() => window.open(instagramHref, '_blank')}
                   >
                     <ExternalLink className="h-4 w-4 mr-2" />
-                    Abrir perfil
+                    Abrir Instagram
                   </button>
                 </div>
-                
-                <div className="bg-white rounded-lg shadow border border-gray-200 p-6 mb-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {/* Instagram Card */}
-                  <div className="bg-gray-50 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border border-gray-200">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center">
-                        <div className="bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 p-3 rounded-lg">
-                          <Instagram className="h-8 w-8 text-white" />
-                        </div>
-                        <div className="ml-4">
-                          <h3 className="text-lg font-semibold text-gray-800">Instagram</h3>
-                          <p className="text-sm text-gray-600">Soporte Técnico</p>
-                        </div>
-                      </div>
-                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                        Activo
-                      </span>
-                    </div>
-                    
-                    <div className="space-y-3">
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                        <span className="text-sm font-medium text-gray-700">Usuario:</span>
-                        <span className="text-sm text-gray-800 font-mono">@techfix_soporte_tecnico</span>
-                      </div>
-                      
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                        <span className="text-sm font-medium text-gray-700">Seguidores:</span>
-                        <span className="text-sm text-gray-800">2.1K</span>
-                      </div>
-                      
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                        <span className="text-sm font-medium text-gray-700">Publicaciones:</span>
-                        <span className="text-sm text-gray-800">156</span>
-                      </div>
-                      
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                        <span className="text-sm font-medium text-gray-700">Última publicación:</span>
-                        <span className="text-sm text-gray-800">Hace 2 horas</span>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-6 flex gap-2">
-                      <button
-                        onClick={() => window.open(instagramHref, '_blank')}
-                        className="flex-1 bg-gradient-to-r from-purple-600 to-pink-500 text-white px-4 py-2 rounded-md hover:from-purple-700 hover:to-pink-600 transition-all duration-200 flex items-center justify-center"
-                      >
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Ver Perfil
-                      </button>
-                      <button className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
-                        <Settings className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
 
-                  {/* WhatsApp Card */}
-                  <div className="bg-gray-50 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border border-gray-200">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center">
-                        <div className="bg-green-500 p-3 rounded-lg">
-                          <MessageSquare className="h-8 w-8 text-white" />
+                <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+                  {[
+                    {
+                      name: 'Instagram',
+                      detail: '@techfix_soporte_tecnico',
+                      href: instagramHref,
+                      status: 'Perfil principal',
+                      icon: Instagram,
+                      accent: 'from-purple-600 via-pink-500 to-orange-400',
+                    },
+                    {
+                      name: 'WhatsApp',
+                      detail: whatsappNumber,
+                      href: whatsappHref,
+                      status: 'Contacto directo',
+                      icon: MessageSquare,
+                      accent: 'from-green-500 to-emerald-400',
+                    },
+                    {
+                      name: 'Facebook',
+                      detail: 'TechFix Uruguay',
+                      href: facebookHref,
+                      status: 'Perfil publico',
+                      icon: Share2,
+                      accent: 'from-blue-600 to-cyan-400',
+                    },
+                    {
+                      name: 'TikTok',
+                      detail: '@techfix_soporte_tecnico',
+                      href: tiktokHref,
+                      status: 'Perfil publico',
+                      icon: Share2,
+                      accent: 'from-slate-900 via-cyan-500 to-pink-500',
+                    },
+                  ].map((channel) => {
+                    const Icon = channel.icon
+                    return (
+                      <div key={channel.name} className="bg-white rounded-lg border border-gray-200 p-5">
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="flex min-w-0 items-start gap-4">
+                            <div className={`rounded-lg bg-gradient-to-br ${channel.accent} p-3 shadow-lg`}>
+                              <Icon className="h-7 w-7 text-white" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <h3 className="text-lg font-semibold text-gray-800">{channel.name}</h3>
+                                <span className="rounded-full border border-yellow-300/40 bg-yellow-400/10 px-2.5 py-1 text-xs font-semibold text-yellow-200">
+                                  Activo
+                                </span>
+                              </div>
+                              <p className="mt-1 text-sm text-gray-600">{channel.status}</p>
+                              <p className="mt-3 break-all rounded-md border border-white/10 bg-black/25 px-3 py-2 font-mono text-sm text-white/85">
+                                {channel.detail}
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                        <div className="ml-4">
-                          <h3 className="text-lg font-semibold text-gray-800">WhatsApp</h3>
-                          <p className="text-sm text-gray-600">Contacto Directo</p>
-                        </div>
-                      </div>
-                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                        Activo
-                      </span>
-                    </div>
-                    
-                    <div className="space-y-3">
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                        <span className="text-sm font-medium text-gray-700">Número:</span>
-                        <span className="text-sm text-gray-800 font-mono">{whatsappNumber}</span>
-                      </div>
-                      
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                        <span className="text-sm font-medium text-gray-700">Mensajes hoy:</span>
-                        <span className="text-sm text-gray-800">47</span>
-                      </div>
-                      
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                        <span className="text-sm font-medium text-gray-700">Tiempo respuesta:</span>
-                        <span className="text-sm text-green-600 font-semibold">&lt; 5 min</span>
-                      </div>
-                      
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                        <span className="text-sm font-medium text-gray-700">Estado:</span>
-                        <span className="text-sm text-green-600 font-semibold">En línea</span>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-6 flex gap-2">
-                      <button
-                        onClick={() => window.open(whatsappHref, '_blank')}
-                        className="flex-1 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors flex items-center justify-center"
-                      >
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Abrir Chat
-                      </button>
-                      <button className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
-                        <Settings className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Estadísticas de Redes */}
-                  <div className="bg-gray-50 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border border-gray-200">
-                    <div className="flex items-center mb-4">
-                      <div className="bg-blue-500 p-3 rounded-lg">
-                        <TrendingUp className="h-8 w-8 text-white" />
-                      </div>
-                      <div className="ml-4">
-                        <h3 className="text-lg font-semibold text-gray-800">Estadísticas</h3>
-                        <p className="text-sm text-gray-600">Último mes</p>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-gray-600">Instagram</span>
-                          <span className="text-sm text-green-600 font-semibold">+12%</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-500">Nuevos seguidores</span>
-                          <span className="text-lg font-bold text-purple-600">247</span>
+                        <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                          <button
+                            onClick={() => window.open(channel.href, '_blank')}
+                            className="inline-flex items-center justify-center rounded-md bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-cyan-400"
+                          >
+                            <ExternalLink className="h-4 w-4 mr-2" />
+                            Abrir canal
+                          </button>
+                          <button
+                            onClick={() => copyToClipboard(channel.name, channel.href)}
+                            className="inline-flex items-center justify-center rounded-md border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/15"
+                          >
+                            <FileText className="h-4 w-4 mr-2" />
+                            Copiar link
+                          </button>
                         </div>
                       </div>
-                      
-                      <div className="bg-green-50 p-4 rounded-lg">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-gray-600">WhatsApp</span>
-                          <span className="text-sm text-green-600 font-semibold">+8%</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-500">Consultas resueltas</span>
-                          <span className="text-lg font-bold text-green-600">1,234</span>
-                        </div>
-                      </div>
-                      
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-gray-600">Engagement</span>
-                          <span className="text-sm text-green-600 font-semibold">+15%</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-500">Interacciones totales</span>
-                          <span className="text-lg font-bold text-blue-600">3.7K</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                    )
+                  })}
                 </div>
 
-                {/* Acciones Rápidas */}
-                <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-                  <h3 className="text-lg font-semibold mb-4">Acciones Rápidas</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <button onClick={() => window.open(instagramHref, '_blank')} className="bg-gradient-to-r from-purple-600 to-pink-500 text-white p-4 rounded-lg hover:from-purple-700 hover:to-pink-600 transition-all duration-200 flex items-center justify-center">
-                      <ExternalLink className="h-5 w-5 mr-2" />
-                      Abrir Instagram
-                    </button>
-                    <button onClick={() => window.open(whatsappHref, '_blank')} className="bg-green-500 text-white p-4 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center">
-                      <MessageSquare className="h-5 w-5 mr-2" />
-                      Abrir WhatsApp
-                    </button>
-                    <button onClick={() => setActiveTab('dashboard')} className="bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center">
-                      <TrendingUp className="h-5 w-5 mr-2" />
-                      Ver Analytics
-                    </button>
-                    <button onClick={() => setActiveTab('settings')} className="bg-gray-500 text-white p-4 rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center">
-                      <Settings className="h-5 w-5 mr-2" />
-                      Configurar APIs
-                    </button>
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                  <div className="bg-white rounded-lg border border-gray-200 p-5 lg:col-span-2">
+                    <h3 className="text-lg font-semibold text-gray-800">Estado del sistema</h3>
+                    <div className="mt-4 space-y-3 text-sm text-gray-600">
+                      <div className="flex items-start gap-3">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
+                        <span>Los botones abren perfiles reales en pestaña nueva.</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
+                        <span>WhatsApp usa el numero visible del negocio y mensaje prearmado.</span>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-yellow-300" />
+                        <span>Las metricas automaticas quedan fuera hasta conectar APIs oficiales; no muestro numeros inventados.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-lg border border-gray-200 p-5">
+                    <h3 className="text-lg font-semibold text-gray-800">Acciones</h3>
+                    <div className="mt-4 space-y-2">
+                      <button
+                        onClick={() => setActiveTab('settings')}
+                        className="flex w-full items-center justify-center rounded-md bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-yellow-300"
+                      >
+                        <Settings className="h-4 w-4 mr-2" />
+                        Editar datos web
+                      </button>
+                      <button
+                        onClick={() => setActiveTab('dashboard')}
+                        className="flex w-full items-center justify-center rounded-md border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/15"
+                      >
+                        <TrendingUp className="h-4 w-4 mr-2" />
+                        Ver dashboard
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
