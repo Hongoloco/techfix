@@ -87,6 +87,31 @@ interface Stats {
   revenue: number
 }
 
+interface SiteSettings {
+  heroVideoUrl: string
+  showcaseVideoUrl: string
+  heroTitle: string
+  heroSubtitle: string
+  primaryCta: string
+  secondaryCta: string
+  accentColor: string
+  accentSoftColor: string
+  starColor: string
+}
+
+const defaultSiteSettings: SiteSettings = {
+  heroVideoUrl: '/techfix-repair-animation.mp4',
+  showcaseVideoUrl: '/techfix-repair-animation.mp4',
+  heroTitle: 'Tu tecnologia funcionando, sin vueltas.',
+  heroSubtitle:
+    'Arreglamos PC lentas, redes, configuraciones, backups y problemas tecnicos comunes con atencion directa en Las Piedras y soporte remoto cuando se puede.',
+  primaryCta: 'Consultar soporte',
+  secondaryCta: 'Armar presupuesto',
+  accentColor: '#F4C542',
+  accentSoftColor: '#45D6E8',
+  starColor: '#F7C948',
+}
+
 // Componente optimizado para las tarjetas de estadísticas
 function StatCard({ icon: Icon, label, value, color, loading }: {
   icon: any
@@ -452,6 +477,8 @@ export default function AdminDashboard() {
     address: '',
     notes: ''
   })
+
+  const [siteSettingsForm, setSiteSettingsForm] = useState<SiteSettings>(defaultSiteSettings)
   
   // Estados para notificaciones
   const [notification, setNotification] = useState<{
@@ -492,6 +519,11 @@ export default function AdminDashboard() {
     initialData: []
   })
 
+  const { data: siteSettings, loading: siteSettingsLoading, refetch: refetchSiteSettings } = useApi<SiteSettings>('/api/site-settings', {
+    autoFetch: activeTab === 'settings',
+    initialData: defaultSiteSettings
+  })
+
   const { mutate: toggleService } = useMutation()
   const { mutate: createUserMutation } = useMutation()
   const { mutate: updateUserMutation } = useMutation()
@@ -499,6 +531,13 @@ export default function AdminDashboard() {
   const { mutate: createClientMutation } = useMutation()
   const { mutate: updateClientMutation } = useMutation()
   const { mutate: deleteClientMutation } = useMutation()
+  const { mutate: saveSiteSettingsMutation, loading: savingSiteSettings } = useMutation<SiteSettings>()
+
+  useEffect(() => {
+    if (siteSettings) {
+      setSiteSettingsForm(siteSettings)
+    }
+  }, [siteSettings])
 
   // Redirect si no es admin
   useEffect(() => {
@@ -527,6 +566,25 @@ export default function AdminDashboard() {
       setNotification(prev => ({ ...prev, show: false }))
     }, 5000)
   }, [])
+
+  const updateSiteSettingField = useCallback((field: keyof SiteSettings, value: string) => {
+    setSiteSettingsForm(prev => ({ ...prev, [field]: value }))
+  }, [])
+
+  const handleSaveSiteSettings = useCallback(async () => {
+    try {
+      const saved = await saveSiteSettingsMutation('/api/site-settings', {
+        method: 'PUT',
+        body: siteSettingsForm
+      })
+      setSiteSettingsForm(saved)
+      refetchSiteSettings()
+      showNotification('success', 'Web actualizada', 'Los textos, videos y colores del sitio quedaron guardados.')
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido'
+      showNotification('error', 'No se pudo guardar', errorMessage)
+    }
+  }, [saveSiteSettingsMutation, siteSettingsForm, refetchSiteSettings, showNotification])
 
   // Funciones para gestión de usuarios
   const handleCreateUser = useCallback(async () => {
@@ -1412,6 +1470,104 @@ Esta acción eliminará PERMANENTEMENTE:
                   <h2 className="text-xl font-semibold text-gray-800">Configuración del Sistema</h2>
                   <div className="text-sm text-gray-600">
                     TechFix v2.0 - Sistema de usuario único
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-5">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-800 flex items-center">
+                        <Settings className="h-5 w-5 mr-2 text-cyan-600" />
+                        Editor visual de la web
+                      </h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Cambia videos, titulo, botones y colores principales sin tocar codigo.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleSaveSiteSettings}
+                      disabled={savingSiteSettings || siteSettingsLoading}
+                      className="inline-flex items-center justify-center rounded-lg bg-cyan-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cyan-700 disabled:opacity-60"
+                    >
+                      <Check className="h-4 w-4 mr-2" />
+                      {savingSiteSettings ? 'Guardando...' : 'Guardar cambios'}
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Video principal</label>
+                      <input
+                        type="text"
+                        value={siteSettingsForm.heroVideoUrl}
+                        onChange={(e) => updateSiteSettingField('heroVideoUrl', e.target.value)}
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                        placeholder="/techfix-repair-animation.mp4 o URL https://..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Video de seccion reparacion</label>
+                      <input
+                        type="text"
+                        value={siteSettingsForm.showcaseVideoUrl}
+                        onChange={(e) => updateSiteSettingField('showcaseVideoUrl', e.target.value)}
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                        placeholder="/techfix-repair-animation.mp4 o URL https://..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Titulo de portada</label>
+                      <input
+                        type="text"
+                        value={siteSettingsForm.heroTitle}
+                        onChange={(e) => updateSiteSettingField('heroTitle', e.target.value)}
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Boton principal</label>
+                      <input
+                        type="text"
+                        value={siteSettingsForm.primaryCta}
+                        onChange={(e) => updateSiteSettingField('primaryCta', e.target.value)}
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                      />
+                    </div>
+                    <div className="lg:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Texto de portada</label>
+                      <textarea
+                        rows={3}
+                        value={siteSettingsForm.heroSubtitle}
+                        onChange={(e) => updateSiteSettingField('heroSubtitle', e.target.value)}
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Boton secundario</label>
+                      <input
+                        type="text"
+                        value={siteSettingsForm.secondaryCta}
+                        onChange={(e) => updateSiteSettingField('secondaryCta', e.target.value)}
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                      />
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        ['accentColor', 'Color titulo/botones'],
+                        ['accentSoftColor', 'Color globos/detalles'],
+                        ['starColor', 'Color estrellas'],
+                      ].map(([field, label]) => (
+                        <label key={field} className="block text-sm font-medium text-gray-700">
+                          {label}
+                          <input
+                            type="color"
+                            value={siteSettingsForm[field as keyof SiteSettings]}
+                            onChange={(e) => updateSiteSettingField(field as keyof SiteSettings, e.target.value)}
+                            className="mt-2 h-10 w-full cursor-pointer rounded border border-gray-300 bg-white p-1"
+                          />
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 </div>
 

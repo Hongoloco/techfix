@@ -1,10 +1,13 @@
 import { ArrowRight, CheckCircle2, Clock, MapPin, MessageCircle, Monitor, Phone, Shield, Star, Wifi } from 'lucide-react'
+import type { CSSProperties } from 'react'
 import Link from 'next/link'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
+import { getSiteSettings } from '@/lib/siteSettings'
+
+export const dynamic = 'force-dynamic'
 
 const whatsappHref = 'https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20con%20un%20problema%20t%C3%A9cnico'
 const googleHref = 'https://share.google/Meh5sUZmlelWBE24v'
-const repairVideoSrc = '/techfix-repair-animation.mp4'
 
 const pills = [
   'PC lenta',
@@ -99,9 +102,20 @@ function AnimatedRepairBot() {
   )
 }
 
-export default function Home() {
+export default async function Home() {
+  const settings = await getSiteSettings()
+  const repairVideoSrc = settings.heroVideoUrl
+  const showcaseVideoSrc = settings.showcaseVideoUrl || settings.heroVideoUrl
+
   return (
-    <main className="techfix-premium">
+    <main
+      className="techfix-premium"
+      style={{
+        '--tf-accent': settings.accentColor,
+        '--tf-accent-soft': settings.accentSoftColor,
+        '--tf-star': settings.starColor,
+      } as CSSProperties}
+    >
       <header className="tf-nav">
         <Link href="/" className="tf-logo" aria-label="TechFix Uruguay">
           <span>TechFix</span>
@@ -150,12 +164,11 @@ export default function Home() {
 
           <div className="tf-title-lockup">
             <AnimatedRepairBot />
-            <h1>Tu tecnologia funcionando, sin vueltas.</h1>
+            <h1>{settings.heroTitle}</h1>
           </div>
 
           <p className="tf-hero-copy">
-            Arreglamos PC lentas, redes, configuraciones, backups y problemas tecnicos comunes con
-            atencion directa en Las Piedras y soporte remoto cuando se puede.
+            {settings.heroSubtitle}
           </p>
 
           <div className="tf-pill-row" aria-label="Servicios frecuentes">
@@ -167,10 +180,10 @@ export default function Home() {
           <div className="tf-actions">
             <a href={whatsappHref} className="tf-main-button" target="_blank" rel="noopener noreferrer">
               <MessageCircle className="h-5 w-5" />
-              Consultar soporte
+              {settings.primaryCta}
             </a>
             <Link href="/quote" className="tf-outline-button">
-              Armar presupuesto
+              {settings.secondaryCta}
               <ArrowRight className="h-5 w-5" />
             </Link>
           </div>
@@ -204,7 +217,7 @@ export default function Home() {
           </p>
         </div>
         <div className="tf-repair-video-frame" aria-label="Animacion de robot reparando una computadora">
-          <video src={repairVideoSrc} muted loop autoPlay playsInline preload="metadata" />
+          <video src={showcaseVideoSrc} muted loop autoPlay playsInline preload="metadata" />
         </div>
       </section>
 

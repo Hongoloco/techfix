@@ -477,6 +477,9 @@ body:has(.techfix-premium) {
 }
 
 .techfix-premium {
+  --tf-accent: #F4C542;
+  --tf-accent-soft: #45D6E8;
+  --tf-star: #F7C948;
   min-height: 100vh;
   background: #050607;
   color: #f7f7f2;
@@ -525,7 +528,7 @@ body:has(.techfix-premium) {
   font-style: normal;
   font-size: 1.45rem;
   line-height: 1;
-  color: #8de8ff;
+  color: var(--tf-accent-soft);
   transform: translateY(-1px);
 }
 
@@ -605,7 +608,7 @@ body:has(.techfix-premium) {
   inset: 0;
   z-index: 1;
   background:
-    radial-gradient(circle at 74% 42%, rgba(157, 231, 239, 0.1), transparent 28rem),
+    radial-gradient(circle at 74% 42%, color-mix(in srgb, var(--tf-accent-soft) 18%, transparent), transparent 28rem),
     linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.44) 48%, rgba(0, 0, 0, 0.22) 100%),
     linear-gradient(180deg, rgba(0, 0, 0, 0.48) 0%, rgba(0, 0, 0, 0.12) 38%, rgba(0, 0, 0, 0.82) 100%);
 }
@@ -652,8 +655,8 @@ body:has(.techfix-premium) {
 }
 
 .tf-bot-halo {
-  fill: rgba(126, 226, 247, 0.08);
-  stroke: rgba(151, 238, 255, 0.22);
+  fill: color-mix(in srgb, var(--tf-accent-soft) 10%, transparent);
+  stroke: color-mix(in srgb, var(--tf-accent-soft) 35%, transparent);
   stroke-width: 1.5;
 }
 
@@ -705,14 +708,14 @@ body:has(.techfix-premium) {
 }
 
 .tf-bot-light {
-  fill: #F9D36A;
-  filter: drop-shadow(0 0 10px rgba(249, 211, 106, 0.9));
+  fill: var(--tf-accent);
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--tf-accent) 90%, transparent));
   opacity: 0;
   animation: tf-bot-lightbulb 5.2s ease-in-out infinite;
 }
 
 .tf-bot-light-rays {
-  stroke: #F9D36A;
+  stroke: var(--tf-accent);
   stroke-width: 4;
   opacity: 0;
   animation: tf-bot-lightbulb 5.2s ease-in-out infinite;
@@ -762,7 +765,7 @@ body:has(.techfix-premium) {
 }
 
 .tf-bot-wrench {
-  stroke: #F9D36A;
+  stroke: var(--tf-accent);
   stroke-width: 6;
   animation: tf-bot-wrench 5.2s ease-in-out infinite;
   transform-origin: 156px 119px;
@@ -780,7 +783,7 @@ body:has(.techfix-premium) {
   margin: 0;
   color: #dff8ff;
   font-family: 'Space Grotesk', 'Manrope', system-ui, sans-serif;
-  background: linear-gradient(120deg, #ffffff 0%, #dff8ff 38%, #7adff5 70%, #f4fbff 100%);
+  background: linear-gradient(120deg, #ffffff 0%, #e7fbff 34%, var(--tf-accent-soft) 66%, var(--tf-accent) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -884,9 +887,9 @@ body:has(.techfix-premium) {
   display: inline-flex;
   align-items: center;
   min-height: 34px;
-  border: 1px solid rgba(138, 231, 255, 0.26);
+  border: 1px solid color-mix(in srgb, var(--tf-accent-soft) 32%, transparent);
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(138, 231, 255, 0.14), rgba(255, 255, 255, 0.055));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--tf-accent-soft) 16%, transparent), rgba(255, 255, 255, 0.055));
   backdrop-filter: blur(10px);
   padding: 0.42rem 0.85rem;
   color: rgba(230, 251, 255, 0.9);
@@ -918,7 +921,7 @@ body:has(.techfix-premium) {
 }
 
 .tf-main-button {
-  background: white;
+  background: linear-gradient(135deg, #ffffff, color-mix(in srgb, var(--tf-accent) 34%, white));
   color: #050607;
   box-shadow: 0 0 28px rgba(255, 255, 255, 0.2), 0 0 70px rgba(255, 255, 255, 0.08);
 }
@@ -948,8 +951,8 @@ body:has(.techfix-premium) {
 .tf-section {
   padding: 5rem 1.25rem;
   background:
-    radial-gradient(circle at 18% 8%, rgba(157, 231, 239, 0.1), transparent 25rem),
-    radial-gradient(circle at 86% 72%, rgba(241, 201, 120, 0.08), transparent 28rem),
+    radial-gradient(circle at 18% 8%, color-mix(in srgb, var(--tf-accent-soft) 12%, transparent), transparent 25rem),
+    radial-gradient(circle at 86% 72%, color-mix(in srgb, var(--tf-accent) 10%, transparent), transparent 28rem),
     #050607;
 }
 
@@ -987,10 +990,10 @@ body:has(.techfix-premium) {
 
 .tf-glass-card {
   min-height: 260px;
-  border: 1px solid rgba(157, 231, 239, 0.16);
+  border: 1px solid color-mix(in srgb, var(--tf-accent-soft) 20%, transparent);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(157, 231, 239, 0.08), transparent 38%),
+    linear-gradient(135deg, color-mix(in srgb, var(--tf-accent-soft) 10%, transparent), transparent 38%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.035));
   backdrop-filter: blur(14px);
   padding: 1.4rem;
@@ -998,7 +1001,7 @@ body:has(.techfix-premium) {
 }
 
 .tf-glass-card svg {
-  color: #9de7ef;
+  color: var(--tf-accent-soft);
   margin-bottom: 3rem;
 }
 
@@ -1022,8 +1025,8 @@ body:has(.techfix-premium) {
   overflow: hidden;
   padding: 5rem 1.25rem;
   background:
-    radial-gradient(circle at 18% 22%, rgba(157, 231, 239, 0.12), transparent 26rem),
-    radial-gradient(circle at 82% 62%, rgba(241, 201, 120, 0.13), transparent 28rem),
+    radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--tf-accent-soft) 14%, transparent), transparent 26rem),
+    radial-gradient(circle at 82% 62%, color-mix(in srgb, var(--tf-accent) 14%, transparent), transparent 28rem),
     linear-gradient(180deg, #050607 0%, #0a1720 34%, #153b4a 66%, #d8d2c5 100%);
 }
 
@@ -1083,8 +1086,8 @@ body:has(.techfix-premium) {
   justify-content: space-between;
   padding: 4rem 1.25rem;
   background:
-    radial-gradient(circle at 18% 28%, rgba(241, 201, 120, 0.1), transparent 26rem),
-    radial-gradient(circle at 76% 20%, rgba(157, 231, 239, 0.1), transparent 30rem),
+    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--tf-accent) 12%, transparent), transparent 26rem),
+    radial-gradient(circle at 76% 20%, color-mix(in srgb, var(--tf-accent-soft) 12%, transparent), transparent 30rem),
     #050607;
   color: white;
 }
@@ -1119,8 +1122,8 @@ body:has(.techfix-premium) {
   gap: 1.2rem;
   padding: 5rem 1.25rem;
   background:
-    radial-gradient(circle at 15% 15%, rgba(245, 190, 86, 0.12), transparent 26rem),
-    radial-gradient(circle at 88% 28%, rgba(80, 177, 201, 0.1), transparent 24rem),
+    radial-gradient(circle at 15% 15%, color-mix(in srgb, var(--tf-accent) 14%, transparent), transparent 26rem),
+    radial-gradient(circle at 88% 28%, color-mix(in srgb, var(--tf-accent-soft) 12%, transparent), transparent 24rem),
     #09090a;
   color: white;
 }
@@ -1142,7 +1145,7 @@ body:has(.techfix-premium) {
 }
 
 .tf-google-copy h2 {
-  background: linear-gradient(92deg, #ffffff 0%, #f1c978 48%, #9de7ef 100%);
+  background: linear-gradient(92deg, #ffffff 0%, var(--tf-accent) 48%, var(--tf-accent-soft) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1159,10 +1162,10 @@ body:has(.techfix-premium) {
 }
 
 .tf-google-panel {
-  border: 1px solid rgba(241, 201, 120, 0.22);
+  border: 1px solid color-mix(in srgb, var(--tf-accent) 26%, transparent);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(241, 201, 120, 0.12), transparent 34%),
+    linear-gradient(135deg, color-mix(in srgb, var(--tf-accent) 14%, transparent), transparent 34%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.035));
   backdrop-filter: blur(14px);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
@@ -1174,16 +1177,16 @@ body:has(.techfix-premium) {
   gap: 1rem;
   align-items: center;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(241, 201, 120, 0.16);
+  border-bottom: 1px solid color-mix(in srgb, var(--tf-accent) 20%, transparent);
 }
 
 .tf-google-score > span {
   font-family: 'Space Grotesk', 'Manrope', system-ui, sans-serif;
-  color: #f1c978;
+  color: var(--tf-accent);
   font-size: clamp(3.2rem, 12vw, 6.8rem);
   font-weight: 700;
   line-height: 0.9;
-  text-shadow: 0 0 32px rgba(241, 201, 120, 0.22);
+  text-shadow: 0 0 32px color-mix(in srgb, var(--tf-accent) 26%, transparent);
 }
 
 .tf-google-score p {
@@ -1199,13 +1202,13 @@ body:has(.techfix-premium) {
 
 .tf-google-stars svg {
   fill: currentColor;
-  color: #f4c95d;
-  filter: drop-shadow(0 0 8px rgba(244, 201, 93, 0.28));
+  color: var(--tf-star);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--tf-star) 32%, transparent));
 }
 
 .tf-google-facts svg,
 .tf-review-list svg {
-  color: #9de7ef;
+  color: var(--tf-accent-soft);
 }
 
 .tf-google-facts {
@@ -1223,7 +1226,7 @@ body:has(.techfix-premium) {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(157, 231, 239, 0.08), transparent 38%),
+    linear-gradient(135deg, color-mix(in srgb, var(--tf-accent-soft) 10%, transparent), transparent 38%),
     rgba(255, 255, 255, 0.045);
   padding: 0.9rem;
 }
