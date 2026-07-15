@@ -1291,6 +1291,25 @@ body:has(.techfix-premium) {
   text-align: left;
 }
 
+.tf-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  color: #e9fbff;
+  font-family: 'Space Grotesk', 'Manrope', system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.tf-footer-brand i {
+  color: #8de8ff;
+  font-style: normal;
+  font-size: 1.1rem;
+}
+
 @media (min-width: 640px) {
   .tf-actions {
     flex-direction: row;

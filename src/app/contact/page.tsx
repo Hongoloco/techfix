@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Send, MapPin, Clock, Mail, Phone, Zap, AlertTriangle } from 'lucide-react'
-import Image from 'next/image'
 import { BusinessHours } from '@/components/BusinessHours'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
 import { LoadingSpinner, ButtonLoading } from '@/components/LoadingSpinner'
@@ -396,15 +395,9 @@ export default function ContactPage() {
       <footer className="footer-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex items-center justify-center mb-4">
-              <Image 
-                src="/techfix-logo.svg" 
-                alt="TechFix Uruguay" 
-                width={32} 
-                height={32}
-                className="mr-3"
-              />
-              <span className="font-bold text-white">TechFix Uruguay</span>
+            <div className="tf-footer-brand">
+              <span>TechFix</span>
+              <i aria-hidden="true">✳︎</i>
             </div>
             <p className="text-sm text-gray-400">
               © 2024 TechFix Uruguay. Todos los derechos reservados.
