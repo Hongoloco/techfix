@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, Clock, MapPin, MessageCircle, Monitor, Phone, Shield, Star, Wifi } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Clock, Instagram, MapPin, MessageCircle, Monitor, Phone, Share2, Shield, Star, Wifi } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import Link from 'next/link'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
@@ -6,7 +6,6 @@ import { getSiteSettings } from '@/lib/siteSettings'
 
 export const dynamic = 'force-dynamic'
 
-const whatsappHref = 'https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20con%20un%20problema%20t%C3%A9cnico'
 const googleHref = 'https://share.google/Meh5sUZmlelWBE24v'
 
 const pills = [
@@ -106,6 +105,12 @@ export default async function Home() {
   const settings = await getSiteSettings()
   const repairVideoSrc = settings.heroVideoUrl
   const showcaseVideoSrc = settings.showcaseVideoUrl || settings.heroVideoUrl
+  const socialChannels = [
+    { name: 'Instagram', detail: '@techfix_soporte_tecnico', href: settings.instagramHref, icon: Instagram },
+    { name: 'WhatsApp', detail: settings.whatsappNumber, href: settings.whatsappHref, icon: MessageCircle },
+    { name: 'Facebook', detail: 'TechFix Uruguay', href: settings.facebookHref, icon: Share2 },
+    { name: 'TikTok', detail: '@techfix_soporte_tecnico', href: settings.tiktokHref, icon: Share2 },
+  ]
 
   return (
     <main
@@ -132,7 +137,7 @@ export default async function Home() {
           <Link href="/contact">Contacto</Link>
         </nav>
 
-        <a href={whatsappHref} className="tf-nav-cta" target="_blank" rel="noopener noreferrer">
+        <a href={settings.whatsappHref} className="tf-nav-cta" target="_blank" rel="noopener noreferrer">
           Escribir ahora
         </a>
 
@@ -178,7 +183,7 @@ export default async function Home() {
           </div>
 
           <div className="tf-actions">
-            <a href={whatsappHref} className="tf-main-button" target="_blank" rel="noopener noreferrer">
+            <a href={settings.whatsappHref} className="tf-main-button" target="_blank" rel="noopener noreferrer">
               <MessageCircle className="h-5 w-5" />
               {settings.primaryCta}
             </a>
@@ -203,6 +208,23 @@ export default async function Home() {
               <h3>{title}</h3>
               <p>{text}</p>
             </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="tf-section tf-services">
+        <div className="tf-section-heading">
+          <p>Redes y contacto</p>
+          <h2>Canales directos de TechFix, siempre actualizados desde el admin.</h2>
+        </div>
+
+        <div className="tf-service-grid">
+          {socialChannels.map(({ name, detail, href, icon: Icon }) => (
+            <a key={name} href={href} className="tf-glass-card" target="_blank" rel="noopener noreferrer">
+              <Icon className="h-7 w-7" />
+              <h3>{name}</h3>
+              <p>{detail}</p>
+            </a>
           ))}
         </div>
       </section>
@@ -296,7 +318,7 @@ export default async function Home() {
           <h2>Decime que le pasa a tu equipo y lo vemos.</h2>
           <p>WhatsApp es la forma mas rapida para orientarte y coordinar el siguiente paso.</p>
         </div>
-        <a href={whatsappHref} className="tf-main-button" target="_blank" rel="noopener noreferrer">
+        <a href={settings.whatsappHref} className="tf-main-button" target="_blank" rel="noopener noreferrer">
           Consultar ahora
         </a>
       </section>

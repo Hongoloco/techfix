@@ -10,6 +10,11 @@ export type SiteSettings = {
   accentColor: string
   accentSoftColor: string
   starColor: string
+  whatsappNumber: string
+  whatsappHref: string
+  instagramHref: string
+  facebookHref: string
+  tiktokHref: string
 }
 
 export const defaultSiteSettings: SiteSettings = {
@@ -23,6 +28,11 @@ export const defaultSiteSettings: SiteSettings = {
   accentColor: '#F4C542',
   accentSoftColor: '#45D6E8',
   starColor: '#F7C948',
+  whatsappNumber: '+598 99 252 808',
+  whatsappHref: 'https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20con%20un%20problema%20t%C3%A9cnico',
+  instagramHref: 'https://instagram.com/techfix_soporte_tecnico',
+  facebookHref: 'https://www.facebook.com/profile.php?id=61579259244594',
+  tiktokHref: 'https://www.tiktok.com/@techfix_soporte_tecnico',
 }
 
 const settingKey = 'site'
@@ -70,6 +80,11 @@ export function sanitizeSiteSettings(input: Partial<SiteSettings>): SiteSettings
     accentColor: cleanColor(input.accentColor, defaultSiteSettings.accentColor),
     accentSoftColor: cleanColor(input.accentSoftColor, defaultSiteSettings.accentSoftColor),
     starColor: cleanColor(input.starColor, defaultSiteSettings.starColor),
+    whatsappNumber: cleanText(input.whatsappNumber, defaultSiteSettings.whatsappNumber, 32),
+    whatsappHref: cleanUrl(input.whatsappHref, defaultSiteSettings.whatsappHref),
+    instagramHref: cleanUrl(input.instagramHref, defaultSiteSettings.instagramHref),
+    facebookHref: cleanUrl(input.facebookHref, defaultSiteSettings.facebookHref),
+    tiktokHref: cleanUrl(input.tiktokHref, defaultSiteSettings.tiktokHref),
   }
 }
 

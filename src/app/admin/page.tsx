@@ -100,6 +100,11 @@ interface SiteSettings {
   accentColor: string
   accentSoftColor: string
   starColor: string
+  whatsappNumber: string
+  whatsappHref: string
+  instagramHref: string
+  facebookHref: string
+  tiktokHref: string
 }
 
 const defaultSiteSettings: SiteSettings = {
@@ -113,13 +118,12 @@ const defaultSiteSettings: SiteSettings = {
   accentColor: '#F4C542',
   accentSoftColor: '#45D6E8',
   starColor: '#F7C948',
+  whatsappNumber: '+598 99 252 808',
+  whatsappHref: 'https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20con%20un%20problema%20t%C3%A9cnico',
+  instagramHref: 'https://instagram.com/techfix_soporte_tecnico',
+  facebookHref: 'https://www.facebook.com/profile.php?id=61579259244594',
+  tiktokHref: 'https://www.tiktok.com/@techfix_soporte_tecnico',
 }
-
-const whatsappNumber = '+598 99 252 808'
-const whatsappHref = 'https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20con%20un%20problema%20t%C3%A9cnico'
-const instagramHref = 'https://instagram.com/techfix_soporte_tecnico'
-const facebookHref = 'https://www.facebook.com/profile.php?id=61579259244594'
-const tiktokHref = 'https://www.tiktok.com/@techfix_soporte_tecnico'
 
 function downloadTextFile(filename: string, content: string, type = 'text/plain;charset=utf-8') {
   const blob = new Blob([content], { type })
@@ -551,7 +555,7 @@ export default function AdminDashboard() {
   })
 
   const { data: siteSettings, loading: siteSettingsLoading, refetch: refetchSiteSettings } = useApi<SiteSettings>('/api/site-settings', {
-    autoFetch: activeTab === 'settings',
+    autoFetch: activeTab === 'settings' || activeTab === 'social',
     initialData: defaultSiteSettings
   })
 
@@ -1378,11 +1382,12 @@ Esta acción eliminará PERMANENTEMENTE:
                     </p>
                   </div>
                   <button
+                    disabled={savingSiteSettings || siteSettingsLoading}
                     className="inline-flex items-center justify-center rounded-md bg-yellow-400 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-yellow-300"
-                    onClick={() => window.open(instagramHref, '_blank')}
+                    onClick={handleSaveSiteSettings}
                   >
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Abrir Instagram
+                    <Check className="h-4 w-4 mr-2" />
+                    {savingSiteSettings ? 'Guardando...' : 'Guardar redes'}
                   </button>
                 </div>
 
@@ -1391,15 +1396,17 @@ Esta acción eliminará PERMANENTEMENTE:
                     {
                       name: 'Instagram',
                       detail: '@techfix_soporte_tecnico',
-                      href: instagramHref,
+                      href: siteSettingsForm.instagramHref,
+                      field: 'instagramHref' as keyof SiteSettings,
                       status: 'Perfil principal',
                       icon: Instagram,
                       accent: 'from-purple-600 via-pink-500 to-orange-400',
                     },
                     {
                       name: 'WhatsApp',
-                      detail: whatsappNumber,
-                      href: whatsappHref,
+                      detail: siteSettingsForm.whatsappNumber,
+                      href: siteSettingsForm.whatsappHref,
+                      field: 'whatsappHref' as keyof SiteSettings,
                       status: 'Contacto directo',
                       icon: MessageSquare,
                       accent: 'from-green-500 to-emerald-400',
@@ -1407,7 +1414,8 @@ Esta acción eliminará PERMANENTEMENTE:
                     {
                       name: 'Facebook',
                       detail: 'TechFix Uruguay',
-                      href: facebookHref,
+                      href: siteSettingsForm.facebookHref,
+                      field: 'facebookHref' as keyof SiteSettings,
                       status: 'Perfil publico',
                       icon: Share2,
                       accent: 'from-blue-600 to-cyan-400',
@@ -1415,7 +1423,8 @@ Esta acción eliminará PERMANENTEMENTE:
                     {
                       name: 'TikTok',
                       detail: '@techfix_soporte_tecnico',
-                      href: tiktokHref,
+                      href: siteSettingsForm.tiktokHref,
+                      field: 'tiktokHref' as keyof SiteSettings,
                       status: 'Perfil publico',
                       icon: Share2,
                       accent: 'from-slate-900 via-cyan-500 to-pink-500',
@@ -1437,11 +1446,30 @@ Esta acción eliminará PERMANENTEMENTE:
                                 </span>
                               </div>
                               <p className="mt-1 text-sm text-gray-600">{channel.status}</p>
-                              <p className="mt-3 break-all rounded-md border border-white/10 bg-black/25 px-3 py-2 font-mono text-sm text-white/85">
-                                {channel.detail}
-                              </p>
                             </div>
                           </div>
+                        </div>
+                        <div className="mt-5 space-y-3">
+                          {channel.name === 'WhatsApp' && (
+                            <label className="block text-sm font-medium text-gray-700">
+                              Numero visible
+                              <input
+                                type="text"
+                                value={siteSettingsForm.whatsappNumber}
+                                onChange={(e) => updateSiteSettingField('whatsappNumber', e.target.value)}
+                                className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                              />
+                            </label>
+                          )}
+                          <label className="block text-sm font-medium text-gray-700">
+                            Link
+                            <input
+                              type="url"
+                              value={channel.href}
+                              onChange={(e) => updateSiteSettingField(channel.field, e.target.value)}
+                              className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                            />
+                          </label>
                         </div>
                         <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
                           <button
@@ -1470,11 +1498,11 @@ Esta acción eliminará PERMANENTEMENTE:
                     <div className="mt-4 space-y-3 text-sm text-gray-600">
                       <div className="flex items-start gap-3">
                         <Check className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
-                        <span>Los botones abren perfiles reales en pestaña nueva.</span>
+                        <span>Los links se guardan en la configuracion de la web.</span>
                       </div>
                       <div className="flex items-start gap-3">
                         <Check className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
-                        <span>WhatsApp usa el numero visible del negocio y mensaje prearmado.</span>
+                        <span>La portada publica usa WhatsApp y redes desde estos campos.</span>
                       </div>
                       <div className="flex items-start gap-3">
                         <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-yellow-300" />
@@ -1487,11 +1515,12 @@ Esta acción eliminará PERMANENTEMENTE:
                     <h3 className="text-lg font-semibold text-gray-800">Acciones</h3>
                     <div className="mt-4 space-y-2">
                       <button
-                        onClick={() => setActiveTab('settings')}
+                        onClick={handleSaveSiteSettings}
+                        disabled={savingSiteSettings || siteSettingsLoading}
                         className="flex w-full items-center justify-center rounded-md bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-yellow-300"
                       >
-                        <Settings className="h-4 w-4 mr-2" />
-                        Editar datos web
+                        <Check className="h-4 w-4 mr-2" />
+                        Guardar cambios
                       </button>
                       <button
                         onClick={() => setActiveTab('dashboard')}
@@ -1637,10 +1666,10 @@ Esta acción eliminará PERMANENTEMENTE:
                       <label className="block text-sm font-medium text-gray-700 mb-2">Teléfono Principal</label>
                       <input
                         type="tel"
-                        defaultValue={whatsappNumber}
+                        defaultValue={siteSettingsForm.whatsappNumber}
                         readOnly
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder={whatsappNumber}
+                        placeholder={siteSettingsForm.whatsappNumber}
                       />
                     </div>
                     <div>
