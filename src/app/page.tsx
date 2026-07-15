@@ -1,8 +1,9 @@
-import { ArrowRight, CheckCircle2, MessageCircle, Monitor, Shield, Wifi, Wrench } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Clock, MapPin, MessageCircle, Monitor, Phone, Shield, Star, Wifi } from 'lucide-react'
 import Link from 'next/link'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
 
 const whatsappHref = 'https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20con%20un%20problema%20t%C3%A9cnico'
+const googleHref = 'https://share.google/Meh5sUZmlelWBE24v'
 
 const pills = [
   'PC lenta',
@@ -33,6 +34,19 @@ const steps = [
   ['01', 'Contanos qué pasa', 'Mandás un mensaje con el problema y una foto o captura si ayuda.'],
   ['02', 'Te damos una ruta clara', 'Vemos si conviene remoto, visita, presupuesto o derivación.'],
   ['03', 'Lo resolvemos sin vueltas', 'Coordinamos y te explicamos qué se hizo para que quede claro.'],
+]
+
+const googleFacts = [
+  { icon: Star, label: 'Google', value: '5.0 estrellas' },
+  { icon: Monitor, label: 'Categoria', value: 'Servicio de informatica' },
+  { icon: Clock, label: 'Horario', value: 'Lunes a sabado, 9 a 20 h' },
+  { icon: Phone, label: 'Telefono', value: '099 252 808' },
+]
+
+const reviewHighlights = [
+  'Atencion directa por WhatsApp y seguimiento claro.',
+  'Soporte para computadoras, redes, datos y configuraciones.',
+  'Perfil de Google actualizado con sitio, telefono y horario.',
 ]
 
 export default function Home() {
@@ -100,22 +114,13 @@ export default function Home() {
           <div className="tf-actions">
             <a href={whatsappHref} className="tf-main-button" target="_blank" rel="noopener noreferrer">
               <MessageCircle className="h-5 w-5" />
-              Hablar por WhatsApp
+              Consultar soporte
             </a>
             <Link href="/quote" className="tf-outline-button">
-              Pedir cotizacion
+              Armar presupuesto
               <ArrowRight className="h-5 w-5" />
             </Link>
           </div>
-        </div>
-
-        <div className="tf-sound-indicator" aria-hidden="true">
-          <span />
-          <p>
-            Atencion
-            <br />
-            coordinada
-          </p>
         </div>
       </section>
 
@@ -133,6 +138,56 @@ export default function Home() {
               <p>{text}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="tf-google-section">
+        <div className="tf-google-copy">
+          <p className="tf-kicker">Perfil de Google</p>
+          <h2>Datos reales de TechFix, visibles y faciles de comprobar.</h2>
+          <p>
+            Integramos la ficha de Google con la web: categoria, telefono, horario y acceso directo al
+            perfil para que el cliente vea la presencia del negocio antes de consultar.
+          </p>
+          <a href={googleHref} className="tf-outline-button" target="_blank" rel="noopener noreferrer">
+            Ver perfil en Google
+            <ArrowRight className="h-5 w-5" />
+          </a>
+        </div>
+
+        <div className="tf-google-panel">
+          <div className="tf-google-score">
+            <span>5.0</span>
+            <div>
+              <p>Calificacion en Google</p>
+              <div aria-label="Cinco estrellas">
+                {[...Array(5)].map((_, index) => (
+                  <Star key={index} className="h-4 w-4" />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="tf-google-facts">
+            {googleFacts.map(({ icon: Icon, label, value }) => (
+              <article key={label}>
+                <Icon className="h-5 w-5" />
+                <div>
+                  <p>{label}</p>
+                  <strong>{value}</strong>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="tf-review-list">
+            {reviewHighlights.map((text) => (
+              <blockquote key={text}>
+                <MapPin className="h-4 w-4" />
+                <p>{text}</p>
+              </blockquote>
+            ))}
+          </div>
         </div>
       </section>
 
