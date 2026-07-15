@@ -421,7 +421,7 @@ function TicketsTable({
       </div>
 
       {filteredTickets.length === 0 && (
-        <div className="rounded-lg border border-white/10 bg-white/10 p-6 text-center text-white/80">
+        <div className="rounded-lg border border-gray-200 bg-white p-6 text-center text-gray-600">
           No hay tickets para los filtros seleccionados.
         </div>
       )}
@@ -435,18 +435,18 @@ function TicketsTable({
           const summary = ticket.description || ticket.message || ''
 
           return (
-            <article key={ticket.id} className="rounded-lg border border-white/10 bg-white/10 p-4 shadow-lg">
+            <article key={ticket.id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-white">{ticket.title}</p>
-                  <p className="mt-1 line-clamp-2 text-xs text-white/65">{summary || 'Sin descripción'}</p>
+                  <p className="text-sm font-semibold text-gray-900">{ticket.title}</p>
+                  <p className="mt-1 line-clamp-2 text-xs text-gray-600">{summary || 'Sin descripcion'}</p>
                 </div>
                 <span className={`shrink-0 px-2 py-1 text-[11px] font-semibold rounded-full ${priorityColors[ticket.priority as keyof typeof priorityColors]}`}>
                   {priorityLabels[ticket.priority as keyof typeof priorityLabels] || ticket.priority}
                 </span>
               </div>
 
-              <div className="mt-3 grid gap-1 text-xs text-white/70">
+              <div className="mt-3 grid gap-1 text-xs text-gray-600">
                 <span>{clientName}</span>
                 {clientEmail && <span>{clientEmail}</span>}
                 {clientPhone && <span>{clientPhone}</span>}
@@ -457,7 +457,7 @@ function TicketsTable({
                   value={ticket.status}
                   disabled={updatingTicketId === ticket.id || deletingTicketId === ticket.id}
                   onChange={(e) => handleStatusChange(ticket.id, e.target.value)}
-                  className="min-w-0 flex-1 rounded-md border border-white/15 bg-black/40 px-3 py-2 text-xs font-semibold text-white"
+                  className="min-w-0 flex-1 rounded-md border border-gray-300 bg-white px-3 py-2 text-xs font-semibold text-gray-900"
                 >
                   <option value="OPEN">Abierto</option>
                   <option value="IN_PROGRESS">En Progreso</option>
@@ -466,7 +466,7 @@ function TicketsTable({
                 </select>
                 <button
                   onClick={() => openTicketDetail(ticket)}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/15 bg-white/10 text-white"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-300 bg-gray-50 text-gray-700"
                   aria-label="Ver detalle"
                 >
                   <Eye className="h-4 w-4" />
@@ -476,7 +476,7 @@ function TicketsTable({
                 <button
                   onClick={() => handleCloseTicket(ticket.id)}
                   disabled={ticket.status === 'CLOSED' || updatingTicketId === ticket.id || deletingTicketId === ticket.id}
-                  className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-emerald-300/30 bg-emerald-500/15 px-3 text-xs font-semibold text-emerald-100 disabled:cursor-not-allowed disabled:opacity-45"
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 px-3 text-xs font-semibold text-emerald-700 disabled:cursor-not-allowed disabled:opacity-45"
                 >
                   <Check className="h-4 w-4" />
                   Cerrar
@@ -484,7 +484,7 @@ function TicketsTable({
                 <button
                   onClick={() => handleDeleteTicket(ticket)}
                   disabled={deletingTicketId === ticket.id || updatingTicketId === ticket.id}
-                  className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-red-300/30 bg-red-500/15 px-3 text-xs font-semibold text-red-100 disabled:cursor-not-allowed disabled:opacity-45"
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 text-xs font-semibold text-red-700 disabled:cursor-not-allowed disabled:opacity-45"
                 >
                   <Trash2 className="h-4 w-4" />
                   {deletingTicketId === ticket.id ? 'Borrando' : 'Borrar'}
