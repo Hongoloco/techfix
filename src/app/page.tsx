@@ -54,8 +54,9 @@ export default function Home() {
     <main className="techfix-premium">
       <header className="tf-nav">
         <Link href="/" className="tf-logo" aria-label="TechFix Uruguay">
+          <img src="/techfix-logo.svg" alt="" aria-hidden="true" />
           <span>TechFix</span>
-          <i aria-hidden="true">*</i>
+          <i aria-hidden="true">✳︎</i>
         </Link>
 
         <nav className="tf-nav-links" aria-label="Navegacion principal">
@@ -98,7 +99,10 @@ export default function Home() {
             para hogares, negocios y equipos de trabajo
           </p>
 
-          <h1>Tu tecnologia funcionando, sin vueltas.</h1>
+          <div className="tf-title-lockup">
+            <img src="/techfix-logo.svg" alt="" aria-hidden="true" />
+            <h1>Tu tecnologia funcionando, sin vueltas.</h1>
+          </div>
 
           <p className="tf-hero-copy">
             Arreglamos PC lentas, redes, configuraciones, backups y problemas tecnicos comunes con
