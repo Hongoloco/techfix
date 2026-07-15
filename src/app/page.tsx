@@ -129,11 +129,8 @@ export default async function Home() {
 
         <nav className="tf-nav-links" aria-label="Navegacion principal">
           <Link href="#servicios">Servicios</Link>
-          <span>,</span>
           <Link href="#proceso">Proceso</Link>
-          <span>,</span>
           <Link href="/quote">Cotizacion</Link>
-          <span>,</span>
           <Link href="/contact">Contacto</Link>
         </nav>
 
