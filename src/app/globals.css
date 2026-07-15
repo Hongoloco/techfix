@@ -595,9 +595,9 @@ body:has(.techfix-premium) {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 65% center;
+  object-position: center center;
   z-index: 0;
-  filter: saturate(1.05) contrast(1.05);
+  filter: saturate(1.08) contrast(1.04) brightness(0.92);
 }
 
 .tf-video-overlay {
@@ -605,8 +605,9 @@ body:has(.techfix-premium) {
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.36) 48%, rgba(0, 0, 0, 0.18) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.52) 0%, rgba(0, 0, 0, 0.08) 38%, rgba(0, 0, 0, 0.78) 100%);
+    radial-gradient(circle at 74% 42%, rgba(157, 231, 239, 0.1), transparent 28rem),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.44) 48%, rgba(0, 0, 0, 0.22) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.48) 0%, rgba(0, 0, 0, 0.12) 38%, rgba(0, 0, 0, 0.82) 100%);
 }
 
 .tf-hero-content {
@@ -946,7 +947,10 @@ body:has(.techfix-premium) {
 
 .tf-section {
   padding: 5rem 1.25rem;
-  background: #050607;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(157, 231, 239, 0.1), transparent 25rem),
+    radial-gradient(circle at 86% 72%, rgba(241, 201, 120, 0.08), transparent 28rem),
+    #050607;
 }
 
 .tf-section-heading {
@@ -983,16 +987,18 @@ body:has(.techfix-premium) {
 
 .tf-glass-card {
   min-height: 260px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(157, 231, 239, 0.16);
   border-radius: 8px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.035));
+  background:
+    linear-gradient(135deg, rgba(157, 231, 239, 0.08), transparent 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.035));
   backdrop-filter: blur(14px);
   padding: 1.4rem;
   color: white;
 }
 
 .tf-glass-card svg {
-  color: rgba(255, 255, 255, 0.72);
+  color: #9de7ef;
   margin-bottom: 3rem;
 }
 
@@ -1015,7 +1021,10 @@ body:has(.techfix-premium) {
   place-items: center;
   overflow: hidden;
   padding: 5rem 1.25rem;
-  background: linear-gradient(180deg, #050607 0%, #171719 36%, #303033 70%, #d8d2c5 100%);
+  background:
+    radial-gradient(circle at 18% 22%, rgba(157, 231, 239, 0.12), transparent 26rem),
+    radial-gradient(circle at 82% 62%, rgba(241, 201, 120, 0.13), transparent 28rem),
+    linear-gradient(180deg, #050607 0%, #0a1720 34%, #153b4a 66%, #d8d2c5 100%);
 }
 
 .tf-quote-content {
@@ -1073,7 +1082,10 @@ body:has(.techfix-premium) {
   align-items: flex-start;
   justify-content: space-between;
   padding: 4rem 1.25rem;
-  background: #050607;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(241, 201, 120, 0.1), transparent 26rem),
+    radial-gradient(circle at 76% 20%, rgba(157, 231, 239, 0.1), transparent 30rem),
+    #050607;
   color: white;
 }
 
@@ -1236,11 +1248,76 @@ body:has(.techfix-premium) {
   gap: 0.7rem;
 }
 
+.tf-repair-showcase {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2rem;
+  align-items: center;
+  padding: 5rem 1.25rem;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(157, 231, 239, 0.14), transparent 25rem),
+    radial-gradient(circle at 86% 78%, rgba(241, 201, 120, 0.12), transparent 26rem),
+    linear-gradient(180deg, #050607 0%, #071016 100%);
+  color: white;
+}
+
+.tf-repair-showcase-copy {
+  max-width: 760px;
+}
+
+.tf-repair-showcase-copy h2 {
+  font-family: 'Space Grotesk', 'Manrope', system-ui, sans-serif;
+  margin-bottom: 1rem;
+  background: linear-gradient(92deg, #ffffff 0%, #9de7ef 48%, #f1c978 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: clamp(2.2rem, 6vw, 5rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+.tf-repair-showcase-copy p {
+  max-width: 660px;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.tf-repair-video-frame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(157, 231, 239, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(157, 231, 239, 0.12), transparent 40%),
+    rgba(255, 255, 255, 0.04);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32), 0 0 50px rgba(157, 231, 239, 0.1);
+}
+
+.tf-repair-video-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 32%);
+}
+
+.tf-repair-video-frame video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
 .tf-quote-page {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 78% 12%, rgba(255, 255, 255, 0.14), transparent 28rem),
-    linear-gradient(135deg, #050607 0%, #111113 48%, #2d2d30 100%),
+    radial-gradient(circle at 78% 12%, rgba(157, 231, 239, 0.15), transparent 28rem),
+    radial-gradient(circle at 12% 64%, rgba(241, 201, 120, 0.1), transparent 26rem),
+    linear-gradient(135deg, #050607 0%, #071219 48%, #16323d 100%),
     #050607;
 }
 
@@ -1305,6 +1382,84 @@ body:has(.techfix-premium) {
 .tf-quote-aside .tf-main-button {
   width: 100%;
   margin-top: 0.7rem;
+}
+
+.techfix-premium .form-input-dark {
+  border-color: rgba(157, 231, 239, 0.16);
+  background:
+    linear-gradient(135deg, rgba(157, 231, 239, 0.06), transparent 42%),
+    rgba(255, 255, 255, 0.055);
+  color: #f7f7f2;
+}
+
+.techfix-premium .form-input-dark:focus {
+  border-color: rgba(157, 231, 239, 0.62);
+  box-shadow: 0 0 0 3px rgba(157, 231, 239, 0.1), 0 0 30px rgba(157, 231, 239, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.techfix-premium .form-input-dark::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.techfix-premium .form-label-dark {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.techfix-premium .btn-dark {
+  border-radius: 999px;
+  min-height: 52px;
+  font-weight: 700;
+}
+
+.techfix-premium .btn-primary-dark,
+.techfix-premium .btn-success-dark {
+  border: 1px solid rgba(157, 231, 239, 0.2);
+  background: #ffffff;
+  color: #050607;
+  box-shadow: 0 0 28px rgba(255, 255, 255, 0.16), 0 0 52px rgba(157, 231, 239, 0.08);
+}
+
+.techfix-premium .text-gray-100,
+.techfix-premium .text-gray-300,
+.techfix-premium .text-gray-400,
+.techfix-premium .text-gray-900,
+.techfix-premium .text-gray-600 {
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+
+.techfix-premium .text-cyan-400 {
+  color: #9de7ef !important;
+}
+
+.techfix-premium .text-orange-400 {
+  color: #f1c978 !important;
+}
+
+.techfix-premium .bg-blue-100,
+.techfix-premium .bg-green-100 {
+  background: rgba(157, 231, 239, 0.12) !important;
+  border: 1px solid rgba(157, 231, 239, 0.18);
+}
+
+.techfix-premium .text-blue-600,
+.techfix-premium .text-green-600 {
+  color: #9de7ef !important;
+}
+
+.techfix-premium .bg-green-50,
+.techfix-premium .bg-red-50 {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(157, 231, 239, 0.18) !important;
+}
+
+.techfix-premium .text-green-900,
+.techfix-premium .text-red-900 {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+
+.techfix-premium .list-disc {
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .tf-quote-success {
@@ -1379,6 +1534,11 @@ body:has(.techfix-premium) {
   .tf-google-section {
     grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1fr);
     align-items: center;
+    padding: 6rem 2rem;
+  }
+
+  .tf-repair-showcase {
+    grid-template-columns: minmax(0, 0.85fr) minmax(420px, 1fr);
     padding: 6rem 2rem;
   }
 

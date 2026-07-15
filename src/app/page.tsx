@@ -4,6 +4,7 @@ import { WhatsAppFloatingButton } from '@/components/WhatsApp'
 
 const whatsappHref = 'https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20con%20un%20problema%20t%C3%A9cnico'
 const googleHref = 'https://share.google/Meh5sUZmlelWBE24v'
+const repairVideoSrc = '/techfix-repair-animation.mp4'
 
 const pills = [
   'PC lenta',
@@ -131,7 +132,7 @@ export default function Home() {
       <section className="tf-hero">
         <video
           className="tf-hero-video"
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260530_042513_df96a13b-6155-4f6e-8b93-c9dee66fba08.mp4"
+          src={repairVideoSrc}
           muted
           loop
           autoPlay
@@ -190,6 +191,20 @@ export default function Home() {
               <p>{text}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="tf-repair-showcase">
+        <div className="tf-repair-showcase-copy">
+          <p className="tf-kicker">Diagnostico en accion</p>
+          <h2>Una reparacion clara, de principio a fin.</h2>
+          <p>
+            Usamos esta animacion para reforzar la idea de TechFix: detectar el problema, trabajar con
+            calma y dejar el equipo funcionando sin vueltas.
+          </p>
+        </div>
+        <div className="tf-repair-video-frame" aria-label="Animacion de robot reparando una computadora">
+          <video src={repairVideoSrc} muted loop autoPlay playsInline preload="metadata" />
         </div>
       </section>
 

@@ -7,9 +7,9 @@ export function isBusinessOpen(): boolean {
   const day = uruguayTime.getDay() // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
   const hour = uruguayTime.getHours()
   
-  // Lunes a Viernes (1-5), de 10:00 a 20:00
+  // Lunes a Viernes (1-5), de 10:00 a 18:00
   const isWeekday = day >= 1 && day <= 5
-  const isBusinessHour = hour >= 10 && hour < 20
+  const isBusinessHour = hour >= 10 && hour < 18
   
   return isWeekday && isBusinessHour
 }
@@ -25,11 +25,11 @@ export function getBusinessStatus(): {
   
   if (isOpen) {
     const closingTime = new Date(uruguayTime)
-    closingTime.setHours(20, 0, 0, 0)
+    closingTime.setHours(18, 0, 0, 0)
     
     return {
       isOpen: true,
-      message: `🟢 Estamos abiertos hasta las 20:00`
+      message: `🟢 Estamos abiertos hasta las 18:00`
     }
   }
   
@@ -69,7 +69,7 @@ export function getBusinessStatus(): {
 }
 
 export function formatBusinessHours(): string {
-  return "Lunes a Viernes: 10:00 - 20:00"
+  return "Lunes a Viernes: 10:00 - 18:00"
 }
 
 export function getCurrentTimeInUruguay(): string {
@@ -122,7 +122,7 @@ export function getBusinessInfo(): BusinessInfo {
     email: "techfixuruguay@gmail.com",
     address: "Las Piedras, Uruguay",
     freeVisitArea: "Las Piedras y alrededores",
-    hours: "Lunes a Viernes: 10:00 - 20:00",
+    hours: "Lunes a Viernes: 10:00 - 18:00",
     timezone: "America/Montevideo"
   }
 }
