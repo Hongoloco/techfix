@@ -220,6 +220,7 @@ function TicketsTable({
   const [statusFilter, setStatusFilter] = useState<string>('ALL')
   const [priorityFilter, setPriorityFilter] = useState<string>('ALL')
   const [updatingTicketId, setUpdatingTicketId] = useState<string | null>(null)
+  const [deletingTicketId, setDeletingTicketId] = useState<string | null>(null)
 
   const priorityColors = useMemo(() => ({
     'URGENT': 'bg-red-100 text-red-800',
@@ -256,6 +257,24 @@ function TicketsTable({
     return statusMatch && priorityMatch
   })
 
+  const parseTicketError = async (response: Response, fallback: string) => {
+    let message = fallback
+    try {
+      const errorBody = await response.json()
+      message = errorBody?.message || errorBody?.error || message
+    } catch {
+      // Keep the generic message when the response body is not JSON.
+    }
+
+    if (response.status === 401) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      message = 'Tu sesión venció. Iniciá sesión de nuevo para gestionar tickets.'
+    }
+
+    return message
+  }
+
   const handleStatusChange = async (ticketId: string, newStatus: string) => {
     setUpdatingTicketId(ticketId)
     try {
@@ -265,7 +284,7 @@ function TicketsTable({
         return
       }
 
-      const response = await fetch(`/api/tickets/${ticketId}`, {
+      const response = await fetch(`/api/admin/tickets/${ticketId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -275,25 +294,17 @@ function TicketsTable({
       })
       
       if (!response.ok) {
-        let message = 'No se pudo actualizar el ticket.'
-        try {
-          const errorBody = await response.json()
-          message = errorBody?.message || errorBody?.error || message
-        } catch {
-          // Keep the generic message when the response body is not JSON.
-        }
-
-        if (response.status === 401) {
-          localStorage.removeItem('token')
-          localStorage.removeItem('user')
-          message = 'Tu sesión venció. Iniciá sesión de nuevo para actualizar tickets.'
-        }
-
+        const message = await parseTicketError(response, 'No se pudo actualizar el ticket.')
         throw new Error(message)
       }
 
       await onTicketUpdated()
-      showNotification('success', 'Ticket actualizado', 'El estado quedó guardado correctamente.')
+      setSelectedTicket(prev => prev?.id === ticketId ? { ...prev, status: newStatus } : prev)
+      showNotification(
+        'success',
+        newStatus === 'CLOSED' ? 'Ticket cerrado' : 'Ticket actualizado',
+        newStatus === 'CLOSED' ? 'El ticket quedó cerrado correctamente.' : 'El estado quedó guardado correctamente.'
+      )
     } catch (error) {
       console.error('Error updating ticket status:', error)
       showNotification(
@@ -303,6 +314,53 @@ function TicketsTable({
       )
     } finally {
       setUpdatingTicketId(null)
+    }
+  }
+
+  const handleCloseTicket = async (ticketId: string) => {
+    await handleStatusChange(ticketId, 'CLOSED')
+  }
+
+  const handleDeleteTicket = async (ticket: TicketData) => {
+    const confirmed = window.confirm(`¿Borrar definitivamente el ticket "${ticket.title}"? Esta acción no se puede deshacer.`)
+    if (!confirmed) return
+
+    setDeletingTicketId(ticket.id)
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        showNotification('error', 'Sesión vencida', 'Iniciá sesión de nuevo para borrar tickets.')
+        return
+      }
+
+      const response = await fetch(`/api/admin/tickets/${ticket.id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      if (!response.ok) {
+        const message = await parseTicketError(response, 'No se pudo borrar el ticket.')
+        throw new Error(message)
+      }
+
+      if (selectedTicket?.id === ticket.id) {
+        setShowDetailModal(false)
+        setSelectedTicket(null)
+      }
+
+      await onTicketUpdated()
+      showNotification('success', 'Ticket borrado', 'El ticket fue eliminado correctamente.')
+    } catch (error) {
+      console.error('Error deleting ticket:', error)
+      showNotification(
+        'error',
+        'Error en tickets',
+        error instanceof Error ? error.message : 'No se pudo borrar el ticket.'
+      )
+    } finally {
+      setDeletingTicketId(null)
     }
   }
 
@@ -397,7 +455,7 @@ function TicketsTable({
               <div className="mt-4 flex items-center gap-2">
                 <select
                   value={ticket.status}
-                  disabled={updatingTicketId === ticket.id}
+                  disabled={updatingTicketId === ticket.id || deletingTicketId === ticket.id}
                   onChange={(e) => handleStatusChange(ticket.id, e.target.value)}
                   className="min-w-0 flex-1 rounded-md border border-white/15 bg-black/40 px-3 py-2 text-xs font-semibold text-white"
                 >
@@ -412,6 +470,24 @@ function TicketsTable({
                   aria-label="Ver detalle"
                 >
                   <Eye className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => handleCloseTicket(ticket.id)}
+                  disabled={ticket.status === 'CLOSED' || updatingTicketId === ticket.id || deletingTicketId === ticket.id}
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-emerald-300/30 bg-emerald-500/15 px-3 text-xs font-semibold text-emerald-100 disabled:cursor-not-allowed disabled:opacity-45"
+                >
+                  <Check className="h-4 w-4" />
+                  Cerrar
+                </button>
+                <button
+                  onClick={() => handleDeleteTicket(ticket)}
+                  disabled={deletingTicketId === ticket.id || updatingTicketId === ticket.id}
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-red-300/30 bg-red-500/15 px-3 text-xs font-semibold text-red-100 disabled:cursor-not-allowed disabled:opacity-45"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  {deletingTicketId === ticket.id ? 'Borrando' : 'Borrar'}
                 </button>
               </div>
             </article>
@@ -477,7 +553,7 @@ function TicketsTable({
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select 
                       value={ticket.status}
-                      disabled={updatingTicketId === ticket.id}
+                      disabled={updatingTicketId === ticket.id || deletingTicketId === ticket.id}
                       onChange={(e) => handleStatusChange(ticket.id, e.target.value)}
                       className={`text-xs font-semibold rounded-full border-0 ${statusColors[ticket.status as keyof typeof statusColors]}`}
                     >
@@ -491,13 +567,31 @@ function TicketsTable({
                     {new Date(ticket.createdAt).toLocaleDateString('es-UY')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => openTicketDetail(ticket)}
-                      className="text-blue-600 hover:text-blue-900 flex items-center"
-                    >
-                      <Eye className="h-4 w-4 mr-1" />
-                      Ver Detalle
-                    </button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        onClick={() => openTicketDetail(ticket)}
+                        className="inline-flex items-center rounded-md px-2 py-1 text-blue-700 hover:bg-blue-50"
+                      >
+                        <Eye className="h-4 w-4 mr-1" />
+                        Ver
+                      </button>
+                      <button
+                        onClick={() => handleCloseTicket(ticket.id)}
+                        disabled={ticket.status === 'CLOSED' || updatingTicketId === ticket.id || deletingTicketId === ticket.id}
+                        className="inline-flex items-center rounded-md px-2 py-1 text-emerald-700 hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-45"
+                      >
+                        <Check className="h-4 w-4 mr-1" />
+                        Cerrar
+                      </button>
+                      <button
+                        onClick={() => handleDeleteTicket(ticket)}
+                        disabled={deletingTicketId === ticket.id || updatingTicketId === ticket.id}
+                        className="inline-flex items-center rounded-md px-2 py-1 text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-45"
+                      >
+                        <Trash2 className="h-4 w-4 mr-1" />
+                        {deletingTicketId === ticket.id ? 'Borrando' : 'Borrar'}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               )})}
@@ -593,6 +687,22 @@ function TicketsTable({
                 className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
               >
                 Cerrar
+              </button>
+              <button
+                onClick={() => handleCloseTicket(selectedTicket.id)}
+                disabled={selectedTicket.status === 'CLOSED' || updatingTicketId === selectedTicket.id || deletingTicketId === selectedTicket.id}
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <Check className="h-4 w-4" />
+                Cerrar ticket
+              </button>
+              <button
+                onClick={() => handleDeleteTicket(selectedTicket)}
+                disabled={deletingTicketId === selectedTicket.id || updatingTicketId === selectedTicket.id}
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <Trash2 className="h-4 w-4" />
+                {deletingTicketId === selectedTicket.id ? 'Borrando' : 'Borrar ticket'}
               </button>
               <button
                 onClick={() => {
