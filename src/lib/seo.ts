@@ -1,5 +1,8 @@
 import { Metadata } from 'next'
 
+const siteUrl = 'https://techfix.uy'
+const businessPhone = '+598-99-252-808'
+
 interface SEOProps {
   title?: string
   description?: string
@@ -24,7 +27,7 @@ const defaultSEO = {
     'informática'
   ],
   image: '/og-image.jpg',
-  url: 'https://techfix-uruguay.vercel.app'
+  url: siteUrl
 }
 
 export function generateSEO({
@@ -110,11 +113,11 @@ export function generateServiceSchema(service: {
     provider: {
       '@type': 'Organization',
       name: 'TechFix Uruguay',
-      url: 'https://techfix-uruguay.vercel.app',
-      logo: 'https://techfix-uruguay.vercel.app/logo.png',
+      url: siteUrl,
+      logo: `${siteUrl}/logo.png`,
       contactPoint: {
         '@type': 'ContactPoint',
-        telephone: '+598-99-123-456',
+        telephone: businessPhone,
         contactType: 'customer service',
         areaServed: 'UY',
         availableLanguage: 'Spanish'
@@ -137,8 +140,8 @@ export const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'TechFix Uruguay',
-  url: 'https://techfix-uruguay.vercel.app',
-  logo: 'https://techfix-uruguay.vercel.app/logo.png',
+  url: siteUrl,
+  logo: `${siteUrl}/logo.png`,
   description: 'Soporte técnico profesional en Las Piedras y alrededores',
   address: {
     '@type': 'PostalAddress',
@@ -148,7 +151,7 @@ export const organizationSchema = {
   },
   contactPoint: {
     '@type': 'ContactPoint',
-    telephone: '+598-99-123-456',
+    telephone: businessPhone,
     contactType: 'customer service',
     areaServed: 'UY',
     availableLanguage: 'Spanish'
