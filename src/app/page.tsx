@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, Clock, Instagram, MapPin, MessageCircle, Monitor, Phone, Share2, Shield, Star, Wifi } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Clock, MapPin, MessageCircle, Monitor, Phone, Shield, Star, Wifi } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import Link from 'next/link'
 import { WhatsAppFloatingButton } from '@/components/WhatsApp'
@@ -106,11 +106,11 @@ export default async function Home() {
   const repairVideoSrc = settings.heroVideoUrl
   const showcaseVideoSrc = settings.showcaseVideoUrl || settings.heroVideoUrl
   const socialChannels = [
-    { name: 'Instagram', detail: '@techfix_soporte_tecnico', href: settings.instagramHref, icon: Instagram },
-    { name: 'WhatsApp', detail: settings.whatsappNumber, href: settings.whatsappHref, icon: MessageCircle },
-    { name: 'Facebook', detail: 'TechFix Uruguay', href: settings.facebookHref, icon: Share2 },
-    { name: 'TikTok', detail: '@techfix_soporte_tecnico', href: settings.tiktokHref, icon: Share2 },
-  ]
+    { name: 'Instagram', detail: '@techfix_soporte_tecnico', href: settings.instagramHref, logo: '/instagram-logo.png', enabled: settings.instagramEnabled },
+    { name: 'WhatsApp', detail: settings.whatsappNumber, href: settings.whatsappHref, logo: '/whatsapp-logo.png', enabled: settings.whatsappEnabled },
+    { name: 'Facebook', detail: 'TechFix Uruguay', href: settings.facebookHref, logo: '/facebook-logo.png', enabled: settings.facebookEnabled },
+    { name: 'TikTok', detail: '@techfix_soporte_tecnico', href: settings.tiktokHref, logo: '/tiktok-logo-better.png', enabled: settings.tiktokEnabled },
+  ].filter((channel) => channel.enabled)
 
   return (
     <main
@@ -219,9 +219,9 @@ export default async function Home() {
         </div>
 
         <div className="tf-service-grid">
-          {socialChannels.map(({ name, detail, href, icon: Icon }) => (
+          {socialChannels.map(({ name, detail, href, logo }) => (
             <a key={name} href={href} className="tf-glass-card" target="_blank" rel="noopener noreferrer">
-              <Icon className="h-7 w-7" />
+              <img className="tf-social-logo" src={logo} alt="" aria-hidden="true" />
               <h3>{name}</h3>
               <p>{detail}</p>
             </a>

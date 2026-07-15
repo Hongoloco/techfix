@@ -12,9 +12,13 @@ export type SiteSettings = {
   starColor: string
   whatsappNumber: string
   whatsappHref: string
+  whatsappEnabled: boolean
   instagramHref: string
+  instagramEnabled: boolean
   facebookHref: string
+  facebookEnabled: boolean
   tiktokHref: string
+  tiktokEnabled: boolean
 }
 
 export const defaultSiteSettings: SiteSettings = {
@@ -30,9 +34,13 @@ export const defaultSiteSettings: SiteSettings = {
   starColor: '#F7C948',
   whatsappNumber: '+598 99 252 808',
   whatsappHref: 'https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20con%20un%20problema%20t%C3%A9cnico',
+  whatsappEnabled: true,
   instagramHref: 'https://instagram.com/techfix_soporte_tecnico',
+  instagramEnabled: true,
   facebookHref: 'https://www.facebook.com/profile.php?id=61579259244594',
+  facebookEnabled: true,
   tiktokHref: 'https://www.tiktok.com/@techfix_soporte_tecnico',
+  tiktokEnabled: true,
 }
 
 const settingKey = 'site'
@@ -69,6 +77,10 @@ function cleanColor(value: unknown, fallback: string) {
   return /^#[0-9a-fA-F]{6}$/.test(text) ? text : fallback
 }
 
+function cleanBoolean(value: unknown, fallback: boolean) {
+  return typeof value === 'boolean' ? value : fallback
+}
+
 export function sanitizeSiteSettings(input: Partial<SiteSettings>): SiteSettings {
   return {
     heroVideoUrl: cleanUrl(input.heroVideoUrl, defaultSiteSettings.heroVideoUrl),
@@ -82,9 +94,13 @@ export function sanitizeSiteSettings(input: Partial<SiteSettings>): SiteSettings
     starColor: cleanColor(input.starColor, defaultSiteSettings.starColor),
     whatsappNumber: cleanText(input.whatsappNumber, defaultSiteSettings.whatsappNumber, 32),
     whatsappHref: cleanUrl(input.whatsappHref, defaultSiteSettings.whatsappHref),
+    whatsappEnabled: cleanBoolean(input.whatsappEnabled, defaultSiteSettings.whatsappEnabled),
     instagramHref: cleanUrl(input.instagramHref, defaultSiteSettings.instagramHref),
+    instagramEnabled: cleanBoolean(input.instagramEnabled, defaultSiteSettings.instagramEnabled),
     facebookHref: cleanUrl(input.facebookHref, defaultSiteSettings.facebookHref),
+    facebookEnabled: cleanBoolean(input.facebookEnabled, defaultSiteSettings.facebookEnabled),
     tiktokHref: cleanUrl(input.tiktokHref, defaultSiteSettings.tiktokHref),
+    tiktokEnabled: cleanBoolean(input.tiktokEnabled, defaultSiteSettings.tiktokEnabled),
   }
 }
 

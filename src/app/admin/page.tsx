@@ -102,9 +102,13 @@ interface SiteSettings {
   starColor: string
   whatsappNumber: string
   whatsappHref: string
+  whatsappEnabled: boolean
   instagramHref: string
+  instagramEnabled: boolean
   facebookHref: string
+  facebookEnabled: boolean
   tiktokHref: string
+  tiktokEnabled: boolean
 }
 
 const defaultSiteSettings: SiteSettings = {
@@ -120,9 +124,13 @@ const defaultSiteSettings: SiteSettings = {
   starColor: '#F7C948',
   whatsappNumber: '+598 99 252 808',
   whatsappHref: 'https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20con%20un%20problema%20t%C3%A9cnico',
+  whatsappEnabled: true,
   instagramHref: 'https://instagram.com/techfix_soporte_tecnico',
+  instagramEnabled: true,
   facebookHref: 'https://www.facebook.com/profile.php?id=61579259244594',
+  facebookEnabled: true,
   tiktokHref: 'https://www.tiktok.com/@techfix_soporte_tecnico',
+  tiktokEnabled: true,
 }
 
 function downloadTextFile(filename: string, content: string, type = 'text/plain;charset=utf-8') {
@@ -612,7 +620,7 @@ export default function AdminDashboard() {
     }
   }, [showNotification])
 
-  const updateSiteSettingField = useCallback((field: keyof SiteSettings, value: string) => {
+  const updateSiteSettingField = useCallback((field: keyof SiteSettings, value: string | boolean) => {
     setSiteSettingsForm(prev => ({ ...prev, [field]: value }))
   }, [])
 
@@ -1398,8 +1406,10 @@ Esta acción eliminará PERMANENTEMENTE:
                       detail: '@techfix_soporte_tecnico',
                       href: siteSettingsForm.instagramHref,
                       field: 'instagramHref' as keyof SiteSettings,
+                      enabled: siteSettingsForm.instagramEnabled,
+                      enabledField: 'instagramEnabled' as keyof SiteSettings,
                       status: 'Perfil principal',
-                      icon: Instagram,
+                      logo: '/instagram-logo.png',
                       accent: 'from-purple-600 via-pink-500 to-orange-400',
                     },
                     {
@@ -1407,8 +1417,10 @@ Esta acción eliminará PERMANENTEMENTE:
                       detail: siteSettingsForm.whatsappNumber,
                       href: siteSettingsForm.whatsappHref,
                       field: 'whatsappHref' as keyof SiteSettings,
+                      enabled: siteSettingsForm.whatsappEnabled,
+                      enabledField: 'whatsappEnabled' as keyof SiteSettings,
                       status: 'Contacto directo',
-                      icon: MessageSquare,
+                      logo: '/whatsapp-logo.png',
                       accent: 'from-green-500 to-emerald-400',
                     },
                     {
@@ -1416,8 +1428,10 @@ Esta acción eliminará PERMANENTEMENTE:
                       detail: 'TechFix Uruguay',
                       href: siteSettingsForm.facebookHref,
                       field: 'facebookHref' as keyof SiteSettings,
+                      enabled: siteSettingsForm.facebookEnabled,
+                      enabledField: 'facebookEnabled' as keyof SiteSettings,
                       status: 'Perfil publico',
-                      icon: Share2,
+                      logo: '/facebook-logo.png',
                       accent: 'from-blue-600 to-cyan-400',
                     },
                     {
@@ -1425,29 +1439,44 @@ Esta acción eliminará PERMANENTEMENTE:
                       detail: '@techfix_soporte_tecnico',
                       href: siteSettingsForm.tiktokHref,
                       field: 'tiktokHref' as keyof SiteSettings,
+                      enabled: siteSettingsForm.tiktokEnabled,
+                      enabledField: 'tiktokEnabled' as keyof SiteSettings,
                       status: 'Perfil publico',
-                      icon: Share2,
+                      logo: '/tiktok-logo-better.png',
                       accent: 'from-slate-900 via-cyan-500 to-pink-500',
                     },
-                  ].map((channel) => {
-                    const Icon = channel.icon
-                    return (
+                  ].map((channel) => (
                       <div key={channel.name} className="bg-white rounded-lg border border-gray-200 p-5">
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                           <div className="flex min-w-0 items-start gap-4">
                             <div className={`rounded-lg bg-gradient-to-br ${channel.accent} p-3 shadow-lg`}>
-                              <Icon className="h-7 w-7 text-white" />
+                              <img src={channel.logo} alt="" aria-hidden="true" className="h-7 w-7 object-contain" />
                             </div>
                             <div className="min-w-0">
                               <div className="flex flex-wrap items-center gap-2">
                                 <h3 className="text-lg font-semibold text-gray-800">{channel.name}</h3>
-                                <span className="rounded-full border border-yellow-300/40 bg-yellow-400/10 px-2.5 py-1 text-xs font-semibold text-yellow-200">
-                                  Activo
+                                <span className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${
+                                  channel.enabled
+                                    ? 'border-green-300/40 bg-green-400/10 text-green-200'
+                                    : 'border-white/15 bg-white/10 text-white/55'
+                                }`}>
+                                  {channel.enabled ? 'Activa' : 'Inactiva'}
                                 </span>
                               </div>
                               <p className="mt-1 text-sm text-gray-600">{channel.status}</p>
                             </div>
                           </div>
+                          <button
+                            type="button"
+                            onClick={() => updateSiteSettingField(channel.enabledField, !channel.enabled)}
+                            className={`inline-flex items-center justify-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                              channel.enabled
+                                ? 'border-green-300/40 bg-green-400/10 text-green-100 hover:bg-green-400/15'
+                                : 'border-white/15 bg-white/10 text-white hover:bg-white/15'
+                            }`}
+                          >
+                            {channel.enabled ? 'Desactivar' : 'Activar'}
+                          </button>
                         </div>
                         <div className="mt-5 space-y-3">
                           {channel.name === 'WhatsApp' && (
@@ -1488,8 +1517,7 @@ Esta acción eliminará PERMANENTEMENTE:
                           </button>
                         </div>
                       </div>
-                    )
-                  })}
+                  ))}
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
@@ -1627,17 +1655,19 @@ Esta acción eliminará PERMANENTEMENTE:
                         ['accentColor', 'Color titulo/botones'],
                         ['accentSoftColor', 'Color globos/detalles'],
                         ['starColor', 'Color estrellas'],
-                      ].map(([field, label]) => (
+                      ].map(([field, label]) => {
+                        const colorField = field as 'accentColor' | 'accentSoftColor' | 'starColor'
+                        return (
                         <label key={field} className="block text-sm font-medium text-gray-700">
                           {label}
                           <input
                             type="color"
-                            value={siteSettingsForm[field as keyof SiteSettings]}
-                            onChange={(e) => updateSiteSettingField(field as keyof SiteSettings, e.target.value)}
+                            value={siteSettingsForm[colorField]}
+                            onChange={(e) => updateSiteSettingField(colorField, e.target.value)}
                             className="mt-2 h-11 w-full cursor-pointer rounded border border-gray-300 bg-white p-1"
                           />
                         </label>
-                      ))}
+                      )})}
                     </div>
                   </div>
                 </div>
