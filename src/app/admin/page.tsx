@@ -24,7 +24,10 @@ import {
   ExternalLink,
   Check,
   AlertCircle,
-  Clock
+  Clock,
+  Download,
+  Globe2,
+  RefreshCw
 } from 'lucide-react'
 
 // Carga dinámica de componentes pesados (comentado hasta instalar react-chartjs-2)
@@ -110,6 +113,32 @@ const defaultSiteSettings: SiteSettings = {
   accentColor: '#F4C542',
   accentSoftColor: '#45D6E8',
   starColor: '#F7C948',
+}
+
+const whatsappNumber = '+598 99 252 808'
+const whatsappHref = 'https://wa.me/59899252808?text=Hola%20TechFix%20Uruguay,%20necesito%20ayuda%20con%20un%20problema%20t%C3%A9cnico'
+const instagramHref = 'https://instagram.com/techfix_soporte_tecnico'
+
+function downloadTextFile(filename: string, content: string, type = 'text/plain;charset=utf-8') {
+  const blob = new Blob([content], { type })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
+}
+
+function toCsv(rows: Record<string, unknown>[]) {
+  if (!rows.length) return ''
+  const headers = Object.keys(rows[0])
+  const escape = (value: unknown) => `"${String(value ?? '').replace(/"/g, '""')}"`
+  return [
+    headers.map(escape).join(','),
+    ...rows.map((row) => headers.map((header) => escape(row[header])).join(',')),
+  ].join('\n')
 }
 
 // Componente optimizado para las tarjetas de estadísticas
@@ -505,12 +534,12 @@ export default function AdminDashboard() {
   })
 
   const { data: tickets, loading: ticketsLoading } = useApi<TicketData[]>('/api/admin/tickets', {
-    autoFetch: activeTab === 'tickets',
+    autoFetch: activeTab === 'dashboard' || activeTab === 'tickets',
     initialData: []
   })
 
   const { data: services, loading: servicesLoading, refetch: refetchServices } = useApi<Service[]>('/api/admin/services', {
-    autoFetch: activeTab === 'services',
+    autoFetch: activeTab === 'dashboard' || activeTab === 'services',
     initialData: []
   })
 
@@ -585,6 +614,52 @@ export default function AdminDashboard() {
       showNotification('error', 'No se pudo guardar', errorMessage)
     }
   }, [saveSiteSettingsMutation, siteSettingsForm, refetchSiteSettings, showNotification])
+
+  const downloadAdminExport = useCallback(async (kind: 'tickets' | 'clients' | 'backup') => {
+    try {
+      const token = localStorage.getItem('token')
+      const headers: HeadersInit = { 'Content-Type': 'application/json' }
+      if (token) headers.Authorization = `Bearer ${token}`
+
+      const fetchJson = async (url: string) => {
+        const response = await fetch(url, { headers })
+        if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`)
+        return response.json()
+      }
+
+      const date = new Date().toISOString().slice(0, 10)
+
+      if (kind === 'tickets') {
+        const rows = await fetchJson('/api/admin/tickets')
+        downloadTextFile(`techfix-tickets-${date}.csv`, toCsv(rows), 'text/csv;charset=utf-8')
+        showNotification('success', 'Exportación lista', 'Descargué los tickets en CSV.')
+        return
+      }
+
+      if (kind === 'clients') {
+        const rows = await fetchJson('/api/admin/clients')
+        downloadTextFile(`techfix-clientes-${date}.csv`, toCsv(rows), 'text/csv;charset=utf-8')
+        showNotification('success', 'Exportación lista', 'Descargué los clientes en CSV.')
+        return
+      }
+
+      const [ticketsData, clientsData, servicesData, settingsData] = await Promise.all([
+        fetchJson('/api/admin/tickets'),
+        fetchJson('/api/admin/clients'),
+        fetchJson('/api/admin/services'),
+        fetchJson('/api/site-settings'),
+      ])
+      downloadTextFile(
+        `techfix-backup-${date}.json`,
+        JSON.stringify({ tickets: ticketsData, clients: clientsData, services: servicesData, siteSettings: settingsData }, null, 2),
+        'application/json;charset=utf-8'
+      )
+      showNotification('success', 'Backup listo', 'Descargué una copia JSON con los datos principales.')
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido'
+      showNotification('error', 'No se pudo exportar', errorMessage)
+    }
+  }, [showNotification])
 
   // Funciones para gestión de usuarios
   const handleCreateUser = useCallback(async () => {
@@ -803,29 +878,41 @@ Esta acción eliminará PERMANENTEMENTE:
   }
 
   return (
-    <div className="admin-shell min-h-screen gradient-animated">
+    <div className="admin-shell min-h-screen">
       {/* Header */}
-      <header className="glass-effect sticky top-0 z-50 border-b border-white/10">
+      <header className="admin-topbar sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:py-4">
-            <div className="min-w-0">
-              <h1 className="text-xl font-bold leading-tight text-white sm:text-2xl">
-                Panel de Administración TechFix
-              </h1>
+            <div className="min-w-0 admin-brand-lockup">
+              <span className="admin-logo-mark">✳︎</span>
+              <div>
+                <p className="admin-kicker">TechFix Uruguay</p>
+                <h1 className="text-xl font-bold leading-tight text-white sm:text-2xl">
+                  Administracion
+                </h1>
+              </div>
             </div>
             <div className="flex items-center justify-between gap-3 sm:justify-end sm:space-x-4">
               <span className="min-w-0 truncate text-sm text-white/90">
                 Bienvenido, {user.name}
               </span>
               <button
+                onClick={() => window.location.reload()}
+                className="admin-icon-button"
+                aria-label="Actualizar panel"
+                title="Actualizar panel"
+              >
+                <RefreshCw className="h-4 w-4" />
+              </button>
+              <button
                 onClick={() => {
                   localStorage.removeItem('token')
                   localStorage.removeItem('user')
                   router.push('/')
                 }}
-                className="btn-modern shrink-0 bg-red-600 hover:bg-red-700 px-3 py-2 text-sm sm:px-4"
+                className="admin-danger-button shrink-0 px-3 py-2 text-sm sm:px-4"
               >
-                Cerrar Sesión
+                Cerrar sesion
               </button>
             </div>
           </div>
@@ -836,7 +923,7 @@ Esta acción eliminará PERMANENTEMENTE:
         <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:gap-8">
           {/* Sidebar */}
           <div className="w-full flex-shrink-0 lg:w-64">
-            <nav className="glass-card-readable p-2 sm:p-3 lg:p-4">
+            <nav className="admin-panel p-2 sm:p-3 lg:p-4">
               <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:block lg:space-y-2">
                 {tabs.map((tab) => {
                   const Icon = tab.icon
@@ -846,8 +933,8 @@ Esta acción eliminará PERMANENTEMENTE:
                         onClick={() => setActiveTab(tab.id)}
                         className={`flex w-full items-center rounded-md px-3 py-2 text-left text-sm font-medium transition-colors lg:px-4 ${
                           activeTab === tab.id
-                            ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30'
-                            : 'text-white/80 hover:bg-white/10 hover:text-white'
+                            ? 'admin-tab-active'
+                            : 'admin-tab-idle'
                         }`}
                       >
                         <Icon className="mr-2 h-4 w-4 sm:h-5 sm:w-5 lg:mr-3" />
@@ -1080,10 +1167,10 @@ Esta acción eliminará PERMANENTEMENTE:
                   <h2 className="text-xl font-semibold text-gray-800">Gestión de Tickets</h2>
                   <button
                     className="inline-flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-                    onClick={() => {/* Aquí podrías agregar funcionalidad para crear nuevo ticket */}}
+                    onClick={() => window.open('/quote', '_blank')}
                   >
-                    <PlusCircle className="h-4 w-4 mr-2" />
-                    Nuevo Ticket
+                    <Globe2 className="h-4 w-4 mr-2" />
+                    Abrir formulario publico
                   </button>
                 </div>
                 
@@ -1274,10 +1361,10 @@ Esta acción eliminará PERMANENTEMENTE:
                   <h2 className="text-xl font-semibold text-gray-800">Gestión de Redes Sociales</h2>
                   <button
                     className="inline-flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-                    onClick={() => {/* Aquí podrías agregar funcionalidad para conectar nueva red social */}}
+                    onClick={() => window.open(instagramHref, '_blank')}
                   >
-                    <PlusCircle className="h-4 w-4 mr-2" />
-                    Conectar Red Social
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Abrir perfil
                   </button>
                 </div>
                 
@@ -1324,7 +1411,7 @@ Esta acción eliminará PERMANENTEMENTE:
                     
                     <div className="mt-6 flex gap-2">
                       <button
-                        onClick={() => window.open('https://instagram.com/techfix_soporte_tecnico', '_blank')}
+                        onClick={() => window.open(instagramHref, '_blank')}
                         className="flex-1 bg-gradient-to-r from-purple-600 to-pink-500 text-white px-4 py-2 rounded-md hover:from-purple-700 hover:to-pink-600 transition-all duration-200 flex items-center justify-center"
                       >
                         <ExternalLink className="h-4 w-4 mr-2" />
@@ -1356,7 +1443,7 @@ Esta acción eliminará PERMANENTEMENTE:
                     <div className="space-y-3">
                       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <span className="text-sm font-medium text-gray-700">Número:</span>
-                        <span className="text-sm text-gray-800 font-mono">+598 99 123 456</span>
+                        <span className="text-sm text-gray-800 font-mono">{whatsappNumber}</span>
                       </div>
                       
                       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
@@ -1377,7 +1464,7 @@ Esta acción eliminará PERMANENTEMENTE:
                     
                     <div className="mt-6 flex gap-2">
                       <button
-                        onClick={() => window.open('https://wa.me/59899123456', '_blank')}
+                        onClick={() => window.open(whatsappHref, '_blank')}
                         className="flex-1 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors flex items-center justify-center"
                       >
                         <ExternalLink className="h-4 w-4 mr-2" />
@@ -1443,19 +1530,19 @@ Esta acción eliminará PERMANENTEMENTE:
                 <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
                   <h3 className="text-lg font-semibold mb-4">Acciones Rápidas</h3>
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <button className="bg-gradient-to-r from-purple-600 to-pink-500 text-white p-4 rounded-lg hover:from-purple-700 hover:to-pink-600 transition-all duration-200 flex items-center justify-center">
-                      <Instagram className="h-5 w-5 mr-2" />
-                      Publicar en Instagram
+                    <button onClick={() => window.open(instagramHref, '_blank')} className="bg-gradient-to-r from-purple-600 to-pink-500 text-white p-4 rounded-lg hover:from-purple-700 hover:to-pink-600 transition-all duration-200 flex items-center justify-center">
+                      <ExternalLink className="h-5 w-5 mr-2" />
+                      Abrir Instagram
                     </button>
-                    <button className="bg-green-500 text-white p-4 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center">
+                    <button onClick={() => window.open(whatsappHref, '_blank')} className="bg-green-500 text-white p-4 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center">
                       <MessageSquare className="h-5 w-5 mr-2" />
-                      Mensaje masivo WhatsApp
+                      Abrir WhatsApp
                     </button>
-                    <button className="bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center">
+                    <button onClick={() => setActiveTab('dashboard')} className="bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center">
                       <TrendingUp className="h-5 w-5 mr-2" />
                       Ver Analytics
                     </button>
-                    <button className="bg-gray-500 text-white p-4 rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center">
+                    <button onClick={() => setActiveTab('settings')} className="bg-gray-500 text-white p-4 rounded-lg hover:bg-gray-600 transition-colors flex items-center justify-center">
                       <Settings className="h-5 w-5 mr-2" />
                       Configurar APIs
                     </button>
@@ -1575,14 +1662,18 @@ Esta acción eliminará PERMANENTEMENTE:
                 <div className="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                     <Settings className="h-5 w-5 mr-2 text-blue-600" />
-                    Información del Negocio
+                    Datos visibles del negocio
                   </h3>
+                  <p className="mb-4 text-sm text-gray-600">
+                    Esta seccion queda como referencia operativa. Los cambios reales de portada se guardan desde el editor visual.
+                  </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Nombre del Negocio</label>
                       <input
                         type="text"
                         defaultValue="TechFix - Soporte Técnico"
+                        readOnly
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Nombre de tu negocio"
                       />
@@ -1591,9 +1682,10 @@ Esta acción eliminará PERMANENTEMENTE:
                       <label className="block text-sm font-medium text-gray-700 mb-2">Teléfono Principal</label>
                       <input
                         type="tel"
-                        defaultValue="+598 99 123 456"
+                        defaultValue={whatsappNumber}
+                        readOnly
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="+598 99 123 456"
+                        placeholder={whatsappNumber}
                       />
                     </div>
                     <div>
@@ -1601,6 +1693,7 @@ Esta acción eliminará PERMANENTEMENTE:
                       <input
                         type="email"
                         defaultValue="techfixuruguay@gmail.com"
+                        readOnly
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="contacto@tunegocio.com"
                       />
@@ -1609,7 +1702,8 @@ Esta acción eliminará PERMANENTEMENTE:
                       <label className="block text-sm font-medium text-gray-700 mb-2">Dirección</label>
                       <input
                         type="text"
-                        defaultValue="Montevideo, Uruguay"
+                        defaultValue="Las Piedras, Uruguay"
+                        readOnly
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Tu dirección comercial"
                       />
@@ -1619,7 +1713,8 @@ Esta acción eliminará PERMANENTEMENTE:
                     <label className="block text-sm font-medium text-gray-700 mb-2">Descripción del Negocio</label>
                     <textarea
                       rows={3}
-                      defaultValue="Servicios de reparación y mantenimiento técnico especializado. Soluciones rápidas y confiables para todos tus dispositivos."
+                      defaultValue="Soporte técnico para computadoras, redes, datos y configuraciones, con atención directa por WhatsApp."
+                      readOnly
                       className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Describe tu negocio..."
                     />
@@ -1634,30 +1729,32 @@ Esta acción eliminará PERMANENTEMENTE:
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[
-                      { day: 'Lunes', open: '09:00', close: '18:00' },
-                      { day: 'Martes', open: '09:00', close: '18:00' },
-                      { day: 'Miércoles', open: '09:00', close: '18:00' },
-                      { day: 'Jueves', open: '09:00', close: '18:00' },
-                      { day: 'Viernes', open: '09:00', close: '18:00' },
-                      { day: 'Sábado', open: '10:00', close: '14:00' },
+                      { day: 'Lunes', open: '10:00', close: '18:00' },
+                      { day: 'Martes', open: '10:00', close: '18:00' },
+                      { day: 'Miércoles', open: '10:00', close: '18:00' },
+                      { day: 'Jueves', open: '10:00', close: '18:00' },
+                      { day: 'Viernes', open: '10:00', close: '18:00' },
+                      { day: 'Sábado', open: 'Cerrado', close: '' },
                       { day: 'Domingo', open: 'Cerrado', close: '' }
                     ].map((schedule) => (
                       <div key={schedule.day} className="flex flex-col gap-3 p-3 bg-gray-50 rounded-lg sm:flex-row sm:items-center sm:justify-between">
                         <span className="font-medium text-gray-700">{schedule.day}</span>
                         <div className="flex items-center gap-2">
-                          {schedule.day === 'Domingo' ? (
+                          {schedule.open === 'Cerrado' ? (
                             <span className="text-red-600 font-medium">Cerrado</span>
                           ) : (
                             <>
                               <input
                                 type="time"
                                 defaultValue={schedule.open}
+                                readOnly
                                 className="min-w-0 flex-1 border border-gray-300 rounded px-2 py-1 text-sm"
                               />
                               <span className="text-gray-500">-</span>
                               <input
                                 type="time"
                                 defaultValue={schedule.close}
+                                readOnly
                                 className="min-w-0 flex-1 border border-gray-300 rounded px-2 py-1 text-sm"
                               />
                             </>
@@ -1717,20 +1814,20 @@ Esta acción eliminará PERMANENTEMENTE:
                     Sistema de Respaldo y Exportación
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <button className="flex flex-col items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
-                      <FileText className="h-8 w-8 text-blue-600 mb-2" />
+                    <button onClick={() => downloadAdminExport('tickets')} className="flex flex-col items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                      <Download className="h-8 w-8 text-blue-600 mb-2" />
                       <span className="font-medium text-blue-700">Exportar Tickets</span>
                       <span className="text-sm text-blue-600">Descargar CSV</span>
                     </button>
                     
-                    <button className="flex flex-col items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                      <Users className="h-8 w-8 text-green-600 mb-2" />
+                    <button onClick={() => downloadAdminExport('clients')} className="flex flex-col items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                      <Download className="h-8 w-8 text-green-600 mb-2" />
                       <span className="font-medium text-green-700">Exportar Clientes</span>
                       <span className="text-sm text-green-600">Descargar CSV</span>
                     </button>
                     
-                    <button className="flex flex-col items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
-                      <Package className="h-8 w-8 text-purple-600 mb-2" />
+                    <button onClick={() => downloadAdminExport('backup')} className="flex flex-col items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                      <Download className="h-8 w-8 text-purple-600 mb-2" />
                       <span className="font-medium text-purple-700">Backup Completo</span>
                       <span className="text-sm text-purple-600">Todas las tablas</span>
                     </button>
@@ -1738,10 +1835,10 @@ Esta acción eliminará PERMANENTEMENTE:
                   
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                     <p className="text-sm text-gray-600 mb-2">
-                      <strong>Último respaldo:</strong> 12 de agosto, 2025 - 14:30
+                      <strong>Respaldo:</strong> descarga manual desde estos botones.
                     </p>
                     <p className="text-sm text-gray-600">
-                      <strong>Próximo respaldo automático:</strong> 13 de agosto, 2025 - 02:00
+                      <strong>Incluye:</strong> tickets, clientes, servicios y configuracion visual.
                     </p>
                   </div>
                 </div>
@@ -1795,9 +1892,9 @@ Esta acción eliminará PERMANENTEMENTE:
 
                 {/* Botón de Guardado */}
                 <div className="flex justify-end">
-                  <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center">
+                  <button onClick={handleSaveSiteSettings} disabled={savingSiteSettings || siteSettingsLoading} className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center disabled:opacity-60">
                     <Check className="h-5 w-5 mr-2" />
-                    Guardar Configuración
+                    {savingSiteSettings ? 'Guardando...' : 'Guardar editor visual'}
                   </button>
                 </div>
               </div>

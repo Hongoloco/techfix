@@ -2522,3 +2522,200 @@ body:has(.techfix-premium) {
 body:has(.techfix-premium) {
   padding-top: 0 !important;
 }
+
+/* Admin premium: aligned with the current TechFix public site */
+body:has(.admin-shell) {
+  padding-top: 0 !important;
+  background: #070707;
+}
+
+.admin-shell {
+  min-height: 100vh;
+  color: #f7f5ee;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(244, 197, 66, 0.16), transparent 30%),
+    radial-gradient(circle at 85% 12%, rgba(69, 214, 232, 0.12), transparent 34%),
+    linear-gradient(145deg, #050505 0%, #10100f 46%, #17130c 100%);
+}
+
+.admin-topbar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(6, 6, 6, 0.82);
+  backdrop-filter: blur(22px);
+}
+
+.admin-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.admin-logo-mark {
+  display: inline-flex;
+  height: 2.6rem;
+  width: 2.6rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(244, 197, 66, 0.42);
+  border-radius: 999px;
+  color: #f4c542;
+  background: rgba(244, 197, 66, 0.09);
+  box-shadow: 0 16px 40px rgba(244, 197, 66, 0.16);
+}
+
+.admin-kicker {
+  margin: 0 0 0.1rem;
+  color: rgba(247, 245, 238, 0.62);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-panel,
+.admin-shell .glass-card-readable,
+.admin-shell .bg-white,
+.admin-shell .bg-gray-50 {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0.75rem !important;
+  background: rgba(255, 255, 255, 0.075) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28) !important;
+  backdrop-filter: blur(18px);
+}
+
+.admin-shell .bg-gray-100,
+.admin-shell .bg-blue-50,
+.admin-shell .bg-green-50,
+.admin-shell .bg-yellow-50,
+.admin-shell .bg-purple-50,
+.admin-shell .from-blue-50,
+.admin-shell .to-purple-50,
+.admin-shell .from-purple-50,
+.admin-shell .to-pink-50 {
+  background: rgba(255, 255, 255, 0.065) !important;
+}
+
+.admin-tab-active {
+  border: 1px solid rgba(244, 197, 66, 0.42);
+  color: #f4c542;
+  background: rgba(244, 197, 66, 0.12);
+}
+
+.admin-tab-idle {
+  color: rgba(247, 245, 238, 0.78);
+}
+
+.admin-tab-idle:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.admin-danger-button,
+.admin-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.admin-icon-button {
+  height: 2.35rem;
+  width: 2.35rem;
+  flex: 0 0 auto;
+}
+
+.admin-danger-button:hover,
+.admin-icon-button:hover {
+  border-color: rgba(244, 197, 66, 0.38);
+  background: rgba(244, 197, 66, 0.12);
+  transform: translateY(-1px);
+}
+
+.admin-shell .text-gray-900,
+.admin-shell .text-gray-800,
+.admin-shell .text-gray-700,
+.admin-shell .text-gray-600,
+.admin-shell .font-medium,
+.admin-shell h2,
+.admin-shell h3,
+.admin-shell h4,
+.admin-shell label,
+.admin-shell strong {
+  color: #f7f5ee !important;
+}
+
+.admin-shell .text-gray-500,
+.admin-shell .text-sm,
+.admin-shell p,
+.admin-shell span {
+  color: inherit;
+}
+
+.admin-shell .text-gray-500,
+.admin-shell .text-gray-600,
+.admin-shell .text-gray-700 {
+  color: rgba(247, 245, 238, 0.68) !important;
+}
+
+.admin-shell input,
+.admin-shell textarea,
+.admin-shell select {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #f7f5ee !important;
+  background: rgba(0, 0, 0, 0.32) !important;
+}
+
+.admin-shell input[readonly],
+.admin-shell textarea[readonly] {
+  color: rgba(247, 245, 238, 0.72) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.admin-shell option {
+  color: #111;
+  background: #fff;
+}
+
+.admin-shell table {
+  color: #f7f5ee;
+}
+
+.admin-shell th {
+  color: rgba(247, 245, 238, 0.7) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.admin-shell td,
+.admin-shell .divide-y > :not([hidden]) ~ :not([hidden]),
+.admin-shell .border,
+.admin-shell .border-b {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.admin-shell tr:hover {
+  background: rgba(255, 255, 255, 0.055) !important;
+}
+
+.admin-shell .rounded-lg,
+.admin-shell .rounded-md {
+  border-radius: 0.55rem;
+}
+
+@media (max-width: 640px) {
+  .admin-shell .max-w-7xl {
+    width: 100%;
+  }
+
+  .admin-shell h1 {
+    font-size: 1.08rem;
+  }
+
+  .admin-logo-mark {
+    height: 2.25rem;
+    width: 2.25rem;
+  }
+}
