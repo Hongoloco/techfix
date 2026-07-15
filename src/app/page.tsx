@@ -39,7 +39,7 @@ const steps = [
 const googleFacts = [
   { icon: Star, label: 'Google', value: '5.0 estrellas' },
   { icon: Monitor, label: 'Categoria', value: 'Servicio de informatica' },
-  { icon: Clock, label: 'Horario', value: 'Lunes a sabado, 9 a 20 h' },
+  { icon: Clock, label: 'Horario', value: 'Lunes a viernes, 10 a 18 h' },
   { icon: Phone, label: 'Telefono', value: '099 252 808' },
 ]
 
@@ -212,7 +212,7 @@ export default function Home() {
             <span>5.0</span>
             <div>
               <p>Calificacion en Google</p>
-              <div aria-label="Cinco estrellas">
+              <div className="tf-google-stars" aria-label="Cinco estrellas">
                 {[...Array(5)].map((_, index) => (
                   <Star key={index} className="h-4 w-4" />
                 ))}

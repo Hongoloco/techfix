@@ -1106,7 +1106,10 @@ body:has(.techfix-premium) {
   grid-template-columns: 1fr;
   gap: 1.2rem;
   padding: 5rem 1.25rem;
-  background: #09090a;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(245, 190, 86, 0.12), transparent 26rem),
+    radial-gradient(circle at 88% 28%, rgba(80, 177, 201, 0.1), transparent 24rem),
+    #09090a;
   color: white;
 }
 
@@ -1126,6 +1129,13 @@ body:has(.techfix-premium) {
   letter-spacing: -0.02em;
 }
 
+.tf-google-copy h2 {
+  background: linear-gradient(92deg, #ffffff 0%, #f1c978 48%, #9de7ef 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .tf-google-copy p,
 .tf-quote-intro p,
 .tf-quote-success p {
@@ -1137,10 +1147,13 @@ body:has(.techfix-premium) {
 }
 
 .tf-google-panel {
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(241, 201, 120, 0.22);
   border-radius: 8px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.035));
+  background:
+    linear-gradient(135deg, rgba(241, 201, 120, 0.12), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.035));
   backdrop-filter: blur(14px);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
   padding: 1rem;
 }
 
@@ -1149,14 +1162,16 @@ body:has(.techfix-premium) {
   gap: 1rem;
   align-items: center;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(241, 201, 120, 0.16);
 }
 
 .tf-google-score > span {
   font-family: 'Space Grotesk', 'Manrope', system-ui, sans-serif;
+  color: #f1c978;
   font-size: clamp(3.2rem, 12vw, 6.8rem);
   font-weight: 700;
   line-height: 0.9;
+  text-shadow: 0 0 32px rgba(241, 201, 120, 0.22);
 }
 
 .tf-google-score p {
@@ -1165,14 +1180,20 @@ body:has(.techfix-premium) {
   font-weight: 700;
 }
 
-.tf-google-score div div {
+.tf-google-stars {
   display: flex;
   gap: 0.2rem;
 }
 
-.tf-google-score svg {
+.tf-google-stars svg {
   fill: currentColor;
-  color: white;
+  color: #f4c95d;
+  filter: drop-shadow(0 0 8px rgba(244, 201, 93, 0.28));
+}
+
+.tf-google-facts svg,
+.tf-review-list svg {
+  color: #9de7ef;
 }
 
 .tf-google-facts {
@@ -1189,7 +1210,9 @@ body:has(.techfix-premium) {
   align-items: flex-start;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.045);
+  background:
+    linear-gradient(135deg, rgba(157, 231, 239, 0.08), transparent 38%),
+    rgba(255, 255, 255, 0.045);
   padding: 0.9rem;
 }
 
