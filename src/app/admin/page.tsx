@@ -1442,7 +1442,7 @@ Esta acción eliminará PERMANENTEMENTE:
                       enabled: siteSettingsForm.tiktokEnabled,
                       enabledField: 'tiktokEnabled' as keyof SiteSettings,
                       status: 'Perfil publico',
-                      logo: '/tiktok-logo-better.png',
+                      logo: '/tiktok-logo-official.png',
                       accent: 'from-slate-900 via-cyan-500 to-pink-500',
                     },
                   ].map((channel) => (
@@ -1457,8 +1457,8 @@ Esta acción eliminará PERMANENTEMENTE:
                                 <h3 className="text-lg font-semibold text-gray-800">{channel.name}</h3>
                                 <span className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${
                                   channel.enabled
-                                    ? 'border-green-300/40 bg-green-400/10 text-green-200'
-                                    : 'border-white/15 bg-white/10 text-white/55'
+                                    ? 'border-green-200 bg-green-50 text-green-700'
+                                    : 'border-gray-200 bg-gray-50 text-gray-500'
                                 }`}>
                                   {channel.enabled ? 'Activa' : 'Inactiva'}
                                 </span>
@@ -1471,8 +1471,8 @@ Esta acción eliminará PERMANENTEMENTE:
                             onClick={() => updateSiteSettingField(channel.enabledField, !channel.enabled)}
                             className={`inline-flex items-center justify-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
                               channel.enabled
-                                ? 'border-green-300/40 bg-green-400/10 text-green-100 hover:bg-green-400/15'
-                                : 'border-white/15 bg-white/10 text-white hover:bg-white/15'
+                                ? 'border-green-200 bg-green-50 text-green-700 hover:bg-green-100'
+                                : 'border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100'
                             }`}
                           >
                             {channel.enabled ? 'Desactivar' : 'Activar'}
@@ -1510,7 +1510,7 @@ Esta acción eliminará PERMANENTEMENTE:
                           </button>
                           <button
                             onClick={() => copyToClipboard(channel.name, channel.href)}
-                            className="inline-flex items-center justify-center rounded-md border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/15"
+                            className="inline-flex items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                           >
                             <FileText className="h-4 w-4 mr-2" />
                             Copiar link
@@ -1552,7 +1552,7 @@ Esta acción eliminará PERMANENTEMENTE:
                       </button>
                       <button
                         onClick={() => setActiveTab('dashboard')}
-                        className="flex w-full items-center justify-center rounded-md border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/15"
+                        className="flex w-full items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                       >
                         <TrendingUp className="h-4 w-4 mr-2" />
                         Ver dashboard

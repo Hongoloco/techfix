@@ -42,7 +42,19 @@ export function useApi<T = any>(
       const response = await fetch(url, { headers })
       
       if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`)
+        let message = `Error ${response.status}: ${response.statusText}`
+        try {
+          const errorBody = await response.json()
+          if (typeof errorBody?.error === 'string') message = errorBody.error
+        } catch {
+          // Keep the HTTP status message when the response is not JSON.
+        }
+        if (response.status === 401) {
+          localStorage.removeItem('token')
+          localStorage.removeItem('user')
+          message = 'Tu sesion vencio. Inicia sesion de nuevo y volve a guardar.'
+        }
+        throw new Error(message)
       }
       
       const data = await response.json()
@@ -104,7 +116,19 @@ export function useMutation<T = any>() {
       })
       
       if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`)
+        let message = `Error ${response.status}: ${response.statusText}`
+        try {
+          const errorBody = await response.json()
+          if (typeof errorBody?.error === 'string') message = errorBody.error
+        } catch {
+          // Keep the HTTP status message when the response is not JSON.
+        }
+        if (response.status === 401) {
+          localStorage.removeItem('token')
+          localStorage.removeItem('user')
+          message = 'Tu sesion vencio. Inicia sesion de nuevo y volve a guardar.'
+        }
+        throw new Error(message)
       }
       
       const data = await response.json()
@@ -144,12 +168,33 @@ export function useAuth() {
       
       if (token && userData) {
         try {
-          const user = JSON.parse(userData)
-          setUser(user)
+          const response = await fetch('/api/auth/me', {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+
+          if (!response.ok) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
+            setUser(null)
+            return
+          }
+
+          const verifiedUser = await response.json()
+          localStorage.setItem('user', JSON.stringify(verifiedUser))
+          setUser(verifiedUser)
         } catch {
-          localStorage.removeItem('token')
-          localStorage.removeItem('user')
+          try {
+            setUser(JSON.parse(userData))
+          } catch {
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
+            setUser(null)
+          }
         }
+      } else {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        setUser(null)
       }
       
       setLoading(false)

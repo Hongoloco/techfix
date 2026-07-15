@@ -109,7 +109,7 @@ export default async function Home() {
     { name: 'Instagram', detail: '@techfix_soporte_tecnico', href: settings.instagramHref, logo: '/instagram-logo.png', enabled: settings.instagramEnabled },
     { name: 'WhatsApp', detail: settings.whatsappNumber, href: settings.whatsappHref, logo: '/whatsapp-logo.png', enabled: settings.whatsappEnabled },
     { name: 'Facebook', detail: 'TechFix Uruguay', href: settings.facebookHref, logo: '/facebook-logo.png', enabled: settings.facebookEnabled },
-    { name: 'TikTok', detail: '@techfix_soporte_tecnico', href: settings.tiktokHref, logo: '/tiktok-logo-better.png', enabled: settings.tiktokEnabled },
+    { name: 'TikTok', detail: '@techfix_soporte_tecnico', href: settings.tiktokHref, logo: '/tiktok-logo-official.png', enabled: settings.tiktokEnabled },
   ].filter((channel) => channel.enabled)
 
   return (
@@ -212,23 +212,6 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="tf-section tf-services">
-        <div className="tf-section-heading">
-          <p>Redes y contacto</p>
-          <h2>Canales directos de TechFix, siempre actualizados desde el admin.</h2>
-        </div>
-
-        <div className="tf-service-grid">
-          {socialChannels.map(({ name, detail, href, logo }) => (
-            <a key={name} href={href} className="tf-glass-card" target="_blank" rel="noopener noreferrer">
-              <img className="tf-social-logo" src={logo} alt="" aria-hidden="true" />
-              <h3>{name}</h3>
-              <p>{detail}</p>
-            </a>
-          ))}
-        </div>
-      </section>
-
       <section className="tf-repair-showcase">
         <div className="tf-repair-showcase-copy">
           <p className="tf-kicker">Diagnostico en accion</p>
@@ -322,6 +305,21 @@ export default async function Home() {
           Consultar ahora
         </a>
       </section>
+
+      {socialChannels.length > 0 && (
+        <footer className="tf-social-footer" aria-label="Redes sociales de TechFix">
+          <div className="tf-social-footer-inner">
+            <span>TechFix Uruguay</span>
+            <div className="tf-social-icon-row">
+              {socialChannels.map(({ name, detail, href, logo }) => (
+                <a key={name} href={href} target="_blank" rel="noopener noreferrer" aria-label={`${name} - ${detail}`} title={name}>
+                  <img src={logo} alt={name} />
+                </a>
+              ))}
+            </div>
+          </div>
+        </footer>
+      )}
 
       <WhatsAppFloatingButton />
     </main>
