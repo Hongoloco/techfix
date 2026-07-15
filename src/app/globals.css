@@ -63,6 +63,10 @@ body {
   padding-top: 80px !important; /* Compensar header fijo */
 }
 
+body:has(.admin-shell) {
+  padding-top: 0 !important;
+}
+
 /* Header fijo optimizado */
 .dark-header {
   background: rgba(31, 41, 55, 0.95);

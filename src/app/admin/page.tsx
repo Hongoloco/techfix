@@ -226,13 +226,13 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
     <div className="space-y-4">
       {/* Filtros */}
       <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
-        <div className="flex flex-wrap gap-4 items-center">
-          <div className="flex items-center space-x-2">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+          <div className="flex items-center justify-between gap-2 sm:justify-start">
             <label className="text-sm font-medium text-gray-700">Estado:</label>
             <select 
               value={statusFilter} 
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-1 text-sm"
+              className="min-w-0 flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm sm:flex-none sm:py-1"
             >
               <option value="ALL">Todos</option>
               <option value="OPEN">Abierto</option>
@@ -242,12 +242,12 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
             </select>
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between gap-2 sm:justify-start">
             <label className="text-sm font-medium text-gray-700">Prioridad:</label>
             <select 
               value={priorityFilter} 
               onChange={(e) => setPriorityFilter(e.target.value)}
-              className="border border-gray-300 rounded-md px-3 py-1 text-sm"
+              className="min-w-0 flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm sm:flex-none sm:py-1"
             >
               <option value="ALL">Todas</option>
               <option value="URGENT">Urgente</option>
@@ -345,8 +345,8 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
       {/* Modal de detalle del ticket */}
       {showDetailModal && selectedTicket && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
+          <div className="bg-white rounded-lg p-4 sm:p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-start gap-4 mb-4">
               <h3 className="text-lg font-semibold text-gray-800">
                 Detalle del Ticket #{selectedTicket.id.substring(0, 8)}
               </h3>
@@ -369,7 +369,7 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
                 <p className="text-gray-800 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">{selectedTicket.message}</p>
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Cliente</label>
                   <p className="text-gray-800">{selectedTicket.user.name}</p>
@@ -382,7 +382,7 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
                 </div>
               </div>
               
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Prioridad</label>
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${priorityColors[selectedTicket.priority as keyof typeof priorityColors]}`}>
@@ -412,7 +412,7 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
               </div>
             </div>
             
-            <div className="mt-6 flex justify-end space-x-3">
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <button
                 onClick={() => setShowDetailModal(false)}
                 className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
@@ -803,18 +803,18 @@ Esta acción eliminará PERMANENTEMENTE:
   }
 
   return (
-    <div className="min-h-screen gradient-animated">
+    <div className="admin-shell min-h-screen gradient-animated">
       {/* Header */}
       <header className="glass-effect sticky top-0 z-50 border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-white">
+          <div className="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:py-4">
+            <div className="min-w-0">
+              <h1 className="text-xl font-bold leading-tight text-white sm:text-2xl">
                 Panel de Administración TechFix
               </h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-white/90">
+            <div className="flex items-center justify-between gap-3 sm:justify-end sm:space-x-4">
+              <span className="min-w-0 truncate text-sm text-white/90">
                 Bienvenido, {user.name}
               </span>
               <button
@@ -823,7 +823,7 @@ Esta acción eliminará PERMANENTEMENTE:
                   localStorage.removeItem('user')
                   router.push('/')
                 }}
-                className="btn-modern bg-red-600 hover:bg-red-700 px-4 py-2 text-sm"
+                className="btn-modern shrink-0 bg-red-600 hover:bg-red-700 px-3 py-2 text-sm sm:px-4"
               >
                 Cerrar Sesión
               </button>
@@ -832,26 +832,26 @@ Esta acción eliminará PERMANENTEMENTE:
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex space-x-8">
+      <div className="max-w-7xl mx-auto px-3 py-4 sm:px-6 sm:py-8 lg:px-8">
+        <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:gap-8">
           {/* Sidebar */}
-          <div className="w-64 flex-shrink-0">
-            <nav className="glass-card-readable p-4">
-              <ul className="space-y-2">
+          <div className="w-full flex-shrink-0 lg:w-64">
+            <nav className="glass-card-readable p-2 sm:p-3 lg:p-4">
+              <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:block lg:space-y-2">
                 {tabs.map((tab) => {
                   const Icon = tab.icon
                   return (
                     <li key={tab.id}>
                       <button
                         onClick={() => setActiveTab(tab.id)}
-                        className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                        className={`flex w-full items-center rounded-md px-3 py-2 text-left text-sm font-medium transition-colors lg:px-4 ${
                           activeTab === tab.id
                             ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30'
                             : 'text-white/80 hover:bg-white/10 hover:text-white'
                         }`}
                       >
-                        <Icon className="mr-3 h-5 w-5" />
-                        {tab.name}
+                        <Icon className="mr-2 h-4 w-4 sm:h-5 sm:w-5 lg:mr-3" />
+                        <span className="whitespace-nowrap">{tab.name}</span>
                       </button>
                     </li>
                   )
@@ -861,10 +861,10 @@ Esta acción eliminará PERMANENTEMENTE:
           </div>
 
           {/* Main Content */}
-          <div className="flex-1">
+          <div className="min-w-0 flex-1">
             {activeTab === 'dashboard' && (
               <div className="space-y-6">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
                   <div className="text-sm text-gray-600">
                     Última actualización: {new Date().toLocaleDateString('es-UY', {
@@ -1076,10 +1076,10 @@ Esta acción eliminará PERMANENTEMENTE:
 
             {activeTab === 'tickets' && (
               <div>
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
                   <h2 className="text-xl font-semibold text-gray-800">Gestión de Tickets</h2>
                   <button
-                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center transition-colors"
+                    className="inline-flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
                     onClick={() => {/* Aquí podrías agregar funcionalidad para crear nuevo ticket */}}
                   >
                     <PlusCircle className="h-4 w-4 mr-2" />
@@ -1095,11 +1095,11 @@ Esta acción eliminará PERMANENTEMENTE:
 
             {activeTab === 'services' && (
               <div>
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
                   <h2 className="text-xl font-semibold text-gray-800">Gestión de Servicios</h2>
                   <button
                     onClick={() => router.push('/admin/services/new')}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center transition-colors"
+                    className="inline-flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
                   >
                     <PlusCircle className="h-4 w-4 mr-2" />
                     Nuevo Servicio
@@ -1151,10 +1151,10 @@ Esta acción eliminará PERMANENTEMENTE:
 
             {activeTab === 'clients' && (
               <div>
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
                   <h2 className="text-xl font-semibold text-gray-800">Gestión de Clientes</h2>
                   <button
-                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center transition-colors"
+                    className="inline-flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
                     onClick={() => setShowCreateClientModal(true)}
                   >
                     <PlusCircle className="w-5 h-5 mr-2" />
@@ -1180,7 +1180,7 @@ Esta acción eliminará PERMANENTEMENTE:
                   <div className="grid gap-4">
                     {clients?.map((client) => (
                       <div key={client.id} className="glass-card-readable p-4 card-hover">
-                        <div className="flex justify-between items-start">
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                           <div className="flex-1">
                             <h3 className="font-semibold text-gray-800">{client.name}</h3>
                             <p className="text-gray-600 text-sm">{client.email}</p>
@@ -1190,13 +1190,13 @@ Esta acción eliminará PERMANENTEMENTE:
                             {client.company && (
                               <p className="text-gray-600 text-sm">🏢 {client.company}</p>
                             )}
-                            <div className="flex gap-4 mt-2 text-sm text-gray-500">
+                            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-sm text-gray-500">
                               <span>🎫 {client._count?.tickets || 0} tickets</span>
                               <span>💰 {client._count?.quotes || 0} cotizaciones</span>
                               <span>📅 {new Date(client.createdAt).toLocaleDateString()}</span>
                             </div>
                           </div>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 self-end sm:self-start">
                             <button
                               onClick={() => openEditClientModal(client)}
                               className="text-blue-600 hover:text-blue-800 p-1"
@@ -1270,10 +1270,10 @@ Esta acción eliminará PERMANENTEMENTE:
 
             {activeTab === 'social' && (
               <div>
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
                   <h2 className="text-xl font-semibold text-gray-800">Gestión de Redes Sociales</h2>
                   <button
-                    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center transition-colors"
+                    className="inline-flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
                     onClick={() => {/* Aquí podrías agregar funcionalidad para conectar nueva red social */}}
                   >
                     <PlusCircle className="h-4 w-4 mr-2" />
@@ -1301,28 +1301,28 @@ Esta acción eliminará PERMANENTEMENTE:
                     </div>
                     
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <span className="text-sm font-medium text-gray-700">Usuario:</span>
                         <span className="text-sm text-gray-800 font-mono">@techfix_soporte_tecnico</span>
                       </div>
                       
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <span className="text-sm font-medium text-gray-700">Seguidores:</span>
                         <span className="text-sm text-gray-800">2.1K</span>
                       </div>
                       
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <span className="text-sm font-medium text-gray-700">Publicaciones:</span>
                         <span className="text-sm text-gray-800">156</span>
                       </div>
                       
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <span className="text-sm font-medium text-gray-700">Última publicación:</span>
                         <span className="text-sm text-gray-800">Hace 2 horas</span>
                       </div>
                     </div>
                     
-                    <div className="mt-6 flex space-x-2">
+                    <div className="mt-6 flex gap-2">
                       <button
                         onClick={() => window.open('https://instagram.com/techfix_soporte_tecnico', '_blank')}
                         className="flex-1 bg-gradient-to-r from-purple-600 to-pink-500 text-white px-4 py-2 rounded-md hover:from-purple-700 hover:to-pink-600 transition-all duration-200 flex items-center justify-center"
@@ -1354,28 +1354,28 @@ Esta acción eliminará PERMANENTEMENTE:
                     </div>
                     
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <span className="text-sm font-medium text-gray-700">Número:</span>
                         <span className="text-sm text-gray-800 font-mono">+598 99 123 456</span>
                       </div>
                       
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <span className="text-sm font-medium text-gray-700">Mensajes hoy:</span>
                         <span className="text-sm text-gray-800">47</span>
                       </div>
                       
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <span className="text-sm font-medium text-gray-700">Tiempo respuesta:</span>
                         <span className="text-sm text-green-600 font-semibold">&lt; 5 min</span>
                       </div>
                       
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                         <span className="text-sm font-medium text-gray-700">Estado:</span>
                         <span className="text-sm text-green-600 font-semibold">En línea</span>
                       </div>
                     </div>
                     
-                    <div className="mt-6 flex space-x-2">
+                    <div className="mt-6 flex gap-2">
                       <button
                         onClick={() => window.open('https://wa.me/59899123456', '_blank')}
                         className="flex-1 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors flex items-center justify-center"
@@ -1466,14 +1466,14 @@ Esta acción eliminará PERMANENTEMENTE:
 
             {activeTab === 'settings' && (
               <div className="space-y-6">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <h2 className="text-xl font-semibold text-gray-800">Configuración del Sistema</h2>
                   <div className="text-sm text-gray-600">
                     TechFix v2.0 - Sistema de usuario único
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6">
                   <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-5">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-800 flex items-center">
@@ -1487,7 +1487,7 @@ Esta acción eliminará PERMANENTEMENTE:
                     <button
                       onClick={handleSaveSiteSettings}
                       disabled={savingSiteSettings || siteSettingsLoading}
-                      className="inline-flex items-center justify-center rounded-lg bg-cyan-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cyan-700 disabled:opacity-60"
+                      className="inline-flex w-full items-center justify-center rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-cyan-700 disabled:opacity-60 sm:w-auto"
                     >
                       <Check className="h-4 w-4 mr-2" />
                       {savingSiteSettings ? 'Guardando...' : 'Guardar cambios'}
@@ -1551,7 +1551,7 @@ Esta acción eliminará PERMANENTEMENTE:
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
                       />
                     </div>
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                       {[
                         ['accentColor', 'Color titulo/botones'],
                         ['accentSoftColor', 'Color globos/detalles'],
@@ -1563,7 +1563,7 @@ Esta acción eliminará PERMANENTEMENTE:
                             type="color"
                             value={siteSettingsForm[field as keyof SiteSettings]}
                             onChange={(e) => updateSiteSettingField(field as keyof SiteSettings, e.target.value)}
-                            className="mt-2 h-10 w-full cursor-pointer rounded border border-gray-300 bg-white p-1"
+                            className="mt-2 h-11 w-full cursor-pointer rounded border border-gray-300 bg-white p-1"
                           />
                         </label>
                       ))}
@@ -1572,7 +1572,7 @@ Esta acción eliminará PERMANENTEMENTE:
                 </div>
 
                 {/* Información del Negocio */}
-                <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                     <Settings className="h-5 w-5 mr-2 text-blue-600" />
                     Información del Negocio
@@ -1627,7 +1627,7 @@ Esta acción eliminará PERMANENTEMENTE:
                 </div>
 
                 {/* Horarios de Atención */}
-                <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                     <Clock className="h-5 w-5 mr-2 text-green-600" />
                     Horarios de Atención
@@ -1642,9 +1642,9 @@ Esta acción eliminará PERMANENTEMENTE:
                       { day: 'Sábado', open: '10:00', close: '14:00' },
                       { day: 'Domingo', open: 'Cerrado', close: '' }
                     ].map((schedule) => (
-                      <div key={schedule.day} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={schedule.day} className="flex flex-col gap-3 p-3 bg-gray-50 rounded-lg sm:flex-row sm:items-center sm:justify-between">
                         <span className="font-medium text-gray-700">{schedule.day}</span>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center gap-2">
                           {schedule.day === 'Domingo' ? (
                             <span className="text-red-600 font-medium">Cerrado</span>
                           ) : (
@@ -1652,13 +1652,13 @@ Esta acción eliminará PERMANENTEMENTE:
                               <input
                                 type="time"
                                 defaultValue={schedule.open}
-                                className="border border-gray-300 rounded px-2 py-1 text-sm"
+                                className="min-w-0 flex-1 border border-gray-300 rounded px-2 py-1 text-sm"
                               />
                               <span className="text-gray-500">-</span>
                               <input
                                 type="time"
                                 defaultValue={schedule.close}
-                                className="border border-gray-300 rounded px-2 py-1 text-sm"
+                                className="min-w-0 flex-1 border border-gray-300 rounded px-2 py-1 text-sm"
                               />
                             </>
                           )}
@@ -1669,13 +1669,13 @@ Esta acción eliminará PERMANENTEMENTE:
                 </div>
 
                 {/* Configuración de Notificaciones */}
-                <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                     <MessageSquare className="h-5 w-5 mr-2 text-purple-600" />
                     Configuración de Notificaciones
                   </h3>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                    <div className="flex items-start justify-between gap-4 p-4 bg-blue-50 rounded-lg">
                       <div>
                         <h4 className="font-medium text-gray-800">Nuevos Tickets</h4>
                         <p className="text-sm text-gray-600">Recibir notificación cuando llegue un nuevo ticket</p>
@@ -1686,7 +1686,7 @@ Esta acción eliminará PERMANENTEMENTE:
                       </label>
                     </div>
                     
-                    <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                    <div className="flex items-start justify-between gap-4 p-4 bg-green-50 rounded-lg">
                       <div>
                         <h4 className="font-medium text-gray-800">Tickets Urgentes</h4>
                         <p className="text-sm text-gray-600">Notificación especial para tickets con prioridad urgente</p>
@@ -1697,7 +1697,7 @@ Esta acción eliminará PERMANENTEMENTE:
                       </label>
                     </div>
                     
-                    <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg">
+                    <div className="flex items-start justify-between gap-4 p-4 bg-yellow-50 rounded-lg">
                       <div>
                         <h4 className="font-medium text-gray-800">Resumen Diario</h4>
                         <p className="text-sm text-gray-600">Recibir un resumen diario de actividad a las 18:00</p>
@@ -1711,7 +1711,7 @@ Esta acción eliminará PERMANENTEMENTE:
                 </div>
 
                 {/* Sistema de Respaldo */}
-                <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                     <FileText className="h-5 w-5 mr-2 text-indigo-600" />
                     Sistema de Respaldo y Exportación
@@ -1747,45 +1747,45 @@ Esta acción eliminará PERMANENTEMENTE:
                 </div>
 
                 {/* Información del Sistema */}
-                <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+                <div className="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                     <TrendingUp className="h-5 w-5 mr-2 text-gray-600" />
                     Información del Sistema
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-3">
-                      <div className="flex justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:justify-between">
                         <span className="text-gray-600">Versión:</span>
                         <span className="font-medium">TechFix v2.0</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:justify-between">
                         <span className="text-gray-600">Base de datos:</span>
                         <span className="font-medium">PostgreSQL</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:justify-between">
                         <span className="text-gray-600">Framework:</span>
                         <span className="font-medium">Next.js 15.4.5</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:justify-between">
                         <span className="text-gray-600">Deployment:</span>
                         <span className="font-medium">Vercel</span>
                       </div>
                     </div>
                     
                     <div className="space-y-3">
-                      <div className="flex justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:justify-between">
                         <span className="text-gray-600">Tiempo activo:</span>
                         <span className="font-medium text-green-600">99.8%</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:justify-between">
                         <span className="text-gray-600">Último error:</span>
                         <span className="font-medium">Ninguno</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:justify-between">
                         <span className="text-gray-600">Modo:</span>
                         <span className="font-medium text-blue-600">Usuario único</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:justify-between">
                         <span className="text-gray-600">Región:</span>
                         <span className="font-medium">South America</span>
                       </div>
