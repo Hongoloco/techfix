@@ -1,16 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendRatingRequest } from '@/lib/rating';
+import { verifyTokenFromRequest } from '@/lib/auth';
 
-export async function PATCH(
+async function updateTicketStatus(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const tokenData = verifyTokenFromRequest(request);
+    if (!tokenData) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: tokenData.userId },
+      select: { role: true }
+    });
+
+    if (!user || (user.role !== 'ADMIN' && user.role !== 'AGENT')) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    }
+
     const params = await context.params;
     const ticketId = params.id;
     const body = await request.json();
     const { status } = body;
+
+    const allowedStatuses = ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'] as const;
+    if (!allowedStatuses.includes(status)) {
+      return NextResponse.json({
+        success: false,
+        message: 'Estado de ticket invalido'
+      }, { status: 400 });
+    }
 
     // Actualizar el ticket
     const updatedTicket = await prisma.ticket.update({
@@ -45,4 +68,18 @@ export async function PATCH(
       message: 'Error al actualizar el ticket'
     }, { status: 500 });
   }
+}
+
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  return updateTicketStatus(request, context);
+}
+
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  return updateTicketStatus(request, context);
 }

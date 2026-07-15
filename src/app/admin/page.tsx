@@ -62,6 +62,7 @@ interface Client {
 interface TicketData {
   id: string
   title: string
+  description?: string
   message?: string
   phone?: string
   priority: string
@@ -70,6 +71,16 @@ interface TicketData {
     name: string
     email?: string
   }
+  client?: {
+    id: string
+    name: string
+    email: string
+    phone?: string | null
+    company?: string | null
+  } | null
+  assignedTo?: {
+    name: string
+  } | null
   createdAt: string
 }
 
@@ -193,11 +204,22 @@ function StatCard({ icon: Icon, label, value, color, loading }: {
 }
 
 // Componente mejorado para la tabla de tickets
-function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: boolean }) {
+function TicketsTable({
+  tickets,
+  loading,
+  onTicketUpdated,
+  showNotification
+}: {
+  tickets: TicketData[]
+  loading: boolean
+  onTicketUpdated: () => Promise<void>
+  showNotification: (type: 'success' | 'error' | 'info', title: string, message: string) => void
+}) {
   const [selectedTicket, setSelectedTicket] = useState<TicketData | null>(null)
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [statusFilter, setStatusFilter] = useState<string>('ALL')
   const [priorityFilter, setPriorityFilter] = useState<string>('ALL')
+  const [updatingTicketId, setUpdatingTicketId] = useState<string | null>(null)
 
   const priorityColors = useMemo(() => ({
     'URGENT': 'bg-red-100 text-red-800',
@@ -235,18 +257,52 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
   })
 
   const handleStatusChange = async (ticketId: string, newStatus: string) => {
+    setUpdatingTicketId(ticketId)
     try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        showNotification('error', 'Sesión vencida', 'Iniciá sesión de nuevo para actualizar tickets.')
+        return
+      }
+
       const response = await fetch(`/api/tickets/${ticketId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify({ status: newStatus })
       })
       
-      if (response.ok) {
-        window.location.reload() // Recargar para actualizar la lista
+      if (!response.ok) {
+        let message = 'No se pudo actualizar el ticket.'
+        try {
+          const errorBody = await response.json()
+          message = errorBody?.message || errorBody?.error || message
+        } catch {
+          // Keep the generic message when the response body is not JSON.
+        }
+
+        if (response.status === 401) {
+          localStorage.removeItem('token')
+          localStorage.removeItem('user')
+          message = 'Tu sesión venció. Iniciá sesión de nuevo para actualizar tickets.'
+        }
+
+        throw new Error(message)
       }
+
+      await onTicketUpdated()
+      showNotification('success', 'Ticket actualizado', 'El estado quedó guardado correctamente.')
     } catch (error) {
       console.error('Error updating ticket status:', error)
+      showNotification(
+        'error',
+        'Error en tickets',
+        error instanceof Error ? error.message : 'No se pudo actualizar el ticket.'
+      )
+    } finally {
+      setUpdatingTicketId(null)
     }
   }
 
@@ -306,8 +362,65 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
         </div>
       </div>
 
+      {filteredTickets.length === 0 && (
+        <div className="rounded-lg border border-white/10 bg-white/10 p-6 text-center text-white/80">
+          No hay tickets para los filtros seleccionados.
+        </div>
+      )}
+
+      {/* Vista mobile */}
+      <div className="space-y-3 md:hidden">
+        {filteredTickets.map((ticket) => {
+          const clientName = ticket.client?.name || ticket.user.name
+          const clientEmail = ticket.client?.email || ticket.user.email
+          const clientPhone = ticket.client?.phone || ticket.phone
+          const summary = ticket.description || ticket.message || ''
+
+          return (
+            <article key={ticket.id} className="rounded-lg border border-white/10 bg-white/10 p-4 shadow-lg">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-white">{ticket.title}</p>
+                  <p className="mt-1 line-clamp-2 text-xs text-white/65">{summary || 'Sin descripción'}</p>
+                </div>
+                <span className={`shrink-0 px-2 py-1 text-[11px] font-semibold rounded-full ${priorityColors[ticket.priority as keyof typeof priorityColors]}`}>
+                  {priorityLabels[ticket.priority as keyof typeof priorityLabels] || ticket.priority}
+                </span>
+              </div>
+
+              <div className="mt-3 grid gap-1 text-xs text-white/70">
+                <span>{clientName}</span>
+                {clientEmail && <span>{clientEmail}</span>}
+                {clientPhone && <span>{clientPhone}</span>}
+              </div>
+
+              <div className="mt-4 flex items-center gap-2">
+                <select
+                  value={ticket.status}
+                  disabled={updatingTicketId === ticket.id}
+                  onChange={(e) => handleStatusChange(ticket.id, e.target.value)}
+                  className="min-w-0 flex-1 rounded-md border border-white/15 bg-black/40 px-3 py-2 text-xs font-semibold text-white"
+                >
+                  <option value="OPEN">Abierto</option>
+                  <option value="IN_PROGRESS">En Progreso</option>
+                  <option value="RESOLVED">Resuelto</option>
+                  <option value="CLOSED">Cerrado</option>
+                </select>
+                <button
+                  onClick={() => openTicketDetail(ticket)}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/15 bg-white/10 text-white"
+                  aria-label="Ver detalle"
+                >
+                  <Eye className="h-4 w-4" />
+                </button>
+              </div>
+            </article>
+          )
+        })}
+      </div>
+
       {/* Tabla de tickets */}
-      <div className="bg-white rounded-lg shadow overflow-hidden border border-gray-200">
+      <div className="hidden rounded-lg border border-gray-200 bg-white shadow md:block md:overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-300">
             <thead className="bg-gray-100">
@@ -333,20 +446,27 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-300">
-              {filteredTickets.map((ticket) => (
+              {filteredTickets.map((ticket) => {
+                const clientName = ticket.client?.name || ticket.user.name
+                const clientEmail = ticket.client?.email || ticket.user.email
+                const clientPhone = ticket.client?.phone || ticket.phone
+                const summary = ticket.description || ticket.message || ''
+
+                return (
                 <tr key={ticket.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-gray-800">{ticket.title}</div>
                       <div className="text-sm text-gray-500 truncate max-w-xs">
-                        {ticket.message?.substring(0, 50)}...
+                        {summary ? `${summary.substring(0, 70)}${summary.length > 70 ? '...' : ''}` : 'Sin descripción'}
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-gray-800">{ticket.user.name}</div>
-                      <div className="text-sm text-gray-500">{ticket.user.email}</div>
+                      <div className="text-sm font-medium text-gray-800">{clientName}</div>
+                      <div className="text-sm text-gray-500">{clientEmail || 'Sin email'}</div>
+                      {clientPhone && <div className="text-xs text-gray-500">{clientPhone}</div>}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -357,6 +477,7 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select 
                       value={ticket.status}
+                      disabled={updatingTicketId === ticket.id}
                       onChange={(e) => handleStatusChange(ticket.id, e.target.value)}
                       className={`text-xs font-semibold rounded-full border-0 ${statusColors[ticket.status as keyof typeof statusColors]}`}
                     >
@@ -379,7 +500,7 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
                     </button>
                   </td>
                 </tr>
-              ))}
+              )})}
             </tbody>
           </table>
         </div>
@@ -402,6 +523,14 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
             </div>
             
             <div className="space-y-4">
+              {(() => {
+                const clientName = selectedTicket.client?.name || selectedTicket.user.name
+                const clientEmail = selectedTicket.client?.email || selectedTicket.user.email
+                const clientPhone = selectedTicket.client?.phone || selectedTicket.phone
+                const message = selectedTicket.description || selectedTicket.message || 'Sin descripción'
+
+                return (
+                  <>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Asunto</label>
                 <p className="text-gray-800 bg-gray-50 p-3 rounded-lg">{selectedTicket.title}</p>
@@ -409,19 +538,19 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Mensaje</label>
-                <p className="text-gray-800 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">{selectedTicket.message}</p>
+                <p className="text-gray-800 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">{message}</p>
               </div>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Cliente</label>
-                  <p className="text-gray-800">{selectedTicket.user.name}</p>
-                  <p className="text-gray-600 text-sm">{selectedTicket.user.email}</p>
+                  <p className="text-gray-800">{clientName}</p>
+                  <p className="text-gray-600 text-sm">{clientEmail || 'Sin email'}</p>
                 </div>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-                  <p className="text-gray-800">{selectedTicket.phone || 'No proporcionado'}</p>
+                  <p className="text-gray-800">{clientPhone || 'No proporcionado'}</p>
                 </div>
               </div>
               
@@ -453,6 +582,9 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
                   </p>
                 </div>
               </div>
+                  </>
+                )
+              })()}
             </div>
             
             <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
@@ -464,7 +596,10 @@ function TicketsTable({ tickets, loading }: { tickets: TicketData[], loading: bo
               </button>
               <button
                 onClick={() => {
-                  window.open(`mailto:${selectedTicket.user.email}?subject=Re: ${selectedTicket.title}`, '_blank')
+                  const email = selectedTicket.client?.email || selectedTicket.user.email
+                  if (email) {
+                    window.open(`mailto:${email}?subject=Re: ${selectedTicket.title}`, '_blank')
+                  }
                 }}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
@@ -547,7 +682,7 @@ export default function AdminDashboard() {
     initialData: []
   })
 
-  const { data: tickets, loading: ticketsLoading } = useApi<TicketData[]>('/api/admin/tickets', {
+  const { data: tickets, loading: ticketsLoading, refetch: refetchTickets } = useApi<TicketData[]>('/api/admin/tickets', {
     autoFetch: activeTab === 'dashboard' || activeTab === 'tickets',
     initialData: []
   })
@@ -1199,7 +1334,12 @@ Esta acción eliminará PERMANENTEMENTE:
                 </div>
                 
                 <div className="bg-white rounded-lg shadow border border-gray-200">
-                  <TicketsTable tickets={tickets || []} loading={ticketsLoading} />
+                  <TicketsTable
+                    tickets={tickets || []}
+                    loading={ticketsLoading}
+                    onTicketUpdated={refetchTickets}
+                    showNotification={showNotification}
+                  />
                 </div>
               </div>
             )}

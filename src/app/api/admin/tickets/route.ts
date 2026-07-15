@@ -36,6 +36,15 @@ export async function GET(request: NextRequest) {
           select: {
             name: true
           }
+        },
+        client: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            company: true
+          }
         }
       },
       orderBy: {
