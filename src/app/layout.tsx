@@ -33,7 +33,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link 
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" 
+          href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" 
           rel="stylesheet" 
         />
         <script
@@ -46,7 +46,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full overflow-x-hidden`}
         suppressHydrationWarning={true}
-        style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+        style={{ fontFamily: 'Manrope, system-ui, sans-serif' }}
       >
         <HydrationFix />
         {children}

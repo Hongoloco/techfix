@@ -103,7 +103,6 @@ export default function Home() {
     <main className="techfix-premium">
       <header className="tf-nav">
         <Link href="/" className="tf-logo" aria-label="TechFix Uruguay">
-          <img src="/techfix-logo.svg" alt="" aria-hidden="true" />
           <span>TechFix</span>
           <i aria-hidden="true">✳︎</i>
         </Link>

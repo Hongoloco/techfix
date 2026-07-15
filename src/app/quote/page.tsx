@@ -84,7 +84,7 @@ function QuoteForm() {
         <header className="tf-nav">
           <Link href="/" className="tf-logo" aria-label="TechFix Uruguay">
             <span>TechFix</span>
-            <i aria-hidden="true">*</i>
+            <i aria-hidden="true">✳︎</i>
           </Link>
           <nav className="tf-nav-links" aria-label="Navegacion principal">
             <Link href="/">Inicio</Link>
@@ -123,7 +123,7 @@ function QuoteForm() {
       <header className="tf-nav">
         <Link href="/" className="tf-logo" aria-label="TechFix Uruguay">
           <span>TechFix</span>
-          <i aria-hidden="true">*</i>
+          <i aria-hidden="true">✳︎</i>
         </Link>
         <nav className="tf-nav-links" aria-label="Navegacion principal">
           <Link href="/">Inicio</Link>
