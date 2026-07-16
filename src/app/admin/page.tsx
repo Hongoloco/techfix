@@ -223,6 +223,7 @@ function TicketsTable({
   const [priorityFilter, setPriorityFilter] = useState<string>('ALL')
   const [updatingTicketId, setUpdatingTicketId] = useState<string | null>(null)
   const [deletingTicketId, setDeletingTicketId] = useState<string | null>(null)
+  const [detailLoadingTicketId, setDetailLoadingTicketId] = useState<string | null>(null)
 
   const priorityColors = useMemo(() => ({
     'URGENT': 'bg-red-100 text-red-800',
@@ -277,21 +278,28 @@ function TicketsTable({
     return message
   }
 
+  const getTicketAuthHeaders = () => {
+    const token = localStorage.getItem('token')
+    if (!token) return null
+
+    return {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
+  }
+
   const handleStatusChange = async (ticketId: string, newStatus: string) => {
     setUpdatingTicketId(ticketId)
     try {
-      const token = localStorage.getItem('token')
-      if (!token) {
+      const headers = getTicketAuthHeaders()
+      if (!headers) {
         showNotification('error', 'Sesión vencida', 'Iniciá sesión de nuevo para actualizar tickets.')
         return
       }
 
       const response = await fetch(`/api/admin/tickets/${ticketId}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
+        headers,
         body: JSON.stringify({ status: newStatus }),
         cache: 'no-store'
       })
@@ -301,12 +309,17 @@ function TicketsTable({
         throw new Error(message)
       }
 
+      const data = await response.json()
       await onTicketUpdated()
-      setSelectedTicket(prev => prev?.id === ticketId ? { ...prev, status: newStatus } : prev)
+      setSelectedTicket(prev => prev?.id === ticketId ? (data?.ticket || { ...prev, status: newStatus }) : prev)
       showNotification(
         'success',
-        newStatus === 'CLOSED' ? 'Ticket cerrado' : 'Ticket actualizado',
-        newStatus === 'CLOSED' ? 'El ticket quedó cerrado correctamente.' : 'El estado quedó guardado correctamente.'
+        newStatus === 'CLOSED' ? 'Ticket cerrado' : newStatus === 'OPEN' ? 'Ticket reabierto' : 'Ticket actualizado',
+        newStatus === 'CLOSED'
+          ? 'El ticket quedó cerrado correctamente.'
+          : newStatus === 'OPEN'
+            ? 'El ticket quedó abierto nuevamente.'
+            : 'El estado quedó guardado correctamente.'
       )
     } catch (error) {
       console.error('Error updating ticket status:', error)
@@ -324,23 +337,25 @@ function TicketsTable({
     await handleStatusChange(ticketId, 'CLOSED')
   }
 
+  const handleReopenTicket = async (ticketId: string) => {
+    await handleStatusChange(ticketId, 'OPEN')
+  }
+
   const handleDeleteTicket = async (ticket: TicketData) => {
     const confirmed = window.confirm(`¿Borrar definitivamente el ticket "${ticket.title}"? Esta acción no se puede deshacer.`)
     if (!confirmed) return
 
     setDeletingTicketId(ticket.id)
     try {
-      const token = localStorage.getItem('token')
-      if (!token) {
+      const headers = getTicketAuthHeaders()
+      if (!headers) {
         showNotification('error', 'Sesión vencida', 'Iniciá sesión de nuevo para borrar tickets.')
         return
       }
 
       const response = await fetch(`/api/admin/tickets/${ticket.id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
+        headers,
         cache: 'no-store'
       })
 
@@ -368,9 +383,39 @@ function TicketsTable({
     }
   }
 
-  const openTicketDetail = (ticket: TicketData) => {
-    setSelectedTicket(ticket)
-    setShowDetailModal(true)
+  const openTicketDetail = async (ticket: TicketData) => {
+    setDetailLoadingTicketId(ticket.id)
+    try {
+      const headers = getTicketAuthHeaders()
+      if (!headers) {
+        showNotification('error', 'Sesión vencida', 'Iniciá sesión de nuevo para abrir tickets.')
+        return
+      }
+
+      const response = await fetch(`/api/admin/tickets/${ticket.id}`, {
+        method: 'GET',
+        headers,
+        cache: 'no-store'
+      })
+
+      if (!response.ok) {
+        const message = await parseTicketError(response, 'No se pudo abrir el ticket.')
+        throw new Error(message)
+      }
+
+      const data = await response.json()
+      setSelectedTicket(data?.ticket || ticket)
+      setShowDetailModal(true)
+    } catch (error) {
+      console.error('Error opening ticket detail:', error)
+      showNotification(
+        'error',
+        'No se pudo abrir',
+        error instanceof Error ? error.message : 'No se pudo abrir el ticket.'
+      )
+    } finally {
+      setDetailLoadingTicketId(null)
+    }
   }
 
   if (loading) {
@@ -488,10 +533,12 @@ function TicketsTable({
                 </select>
                 <button
                   onClick={() => openTicketDetail(ticket)}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-300 bg-gray-50 text-gray-700"
-                  aria-label="Ver detalle"
+                  disabled={detailLoadingTicketId === ticket.id}
+                  className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md border border-gray-300 bg-gray-50 px-3 text-xs font-semibold text-gray-700 disabled:cursor-wait disabled:opacity-60"
+                  aria-label="Abrir ticket"
                 >
-                  <Eye className="h-4 w-4" />
+                  {detailLoadingTicketId === ticket.id ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
+                  Abrir
                 </button>
               </div>
               <div className="mt-2 grid grid-cols-2 gap-2">
@@ -592,10 +639,11 @@ function TicketsTable({
                     <div className="flex flex-wrap items-center gap-2">
                       <button
                         onClick={() => openTicketDetail(ticket)}
-                        className="inline-flex items-center rounded-md px-2 py-1 text-blue-700 hover:bg-blue-50"
+                        disabled={detailLoadingTicketId === ticket.id}
+                        className="inline-flex items-center rounded-md px-2 py-1 text-blue-700 hover:bg-blue-50 disabled:cursor-wait disabled:opacity-60"
                       >
-                        <Eye className="h-4 w-4 mr-1" />
-                        Ver
+                        {detailLoadingTicketId === ticket.id ? <RefreshCw className="h-4 w-4 mr-1 animate-spin" /> : <Eye className="h-4 w-4 mr-1" />}
+                        Abrir
                       </button>
                       <button
                         onClick={() => handleCloseTicket(ticket.id)}
@@ -624,8 +672,8 @@ function TicketsTable({
 
       {/* Modal de detalle del ticket */}
       {showDetailModal && selectedTicket && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-4 sm:p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-3 sm:p-4">
+          <div className="w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-4 shadow-2xl sm:p-6 max-h-[92vh]">
             <div className="flex justify-between items-start gap-4 mb-4">
               <h3 className="text-lg font-semibold text-gray-800">
                 Detalle del Ticket #{selectedTicket.id.substring(0, 8)}
@@ -680,9 +728,17 @@ function TicketsTable({
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusColors[selectedTicket.status as keyof typeof statusColors]}`}>
-                    {statusLabels[selectedTicket.status as keyof typeof statusLabels]}
-                  </span>
+                  <select
+                    value={selectedTicket.status}
+                    disabled={updatingTicketId === selectedTicket.id || deletingTicketId === selectedTicket.id}
+                    onChange={(e) => handleStatusChange(selectedTicket.id, e.target.value)}
+                    className={`inline-flex rounded-full border-0 px-2 py-1 text-xs font-semibold ${statusColors[selectedTicket.status as keyof typeof statusColors]}`}
+                  >
+                    <option value="OPEN">Abierto</option>
+                    <option value="IN_PROGRESS">En Progreso</option>
+                    <option value="RESOLVED">Resuelto</option>
+                    <option value="CLOSED">Cerrado</option>
+                  </select>
                 </div>
                 
                 <div>
@@ -708,8 +764,18 @@ function TicketsTable({
                 onClick={() => setShowDetailModal(false)}
                 className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
               >
-                Cerrar
+                Cerrar ventana
               </button>
+              {selectedTicket.status === 'CLOSED' && (
+                <button
+                  onClick={() => handleReopenTicket(selectedTicket.id)}
+                  disabled={updatingTicketId === selectedTicket.id || deletingTicketId === selectedTicket.id}
+                  className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  Reabrir ticket
+                </button>
+              )}
               <button
                 onClick={() => handleCloseTicket(selectedTicket.id)}
                 disabled={selectedTicket.status === 'CLOSED' || updatingTicketId === selectedTicket.id || deletingTicketId === selectedTicket.id}

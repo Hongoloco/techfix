@@ -8,6 +8,21 @@ export const revalidate = 0
 
 const allowedStatuses = ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'] as const
 
+const ticketInclude = {
+  client: true,
+  user: {
+    select: {
+      name: true,
+      email: true
+    }
+  },
+  assignedTo: {
+    select: {
+      name: true
+    }
+  }
+}
+
 async function requireTicketAdmin(request: NextRequest) {
   const tokenData = verifyTokenFromRequest(request)
   if (!tokenData) return null
@@ -45,20 +60,7 @@ async function updateTicketStatus(
     const ticket = await prisma.ticket.update({
       where: { id },
       data: { status },
-      include: {
-        client: true,
-        user: {
-          select: {
-            name: true,
-            email: true
-          }
-        },
-        assignedTo: {
-          select: {
-            name: true
-          }
-        }
-      }
+      include: ticketInclude
     })
 
     if (status === 'RESOLVED') {
@@ -79,6 +81,33 @@ async function updateTicketStatus(
 
     console.error('Error updating admin ticket:', error)
     return NextResponse.json({ error: 'Error al actualizar el ticket' }, { status: 500 })
+  }
+}
+
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const user = await requireTicketAdmin(request)
+    if (!user) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+    }
+
+    const { id } = await context.params
+    const ticket = await prisma.ticket.findUnique({
+      where: { id },
+      include: ticketInclude
+    })
+
+    if (!ticket) {
+      return NextResponse.json({ error: 'Ticket no encontrado' }, { status: 404 })
+    }
+
+    return NextResponse.json({ success: true, ticket })
+  } catch (error) {
+    console.error('Error getting admin ticket:', error)
+    return NextResponse.json({ error: 'Error al abrir el ticket' }, { status: 500 })
   }
 }
 
