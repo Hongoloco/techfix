@@ -3,6 +3,9 @@ import { verifyTokenFromRequest } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { sendRatingRequest } from '@/lib/rating'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 const allowedStatuses = ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'] as const
 
 async function requireTicketAdmin(request: NextRequest) {

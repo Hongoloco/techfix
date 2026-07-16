@@ -207,11 +207,13 @@ function StatCard({ icon: Icon, label, value, color, loading }: {
 function TicketsTable({
   tickets,
   loading,
+  error,
   onTicketUpdated,
   showNotification
 }: {
   tickets: TicketData[]
   loading: boolean
+  error: string | null
   onTicketUpdated: () => Promise<void>
   showNotification: (type: 'success' | 'error' | 'info', title: string, message: string) => void
 }) {
@@ -290,7 +292,8 @@ function TicketsTable({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }),
+        cache: 'no-store'
       })
       
       if (!response.ok) {
@@ -337,7 +340,8 @@ function TicketsTable({
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`
-        }
+        },
+        cache: 'no-store'
       })
 
       if (!response.ok) {
@@ -381,6 +385,24 @@ function TicketsTable({
 
   return (
     <div className="space-y-4">
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="font-semibold">No se pudieron cargar los tickets</p>
+              <p className="mt-1 text-sm">{error}</p>
+            </div>
+            <button
+              onClick={() => onTicketUpdated()}
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-red-200 bg-white px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-100"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Reintentar
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Filtros */}
       <div className="bg-white p-4 rounded-lg shadow border border-gray-200">
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
@@ -792,7 +814,7 @@ export default function AdminDashboard() {
     initialData: []
   })
 
-  const { data: tickets, loading: ticketsLoading, refetch: refetchTickets } = useApi<TicketData[]>('/api/admin/tickets', {
+  const { data: tickets, loading: ticketsLoading, error: ticketsError, refetch: refetchTickets } = useApi<TicketData[]>('/api/admin/tickets', {
     autoFetch: activeTab === 'dashboard' || activeTab === 'tickets',
     initialData: []
   })
@@ -1447,6 +1469,7 @@ Esta acción eliminará PERMANENTEMENTE:
                   <TicketsTable
                     tickets={tickets || []}
                     loading={ticketsLoading}
+                    error={ticketsError}
                     onTicketUpdated={refetchTickets}
                     showNotification={showNotification}
                   />

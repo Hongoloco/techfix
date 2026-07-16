@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=300, s-maxage=600', // 5 min client, 10 min CDN
+            value: 'no-store, no-cache, must-revalidate, proxy-revalidate',
           },
         ],
       },

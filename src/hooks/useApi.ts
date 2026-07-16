@@ -39,7 +39,7 @@ export function useApi<T = any>(
         headers.Authorization = `Bearer ${token}`
       }
 
-      const response = await fetch(url, { headers })
+      const response = await fetch(url, { headers, cache: 'no-store' })
       
       if (!response.ok) {
         let message = `Error ${response.status}: ${response.statusText}`
@@ -112,7 +112,8 @@ export function useMutation<T = any>() {
       const response = await fetch(url, {
         method: options.method || 'POST',
         headers: { ...defaultHeaders, ...options.headers },
-        body: options.body ? JSON.stringify(options.body) : undefined
+        body: options.body ? JSON.stringify(options.body) : undefined,
+        cache: 'no-store'
       })
       
       if (!response.ok) {
@@ -169,7 +170,8 @@ export function useAuth() {
       if (token && userData) {
         try {
           const response = await fetch('/api/auth/me', {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` },
+            cache: 'no-store'
           })
 
           if (!response.ok) {
